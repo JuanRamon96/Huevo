@@ -1,0 +1,31 @@
+*{
+	padding: 0;
+	margin: 0;
+}
+
+html,body{
+	height: 100%;
+}
+
+body{
+	background: url("../Imagenes/fondo.jpg") no-repeat fixed;
+	background-size: cover; 
+}
+
+.login{
+	background: rgba(255,255,255,0.6);
+	padding: 5%;
+	margin-top: 5%;
+}
+
+
+#logo{
+	display: block;
+	margin: 0 auto;
+	margin-bottom: 5%;
+}
+
+#alerta{
+	display: none;
+}
+

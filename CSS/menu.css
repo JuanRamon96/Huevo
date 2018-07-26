@@ -1,0 +1,157 @@
+*{
+	padding: 0;
+	margin: 0;
+}
+
+html,body{
+	height: 100%;
+}
+
+body{
+	background: #CACFD2;
+}
+
+.sidenav {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background: #2E2E2E;
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 60px;
+}
+
+.sidenav ul{
+    text-decoration: none;
+    font-size: 21px;
+    color: #FFF;
+    display: block;
+    transition: 0.3s;
+    cursor: pointer;
+}
+
+.sidenav ul span{
+	padding: 8px 8px 8px 32px;
+}
+
+.sidenav ul span:hover {
+    color: #B3B6B7;
+}
+
+.sidenav ul li{
+    list-style: none;
+    font-size: 18px;
+    text-align: right;
+    padding: 5px 15px;
+    background: #9A5C0C;
+    color: #FBFCFC;
+    display: none;
+}
+
+.sidenav ul li:hover{
+	background: #C7880B;
+}
+
+.sidenav .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+    text-decoration: none;
+    color: #FFF;
+}
+
+.sidenav .closebtn:hover {
+    color: #D0D3D4;
+}
+
+.openBtn{
+	font-size:30px;
+	cursor:pointer;
+}
+
+.navbar{
+	background: #F5E5C1;
+	box-shadow: 0px 8px 15px;
+}
+
+#UserName{
+	font-size: 20px;
+}
+
+.main{
+	padding: 1% 2%;
+	box-sizing: border-box;
+}
+
+.card{
+	padding: 2% 4%;
+}
+
+.oculto{
+	display: none;
+}
+
+table{
+	text-align: center;
+}
+
+.ModiContra{
+	display: none;
+}
+
+#FormConfiContra{
+	padding: 5% 30%;
+	background: #E5E7E9;
+	display: none;
+}
+
+#FormGuardarProducto label{
+    font-size: 18px;
+}
+
+/*>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
+
+.carga {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    z-index: 2000;
+    background: rgba(0, 0, 0, 0.8);
+    display: none;
+}
+
+.logo {
+    z-index: -1;
+    width: 4%;
+    margin: 18.5% 46.5%;
+    position: absolute;
+}
+
+.carIma {
+    width: 11%;
+    margin: 17% 43%;
+    position: absolute;
+    animation: girando 1s linear infinite;
+}
+
+@keyframes girando {
+    from {
+        transform: rotate(-360deg);
+    }
+    to {
+        transform: rotate(0deg);
+    }
+}
+
+
+/*>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
+
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 18px;}
+}
