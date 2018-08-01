@@ -2,6 +2,7 @@
 	require("../../conexion.php");
 	session_start();
 	$id = $_SESSION['user']['ID_Usuario'];
+	$acCorreo = $_SESSION['user']['Email'];
 	$opciones = [
 			'cost' => 12,
 		];
@@ -17,7 +18,7 @@
             echo "Error: ".mysqli_error($con);
         }
 
-        mail($_POST["email"], 'Nueva cuenta en Sistema Planta de huevo liquido', "Se te ha creado una nueva cuenta con los siguientes datos: Usuario:$_POST[nombre] Contraseña: $_POST[contrasena]");
+        email($_POST["email"], 'Nueva cuenta en Sistema Planta de huevo liquido', "Se te ha creado una nueva cuenta con los siguientes datos: Usuario-> $_POST[nombre] Contraseña-> $_POST[contrasena]");
 	}
 
 	if($_POST["metodo"]=="2"){
@@ -53,7 +54,7 @@
 	}
 
 	if($_POST["metodo"]=="4"){
-		if(isset($_POST["contrasena"])){
+		if(isset($_POST["contrasena"]) && $_POST["contrasena"] != ""){
 			$contrasena=password_hash($_POST["contrasena"], PASSWORD_BCRYPT, $opciones);
 			$sql = "UPDATE usuarios SET Nombre='$_POST[nombre]', Contrasena='$contrasena', Email='$_POST[email]', Tipo='$_POST[tipo]' WHERE ID_Usuario='$_POST[id]'";
 		}else{
@@ -62,6 +63,7 @@
 
         if($con->query($sql)){
             echo "1";
+             email($_POST["email"], 'Sistema Planta de huevo liquido', "Se han modificado tus datos de tu cuenta, para ver las modificaciones accede a tu cuenta: Usuario-> $_POST[nombre] Contraseña-> $_POST[contrasena]");
         }else{
             echo "Error: ".mysqli_error($con);
         }
@@ -73,6 +75,7 @@
         if($con->query($sql)){
             echo "1";
             $_SESSION['user']['Nombre']=$_POST["nombre"];
+            email($acCorreo, 'Sistema Planta de huevo liquido', "Has modificado tu nombre de usuario en tu cuenta: Usuario-> $_POST[nombre]");
         }else{
             echo "Error: ".mysqli_error($con);
         }
@@ -87,6 +90,7 @@
 	        if($con->query($sql)){
 	            echo "1";
 	            $_SESSION['user']['Contrasena']=$contrasena;
+	            email($acCorreo, 'Sistema Planta de huevo liquido', "Has modificado tu Contraseña en tu cuenta: Contraseña-> $_POST[contraN]");
 	        }else{
 	            echo "Error: ".mysqli_error($con);
 	        }	
@@ -266,5 +270,38 @@
 	    }else{
 	        echo "Error: ".mysqli_error($con);
 	    }	
+	}
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>email>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+	function email($destino, $asunto, $mensaje)
+	{
+		require("PHPMailer/PHPMailerAutoload.php");
+
+		$mail = new PHPMailer(true);                              // Passing `true` enables exceptions
+		try {
+		    //Server settings
+		    //$mail->SMTPDebug = 2;                                 // Enable verbose debug output
+		    $mail->isSMTP();                                      // Set mailer to use SMTP
+		    $mail->Host = 'smtp.gmail.com';  // Specify main and backup SMTP servers
+		    $mail->SMTPAuth = true;                               // Enable SMTP authentication
+		    $mail->Username = 'sistemahuevoliquido@gmail.com';                 // SMTP username
+		    $mail->Password = 'Gigantes.2018';                           // SMTP password
+		    $mail->SMTPSecure = 'tls';                            // Enable TLS encryption, `ssl` also accepted
+		    $mail->Port = 587;                                    // TCP port to connect to
+
+		    //Recipients
+		    $mail->setFrom('sistemahuevoliquido@gmail.com', 'Sistema Huevo Liquido');
+		    $mail->addAddress($destino);     // Add a recipient
+
+		    //Content
+		    $mail->isHTML(true);                                  // Set email format to HTML
+		    $mail->Subject = $asunto;
+		    $mail->Body    = $mensaje;
+		    $mail->AltBody = $mensaje;
+
+		    $mail->send();
+		    //echo 'Message has been sent';
+		} catch (Exception $e) {
+		    //echo 'Message could not be sent. Mailer Error: ', $mail->ErrorInfo;
+		}
 	}
 ?>

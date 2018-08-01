@@ -3,6 +3,12 @@ $(document).ready(function() {
 	$tipo1=0;
 	Usuarios();
 
+	const swalWithBootstrapButtons = swal.mixin({
+	  confirmButtonClass: 'btn btn-success',
+	  cancelButtonClass: 'btn btn-danger',
+	  buttonsStyling: false,
+	});
+
 	$("input[name=Tipo]").click(function () {    
         if($(this).attr('id')=="r1"){
         	$tipo=1;
@@ -38,13 +44,20 @@ $(document).ready(function() {
 			})
 			.done(function(res) {
 				if(res=="1"){
-					alert("El usuario se ha creado"); 
+					swal({
+					  	type: 'success',
+					  	title: 'El usuario se ha creado',
+					}); 
 					$("#NombreUsuario").attr('class', 'form-control reUsu');
 					$(".reUsu").val('');
 					$("#r1").prop('checked', true);
 					Usuarios();
 				}else{
-					alert("Error: El usuario no se ha podido crear. Es posible que el nombre de usuario ya exista");
+					swal({
+					  	type: 'error',
+					  	title: 'Error:',
+					  	text: 'El usuario no se ha podido crear. Es posible que el nombre de usuario ya exista',
+					});
 					$("#NombreUsuario").attr('class', 'form-control is-invalid');
 					console.log(res);
 				}
@@ -59,34 +72,50 @@ $(document).ready(function() {
 	});
 
 	$(document).on('click', '.BorrarUsuario', function() {
-		var confir= confirm("Estas seguro que quieres eliminar el usuario. Una vez eliminado no podrá ser recuperados jamás");
+		swalWithBootstrapButtons({
+		  	title: '¿Estas seguro que quieres eliminar el usuario?',
+		  	text: "¡Una vez eliminado no podrá ser recuperados jamás!",
+		  	type: 'warning',
+		  	showCancelButton: true,
+		 	confirmButtonText: 'Aceptar',
+		  	cancelButtonText: 'Cancelar',
+		  	reverseButtons: true
+		}).then((result) => {
+		  	if (result.value) {
+		    	var datos = "metodo=3&id="+$(this).attr('attrID');
 
-        if(confir==true){
-        	var datos = "metodo=3&id="+$(this).attr('attrID');
-			$.ajax({
-				url: 'php/usuarios.php',
-				type: 'POST',
-				data: datos,
-				beforeSend: function() {
-		            $("#carga").show();
-		        }
-			})
-			.done(function(res) {
-				if(res=="1"){
-					alert("El usuario ha sido borrado"); 
-					Usuarios();
-				}else{
-					alert("Error: El usuario no ha podido ser borrado");
-					console.log(res);
-				}
-				$("#carga").hide();	
-			})
-			.fail(function() {
-				console.log("Error");
-			});  
-        }else{
-          alert("Has cancelado la operación");
-        }
+				$.ajax({
+					url: 'php/usuarios.php',
+					type: 'POST',
+					data: datos,
+					beforeSend: function() {
+			            $("#carga").show();
+			        }
+				})
+				.done(function(res) {
+					if(res=="1"){
+						swal({
+						  	type: 'success',
+						  	title: 'El usuario ha sido borrado',
+						});  
+						Usuarios();
+					}else{
+						swal({
+						  	type: 'error',
+						  	title: 'Error:',
+						  	text: 'El usuario no ha podido ser borrado',
+						});
+						console.log(res);
+					}
+					$("#carga").hide();	
+				})
+				.fail(function() {
+					console.log("Error");
+				});
+		  	} else if (result.dismiss === swal.DismissReason.cancel) {
+		    	swal('Has cancelado la operación');
+		  	}
+		});
 	});
 
 	$(document).on('click', '.EditarUsuario', function() {
@@ -128,34 +157,56 @@ $(document).ready(function() {
 			$("#ContraUsuarioM").attr('class', 'form-control is-invalid');
 			$("#ContraRUsuarioM").attr('class', 'form-control is-invalid');
 		}else{
-			var datos = "metodo=4&id="+$("#GuardarMUsu").attr("attrID")+"&nombre="+$.trim($("#NombreUsuarioM").val())+"&contrasena="+$("#ContraUsuarioM").val()+"&tipo="+$tipo1+"&email="+$("#emailUsuarioM").val();
-			$.ajax({
-				url: 'php/usuarios.php',
-				type: 'POST',
-				data: datos,
-				beforeSend: function() {
-	            	$("#carga").show();
-	        	}
-			})
-			.done(function(res) {
-				if(res=="1"){
-					alert("El usuario ha sido modificado"); 
-					$("#NombreUsuarioM").attr('class', 'form-control');
-					$(".reUsuM").val('');
-					$("#CheckContra").prop('checked', false);
-					$("#ModiContra").hide();
-					Usuarios();
-				}else{
-					alert("Error: El usuario no se ha podido crear. Es posible que el nombre de usuario ya exista");
-					$("#NombreUsuarioM").attr('class', 'form-control is-invalid');
-					console.log(res);
-				}
-				$("#carga").hide();
-				$("#ContraUsuarioM").attr('class', 'form-control reUsuM');
-				$("#ContraRUsuarioM").attr('class', 'form-control reUsuM');
-			})
-			.fail(function() {
-				console.log("Error");
+			swalWithBootstrapButtons({
+			  	title: '¿Estas seguro que quieres modificar los datos del usuario?',
+			  	text: "¡Una vez modificados no podrán ser recuperados jamás!",
+			  	type: 'warning',
+			  	showCancelButton: true,
+			 	confirmButtonText: 'Aceptar',
+			  	cancelButtonText: 'Cancelar',
+			  	reverseButtons: true
+			}).then((result) => {
+			  	if (result.value) {
+			    	var datos = "metodo=4&id="+$("#GuardarMUsu").attr("attrID")+"&nombre="+$.trim($("#NombreUsuarioM").val())+"&contrasena="+$("#ContraUsuarioM").val()+"&tipo="+$tipo1+"&email="+$("#emailUsuarioM").val();
+					
+					$.ajax({
+						url: 'php/usuarios.php',
+						type: 'POST',
+						data: datos,
+						beforeSend: function() {
+			            	$("#carga").show();
+			        	}
+					})
+					.done(function(res) {
+						if(res=="1"){
+							swal({
+							  	type: 'success',
+							  	title: 'El usuario ha sido modificado',
+							});
+							$("#NombreUsuarioM").attr('class', 'form-control');
+							$(".reUsuM").val('');
+							$("#CheckContra").prop('checked', false);
+							$("#ModiContra").hide();
+							Usuarios();
+						}else{
+							swal({
+							  	type: 'error',
+							  	title: 'Error:',
+							  	text: 'El usuario no se ha podido crear. Es posible que el nombre de usuario ya exista',
+							});
+							$("#NombreUsuarioM").attr('class', 'form-control is-invalid');
+							console.log(res);
+						}
+						$("#carga").hide();
+						$("#ContraUsuarioM").attr('class', 'form-control reUsuM');
+						$("#ContraRUsuarioM").attr('class', 'form-control reUsuM');
+					})
+					.fail(function() {
+						console.log("Error");
+					});
+			  	} else if (result.dismiss === swal.DismissReason.cancel) {
+			    	swal('Has cancelado la operación');
+			  	}
 			});
 		}
 	});
@@ -170,35 +221,51 @@ $(document).ready(function() {
 
 	$("#FormConfiUsu").submit(function(e) {
 		e.preventDefault();
-		var confir= confirm("Estas seguro que quieres cambiar tu nombre de usuario");
 
-        if(confir==true){
-        	var datos = "metodo=5&nombre="+$("#CNombreUsu").val();
-			$.ajax({
-				url: 'php/usuarios.php',
-				type: 'POST',
-				data: datos,
-				beforeSend: function() {
-		            $("#carga").show();
-		        }
-			})
-			.done(function(res) {
-				if(res=="1"){
-					alert("Tu nombre de usuario ha sido cambiado"); 
-					location.reload();
-				}else{
-					alert("Error: Tu nombre de usuario no se ha podido cambiar. Es posible que el nombre de usuario ya exista");
-					$("#CNombreUsu").focus();
-					console.log(res);
-				}
-				$("#carga").hide();	
-			})
-			.fail(function() {
-				console.log("Error");
-			});  
-        }else{
-         	alert("Has cancelado la operación");
-        }
+		swalWithBootstrapButtons({
+		  	title: '¿Estas seguro que quieres cambiar tu nombre de usuario?',
+		  	type: 'warning',
+		  	showCancelButton: true,
+		 	confirmButtonText: 'Aceptar',
+		  	cancelButtonText: 'Cancelar',
+		  	reverseButtons: true
+		}).then((result) => {
+		  	if (result.value) {
+		    	var datos = "metodo=5&nombre="+$("#CNombreUsu").val();
+				
+				$.ajax({
+					url: 'php/usuarios.php',
+					type: 'POST',
+					data: datos,
+					beforeSend: function() {
+			            $("#carga").show();
+			        }
+				})
+				.done(function(res) {
+					if(res=="1"){
+						swal({
+						  	type: 'success',
+						  	title: 'Tu nombre de usuario ha sido cambiado',
+						}); 
+						location.reload();
+					}else{
+						swal({
+						  	type: 'error',
+						  	title: 'Error:',
+						  	text: 'Tu nombre de usuario no se ha podido cambiar. Es posible que el nombre de usuario ya exista',
+						});
+						$("#CNombreUsu").focus();
+						console.log(res);
+					}
+					$("#carga").hide();	
+				})
+				.fail(function() {
+					console.log("Error");
+				});	
+		  	} else if (result.dismiss === swal.DismissReason.cancel) {
+		    	swal('Has cancelado la operación');
+		  	}
+		});
 	});
 
 	$(".ConfiContra").on('keyup change', function() {
@@ -213,44 +280,61 @@ $(document).ready(function() {
 			$("#CContraN").attr('class', 'form-control is-invalid');
 			$("#CContraR").attr('class', 'form-control is-invalid');
 		}else{
-			var confir= confirm("Estas seguro que quieres cambiar tu contraseña");
-
-	        if(confir==true){
-	        	var datos = "metodo=6&contraA="+$("#CContraA").val()+"&contraN="+$("#CContraN").val();
-				$.ajax({
-					url: 'php/usuarios.php',
-					type: 'POST',
-					data: datos,
-					beforeSend: function() {
-			            $("#carga").show();
-			        }
-				})
-				.done(function(res) {
-					if(res=="1"){
-						alert("Tu contraseña ha sido cambiada"); 
-						$("#CContraA").attr('class', 'form-control');
-						$(".ConfiContra").val("");
-						$("#CContraA").val("");
-						$("#GuardarConfiguracion").attr('disabled', true);
-						$("#FormConfiContra").hide();
-					}else if(res=="2"){
-						alert("Tu contraseña no se ha podido cambiar. Verifica que la contraseña actual este correcta");
-						$("#CContraA").attr('class', 'form-control is-invalid');
-					}else{
-						alert("Error: Tu contraseña no se ha podido cambiar");
-						$("#CContraA").attr('class', 'form-control');
-						console.log(res);
-					}
-					$("#carga").hide();	
-					$("#CContraN").attr('class', 'ConfiContra form-control');
-					$("#CContraR").attr('class', 'ConfiContra form-control');
-				})
-				.fail(function() {
-					console.log("Error");
-				});  
-	        }else{
-	          alert("Has cancelado la operación");
-	        }
+			swalWithBootstrapButtons({
+			  	title: '¿Estas seguro que quieres cambiar tu contraseña?',
+			  	type: 'warning',
+			  	showCancelButton: true,
+			 	confirmButtonText: 'Aceptar',
+			  	cancelButtonText: 'Cancelar',
+			  	reverseButtons: true
+			}).then((result) => {
+			  	if (result.value) {
+			    	var datos = "metodo=6&contraA="+$("#CContraA").val()+"&contraN="+$("#CContraN").val();
+					$.ajax({
+						url: 'php/usuarios.php',
+						type: 'POST',
+						data: datos,
+						beforeSend: function() {
+				            $("#carga").show();
+				        }
+					})
+					.done(function(res) {
+						if(res=="1"){
+							swal({
+							  	type: 'success',
+							  	title: 'Tu contraseña ha sido cambiada',
+							});
+							$("#CContraA").attr('class', 'form-control');
+							$(".ConfiContra").val("");
+							$("#CContraA").val("");
+							$("#GuardarConfiguracion").attr('disabled', true);
+							$("#FormConfiContra").hide();
+						}else if(res=="2"){
+							swal({
+							  	type: 'success',
+							  	title: 'Tu contraseña no se ha podido cambiar. Verifica que la contraseña actual este correcta',
+							});
+							$("#CContraA").attr('class', 'form-control is-invalid');
+						}else{
+							swal({
+							  	type: 'error',
+							  	title: 'Error:',
+							  	text: 'Tu contraseña no se ha podido cambiar',
+							});
+							$("#CContraA").attr('class', 'form-control');
+							console.log(res);
+						}
+						$("#carga").hide();	
+						$("#CContraN").attr('class', 'ConfiContra form-control');
+						$("#CContraR").attr('class', 'ConfiContra form-control');
+					})
+					.fail(function() {
+						console.log("Error");
+					});		
+			  	} else if (result.dismiss === swal.DismissReason.cancel) {
+			    	swal('Has cancelado la operación');
+			  	}
+			});
     	}
 	});
 
@@ -283,7 +367,11 @@ $(document).ready(function() {
 		})
 		.done(function(res) {
 			if(res != "1"){
-				alert("Error: No se pudieron modificar los permisos")
+				swal({
+					type: 'error',
+					title: 'Error:',
+					text: 'No se pudieron modificar los permisos',
+				});
 				console.log(res);
 			}
 			setTimeout(function() {

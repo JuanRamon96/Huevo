@@ -53,9 +53,10 @@
 	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
 	<title>Huevo</title>
 	<link rel="icon" href="../Imagenes/egg.png">
+	<link rel="stylesheet" href="../CSS/dataTables.bootstrap4.min.css">
+	<link rel="stylesheet" href="../CSS/buttons.dataTables.min.css">
 	<link rel="stylesheet" href="../CSS/bootstrap.min.css">
 	<link rel="stylesheet" href="../CSS/bootstrap.css">
-	<link rel="stylesheet" href="../CSS/dataTables.bootstrap4.min.css">
 	<link rel="stylesheet" href="../CSS/menu.css">
 </head>
 <body>
@@ -74,8 +75,8 @@
 	  				echo "<li id='verNuevoProducto'>Nuevo Producto <i class='fas fa-plus'></i></li>";
 	  			}
 	  			echo "<li style='font-size:13px;' id='verProductos1'>Inventario Producto Terminado <i class='fas fa-pallet'></i></li>
-	  					<li style='font-size:16px;'>Inventario Materia Prima <i class='fas fa-box-open'></i></li>
-	  					<li>Inventario Insumos <i class='fas fa-archive'></i></li>
+	  					<li style='font-size:16px;' id='verProductos2'>Inventario Materia Prima <i class='fas fa-box-open'></i></li>
+	  					<li id='verProductos3'>Inventario Insumos <i class='fas fa-archive'></i></li>
 	  				</ul>";
 	  				
 	  		}
@@ -181,9 +182,9 @@
 	          			<?php echo "<b id='UserName'>$nombre <i class='fas fa-user-tie'></i></b>"; ?>
 	        		</a>
 	        		<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-	          			<!-- <a class="dropdown-item" href="javascript:void(0)" id="ConfiguracionUsu"><i class="fas fa-cog"></i> Configuración</a> -->
 	          			<a class="dropdown-item" href="#"><i class="fas fa-info-circle"></i> Ayuda</a>
 	          			<div class="dropdown-divider"></div>
+	          			<?php if($_SESSION['user']['Tipo'] == "1"){ echo "<a class='dropdown-item' href='javascript:void(0)' id='ConfiguracionUsu'><i class='fas fa-cog'></i> Configuración</a>"; } ?> 
 	          			<a class="dropdown-item" href="salir.php"><i class="fas fa-power-off"></i> Cerrar sesión</a>
 	        		</div>
 	      		</li>
@@ -195,6 +196,7 @@
 		<?php 
 			if($_SESSION['user']['Tipo'] == "1"){ 
 				require("vistas/usuarios.php"); 
+				require("vistas/configuracion.php");
 				//require("vistas/generales.php"); 
 			} 
 
@@ -204,8 +206,9 @@
 
 			if($_SESSION['user']['Tipo'] == "1" || $productos[0]=='1'){ 
 				require("vistas/productos1.php"); 
+				require("vistas/productos2.php"); 
+				require("vistas/productos3.php"); 
 			}
-			//require("vistas/configuracion.php");
 		?>
 	</div>
 
@@ -214,6 +217,13 @@
 <script src="../JS/fontawesome-all.min.js"></script>	
 <script src="../JS/jquery.dataTables.min.js"></script>
 <script src="../JS/dataTables.bootstrap4.min.js"></script>	
+<script src="../JS/dataTables.buttons.min.js"></script>	
+<script src="../JS/buttons.flash.min.js"></script>
+<script src="../JS/jszip.min.js"></script>
+<script src="../JS/pdfmake.min.js"></script>
+<script src="../JS/vfs_fonts.js"></script>
+<script src="../JS/buttons.html5.min.js"></script>
+<script src="../JS/sweetalert2.all.min.js"></script>	
 <script src="../JS/menu.js"></script>	
 <script src="../JS/usuarios.js"></script>
 <script src="../JS/productos.js"></script>	

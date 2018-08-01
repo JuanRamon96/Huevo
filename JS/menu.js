@@ -39,6 +39,18 @@ $(document).ready(function() {
 		$("#mySidenav").css('width', '0');
 	});
 
+	$("#verProductos2").click(function() {
+		$(".oculto").hide();
+		$("#VistaProductos2").show();
+		$("#mySidenav").css('width', '0');
+	});
+
+	$("#verProductos3").click(function() {
+		$(".oculto").hide();
+		$("#VistaProductos3").show();
+		$("#mySidenav").css('width', '0');
+	});
+
 	$(document).on('keyup change', '.generales', function() {
 		$("#GuardarGeneral").attr('disabled', false);
 	});
