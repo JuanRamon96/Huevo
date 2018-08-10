@@ -10,6 +10,7 @@
 					<div class="col-12 table-responsive">
 						<table class="table table-hover table-striped" id="tablaProductos1" width="100%">
 							<thead>
+								<th>Código</th>
 								<th>Nombre</th>
 								<th>UME</th>
 								<th>Existencia</th>
@@ -43,11 +44,15 @@
 					<input type="checkbox" class="ModiProductos" id="ProductoMActivo" value="1" checked>
 					<br>
 				</div>
-				<div class="form-group col-6">
+				<div class="form-group col-4">
+					<label for="ProductoMCodigo">Código:</label>
+					<input type="text" id="ProductoMCodigo" class="form-control form-control-lg ModiProductos" maxlength="30" required>
+				</div>
+				<div class="form-group col-8">
 					<label for="ProductoMNombre">Nombre:</label>
 					<input type="text" id="ProductoMNombre" class="form-control ModiProductos" maxlength="100" required>
 				</div>
-				<div class="form-group col-6">
+				<div class="form-group col-4">
 					<label for="ProductoMUME">UME:</label>
 					<select id="ProductoMUME" class="form-control ModiProductos" required>
 						<option value="">--Selecciona una unidad de medida--</option>
@@ -66,7 +71,7 @@
 				</div>
 				<div class="form-group col-4">
 					<label for="ProductoMMaximo">Stock Máximo:</label>
-						<input type="number" id="ProductoMMaximo" class="form-control ModiProductos" min="0" required>
+					<input type="number" id="ProductoMMaximo" class="form-control ModiProductos" min="0" required>
 				</div>
       		</div>
       		<div class="modal-footer">

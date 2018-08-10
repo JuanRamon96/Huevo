@@ -84,9 +84,9 @@
 	  			echo "<ul><span><i class='fas fa-address-card'></i> Clientes</span>";
 
 	  			if($clientes[1]=='1' || $_SESSION['user']['Tipo']=='1'){
-	  				echo "<li>Nuevo Cliente <i class='fas fa-plus'></i></li>";
+	  				echo "<li id='verNuevoCliente'>Nuevo Cliente <i class='fas fa-plus'></i></li>";
 	  			}
-	  			echo "<li>Consultar Clientes <i class='fas fa-search'></i></li>
+	  			echo "<li id='verClientes'>Consultar Clientes <i class='fas fa-search'></i></li>
 	  				</ul>";
 	  				
 	  		}
@@ -94,7 +94,7 @@
 	  			echo "<ul><span><i class='fas fa-dollar-sign'></i> Ventas</span>";
 
 	  			if($ventas[1]=='1' || $_SESSION['user']['Tipo']=='1'){
-	  				echo "<li>Nuevo Venta <i class='fas fa-plus'></i></li>";
+	  				echo "<li>Nueva Venta <i class='fas fa-plus'></i></li>";
 	  			}
 	  			echo "<li>Consultar Ventas <i class='fas fa-search'></i></li>
 	  				</ul>";
@@ -104,9 +104,9 @@
 	  			echo "<ul><span><i class='fas fa-shipping-fast'></i> Proveedores</span>";
 
 	  			if($proveedores[1] =='1' || $_SESSION['user']['Tipo']=='1'){
-	  				echo "<li>Nuevo Proveedor <i class='fas fa-plus'></i></li>";
+	  				echo "<li id='verNuevoProveedor'>Nuevo Proveedor <i class='fas fa-plus'></i></li>";
 	  			}
-	  			echo "<li>Consultar Proveedores <i class='fas fa-search'></i></li>
+	  			echo "<li id='verProveedores'>Consultar Proveedores <i class='fas fa-search'></i></li>
 	  				</ul>";
 	  				
 	  		}
@@ -125,9 +125,10 @@
 	  			echo "<ul><span><i class='fas fa-people-carry'></i> Empleados</span>";
 
 	  			if($empleados[1]=='1' || $_SESSION['user']['Tipo']=='1'){
-	  				echo "<li>Nueva Empleado <i class='fas fa-plus'></i></li>";
+	  				echo "<li>Nuevo Empleado <i class='fas fa-plus'></i></li>";
 	  			}
 	  			echo "<li>Consultar Empleados <i class='fas fa-search'></i></li>
+	  					<li id='verAyP'>Areas y Puestos <i class='fas fa-sitemap'></i></li>
 	  				</ul>";
 	  				
 	  		}
@@ -209,6 +210,26 @@
 				require("vistas/productos2.php"); 
 				require("vistas/productos3.php"); 
 			}
+
+			if($_SESSION['user']['Tipo'] == "1" || $clientes[1]=='1'){ 
+				require("vistas/NuevoCliente.php"); 
+			}
+
+			if ($_SESSION['user']['Tipo']=='1' || $clientes[0]=='1'){
+				require("vistas/verClientes.php");
+			}
+
+			if($_SESSION['user']['Tipo'] == "1" || $proveedores[1]=='1'){ 
+				require("vistas/NuevoProveedor.php"); 
+			}
+
+			if ($_SESSION['user']['Tipo']=='1' || $proveedores[0]=='1'){
+				require("vistas/verProveedores.php");
+			}
+
+			if ($_SESSION['user']['Tipo']=='1' || $empleados[0] =='1') {
+				require("vistas/AreasyPuestos.php");
+			}
 		?>
 	</div>
 
@@ -227,5 +248,8 @@
 <script src="../JS/menu.js"></script>	
 <script src="../JS/usuarios.js"></script>
 <script src="../JS/productos.js"></script>	
+<script src="../JS/clientes.js"></script>
+<script src="../JS/proveedores.js"></script>
+<script src="../JS/AreasyPuestos.js"></script>	
 </body>
 </html>

@@ -1,5 +1,5 @@
 $(document).ready(function() {
-	verProductos();
+	clientes();
 
 	const swalWithBootstrapButtons = swal.mixin({
 	  confirmButtonClass: 'btn btn-success',
@@ -7,15 +7,14 @@ $(document).ready(function() {
 	  buttonsStyling: false,
 	});
 
-	$("#FormGuardarProducto").submit(function(e) {
+	$("#FormGuardarCliente").submit(function(e) {
 		e.preventDefault();
+		var data = "metodo=1&codigo="+$.trim($("#clienteCodigo").val())+"&nombre="+$.trim($("#clienteNombre").val())+"&domicilio="+$.trim($("#clienteDomicilio").val())+"&ciudad="+$.trim($("#clienteCiudad").val())+"&estado="+$.trim($("#clienteEstado").val())+"&pais="+$.trim($("#clientePais").val())+"&cp="+$("#clienteCP").val()+"&rz="+$.trim($("#clienteRZ").val())+"&rfc="+$.trim($("#clienteRFC").val())+"&telefono="+$.trim($("#clienteTelefono").val())+"&email="+$.trim($("#clienteEmail").val())+"&contacto="+$.trim($("#clienteContacto").val())+"&telconta="+$.trim($("#clienteContactoTel").val());
 
-		var datos = "metodo=1&codigo="+$.trim($("#ProductoCodigo").val())+"&nombre="+$.trim($("#ProductoNombre").val())+"&ume="+$("#ProductoUME").val()+"&categoria="+$("#ProductoCategoria").val()+"&existencia="+$("#ProductoExistencia").val()+"&minimo="+$("#ProductoMinimo").val()+"&maximo="+$("#ProductoMaximo").val();
-			
 		$.ajax({
-			url: 'php/productos.php',
+			url: 'php/clientes.php',
 			type: 'POST',
-			data: datos,
+			data: data,
 			beforeSend: function() {
 	           	$("#carga").show();
 	        }
@@ -24,15 +23,15 @@ $(document).ready(function() {
 			if(res=="1"){
 				swal({
 				  	type: 'success',
-				  	title: 'El producto se ha guardado',
+				  	title: 'El cliente se ha guardado',
 				}); 
-				$(".IntProductos").val("");
-				verProductos();	
+				$(".IntClientes").val("");
+				clientes();	
 			}else{
 				swal({
 				  	type: 'error',
 				  	title: 'Error:',
-				  	text: 'El producto no se ha podido guardar. Es posible que el código del producto ya exista',
+				  	text: 'El cliente no se ha podido guardar. Es posible que el código del cliente ya exista',
 				});
 				console.log(res);
 			}
@@ -43,9 +42,9 @@ $(document).ready(function() {
 		});
 	});
 
-	$(document).on('click', '.BorrarProducto', function() {
+	$(document).on('click', '.BorrarCliente', function() {
 		swalWithBootstrapButtons({
-		  	title: '¿Estas seguro que quieres eliminar el producto del inventario?',
+		  	title: '¿Estas seguro que quieres eliminar el cliente?',
 		  	text: "¡Una vez eliminado no podrá ser recuperado jamás!",
 		  	type: 'warning',
 		  	showCancelButton: true,
@@ -57,7 +56,7 @@ $(document).ready(function() {
 		    	var datos = "metodo=3&id="+$(this).attr('attrID');
 
 				$.ajax({
-					url: 'php/productos.php',
+					url: 'php/clientes.php',
 					type: 'POST',
 					data: datos,
 					beforeSend: function() {
@@ -68,14 +67,14 @@ $(document).ready(function() {
 					if(res=="1"){
 						swal({
 						  	type: 'success',
-						  	title: 'El producto ha sido borrado',
+						  	title: 'El cliente ha sido borrado',
 						});  
-						verProductos();	
+						clientes();	
 					}else{
 						swal({
 						  	type: 'error',
 						  	title: 'Error:',
-						  	text: 'El producto no ha podido ser borrado',
+						  	text: 'El cliente no ha podido ser borrado',
 						});
 						console.log(res);
 					}
@@ -90,39 +89,48 @@ $(document).ready(function() {
 		});	
 	});
 
-	$(document).on('click', '.ModificarProducto', function() {
+	$(document).on('click', '.ModificarCliente', function() {
 		var padre = $(this).parent().parent();
-		$("#ProductoMCodigo").val(padre.children('td:eq(0)').text());
-		$("#ProductoMNombre").val(padre.children('td:eq(1)').text());
-		$("#ProductoMUME").val(padre.children('td:eq(2)').text());
-		$("#ProductoMExistencia").val(padre.children('td:eq(3)').text());
-		$("#ProductoMMinimo").val(padre.children('td:eq(4)').text());
-		$("#ProductoMMaximo").val(padre.children('td:eq(5)').text());
-		
-		if(padre.children('td:eq(6)').text() == 'Activo'){
-			$("#ProductoMActivo").attr('checked', true);
+
+		$("#clienteMCodigo").val(padre.children('td:eq(0)').text());
+		$("#clienteMNombre").val(padre.children('td:eq(1)').text());
+		$("#clienteMDomicilio").val(padre.children('td:eq(2)').text());
+		$("#clienteMCiudad").val(padre.children('td:eq(3)').text());
+		$("#clienteMEstado").val(padre.children('td:eq(4)').text());
+		$("#clienteMPais").val(padre.children('td:eq(5)').text());
+		$("#clienteMCP").val(padre.children('td:eq(6)').text());
+		$("#clienteMRZ").val(padre.children('td:eq(7)').text());
+		$("#clienteMRFC").val(padre.children('td:eq(8)').text());
+		$("#clienteMTelefono").val(padre.children('td:eq(9)').text());
+		$("#clienteMEmail").val(padre.children('td:eq(10)').text());
+		$("#clienteMContacto").val(padre.children('td:eq(11)').text());
+		$("#clienteMContactoTel").val(padre.children('td:eq(12)').text());
+
+		if(padre.children('td:eq(13)').text() == 'Activo'){
+			$("#ClienteMActivo").attr('checked', true);
 		}else{
-			$("#ProductoMActivo").attr('checked', false);
+			$("#ClienteMActivo").attr('checked', false);
 		}
-		$("#GuardarMProducto").attr('attrID', $(this).attr('attrID'));
-		$("#GuardarMProducto").attr('disabled', true);
+
+		$("#GuardarMCliente").attr('disabled', true);
+		$("#GuardarMCliente").attr('attrID', $(this).attr('attrID'));
 	});
 
-	$(".ModiProductos").on('keyup change', function() {
-		$("#GuardarMProducto").attr('disabled', false);
+	$(".ModiClientes").on('keyup change', function() {
+		$("#GuardarMCliente").attr('disabled', false);
 	});
 
-	$("#FormModiProducto").submit(function(e) {
+	$("#FormModiCliente").submit(function(e) {
 		e.preventDefault();
 		var activo=0;
-		if($("#ProductoMActivo").is(':checked')){
+		if($("#ClienteMActivo").is(':checked')){
 			activo=1;
 		}else{
 			activo=0;
 		}
 		
 		swalWithBootstrapButtons({
-		  	title: '¿Estas seguro que quieres modificar los datos del producto?',
+		  	title: '¿Estas seguro que quieres modificar los datos del cliente?',
 		  	text: "¡Una vez modificados no podrán ser recuperados jamás!",
 		  	type: 'warning',
 		  	showCancelButton: true,
@@ -131,10 +139,10 @@ $(document).ready(function() {
 		  	reverseButtons: true
 		}).then((result) => {
 		  	if (result.value) {
-		    	var datos = "metodo=4&id="+$("#GuardarMProducto").attr('attrID')+"&codigo="+$.trim($("#ProductoMCodigo").val())+"&nombre="+$.trim($("#ProductoMNombre").val())+"&ume="+$("#ProductoMUME").val()+"&existencia="+$("#ProductoMExistencia").val()+"&minimo="+$("#ProductoMMinimo").val()+"&maximo="+$("#ProductoMMaximo").val()+"&activo="+activo;
+		    	var datos = "metodo=4&id="+$("#GuardarMCliente").attr('attrID')+"&codigo="+$.trim($("#clienteMCodigo").val())+"&nombre="+$.trim($("#clienteMNombre").val())+"&domicilio="+$.trim($("#clienteMDomicilio").val())+"&ciudad="+$.trim($("#clienteMCiudad").val())+"&estado="+$.trim($("#clienteMEstado").val())+"&pais="+$.trim($("#clienteMPais").val())+"&cp="+$("#clienteMCP").val()+"&rz="+$.trim($("#clienteMRZ").val())+"&rfc="+$.trim($("#clienteMRFC").val())+"&telefono="+$.trim($("#clienteMTelefono").val())+"&email="+$.trim($("#clienteMEmail").val())+"&contacto="+$.trim($("#clienteMContacto").val())+"&telconta="+$.trim($("#clienteMContactoTel").val())+"&activo="+activo;
 
 				$.ajax({
-					url: 'php/productos.php',
+					url: 'php/clientes.php',
 					type: 'POST',
 					data: datos,
 					beforeSend: function() {
@@ -145,15 +153,15 @@ $(document).ready(function() {
 					if(res=="1"){
 						swal({
 						  	type: 'success',
-						  	title: 'Los datos del producto han sido modificados',
+						  	title: 'Los datos del cliente han sido modificados',
 						});  
-						verProductos();	
-						$("#GuardarMProducto").attr('disabled', true);
+						clientes();	
+						$("#GuardarMCliente").attr('disabled', true);
 					}else{
 						swal({
 						  	type: 'error',
 						  	title: 'Error:',
-				  			text: 'El producto no se ha podido guardar. Es posible que el código del producto ya exista',
+						  	text: 'Los datos del cliente no han podido ser modificados. Es posible que el código del cliente ya exista',
 						});
 						console.log(res);
 					}
@@ -167,30 +175,35 @@ $(document).ready(function() {
 		  	}
 		});	
 	});
-
-//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-	
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 	$.fn.dataTable.ext.errMode = 'none';
-	function productos(catego,tabla) {
-		tabla.dataTable({
+	function clientes() {
+		$("#tablaClientes").dataTable({
 			"destroy": true,
 			"ajax":{
-				"url": 'php/productos.php',
+				"url": 'php/clientes.php',
 				"method": 'POST',
 				"data": {
-			        "metodo": '2',
-			        "categoria": catego
+			        "metodo": '2'
 			    }
 			},
 			"columns": [
-				{ "data": "Codigo" },
+	            { "data": "Codigo" },
 	            { "data": "Nombre" },
-	            { "data": "UME" },
-	            { "data": "Existencia" },
-	            { "data": "Max" },
-	            { "data": "Min" },
+	            { "data": "Domicilio" },
+	            { "data": "Ciudad" },
+	            { "data": "Estado" },
+	            { "data": "Pais" },
+	            { "data": "CP" },
+	            { "data": "RazonSocial" },
+	            { "data": "RFC" },
+	            { "data": "Telefono" },
+	            { "data": "Email" },
+	            { "data": "Contacto" },
+	            { "data": "TelContacto" },
 	            { "data": "Activo" },
-	            { "data": "Botones" }
+	            { "data": "Botones1" },
+	            { "data": "Botones2" }
 	        ], 
 	        "language": {
 			    "sProcessing":     "Procesando...",
@@ -238,26 +251,24 @@ $(document).ready(function() {
 	            	extend: 'excelHtml5',
 	            	text: "<i class='fas fa-file-excel'></i>",
 	            	titleAttr: 'Excel',
-	            	filename: catego,
-	            	title: catego
+	            	filename: 'Clientes',
+	            	title: 'Clientes'
 	            },
 	            {
 	            	extend: 'pdfHtml5',
 	            	text: "<i class='fas fa-file-pdf'></i>",
 	            	titleAttr: 'PDF',
-	            	filename: catego,
-	            	title: catego,
+	            	filename: 'Clientes',
+	            	title: 'Clientes',
+	            	orientation: 'landscape',
+	            	pageSize: 'TABLOID',
 	            	customize: function(doc) {
+					    doc.defaultStyle.fontSize = 11;
+					    doc.styles.tableHeader.fontSize = 12;
 					    doc.defaultStyle.alignment = 'center';
 					}
 	            }
 	        ]
 		});
-	}
-
-	function verProductos() {
-		productos('Producto Terminado',$("#tablaProductos1"));
-		productos('Materia Prima',$("#tablaProductos2"));
-		productos('Insumo',$("#tablaProductos3"));
 	}
 });

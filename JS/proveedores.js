@@ -1,5 +1,5 @@
 $(document).ready(function() {
-	verProductos();
+	proveedores();
 
 	const swalWithBootstrapButtons = swal.mixin({
 	  confirmButtonClass: 'btn btn-success',
@@ -7,15 +7,14 @@ $(document).ready(function() {
 	  buttonsStyling: false,
 	});
 
-	$("#FormGuardarProducto").submit(function(e) {
+	$("#FormGuardarProveedor").submit(function(e) {
 		e.preventDefault();
+		var data = "metodo=1&codigo="+$.trim($("#proveedorCodigo").val())+"&nombre="+$.trim($("#proveedorNombre").val())+"&domicilio="+$.trim($("#proveedorDomicilio").val())+"&ciudad="+$.trim($("#proveedorCiudad").val())+"&estado="+$.trim($("#proveedorEstado").val())+"&pais="+$.trim($("#proveedorPais").val())+"&cp="+$("#proveedorCP").val()+"&rz="+$.trim($("#proveedorRZ").val())+"&rfc="+$.trim($("#proveedorRFC").val())+"&telefono="+$.trim($("#proveedorTelefono").val())+"&email="+$.trim($("#proveedorEmail").val())+"&contacto="+$.trim($("#proveedorContacto").val())+"&telconta="+$.trim($("#proveedorContactoTel").val());
 
-		var datos = "metodo=1&codigo="+$.trim($("#ProductoCodigo").val())+"&nombre="+$.trim($("#ProductoNombre").val())+"&ume="+$("#ProductoUME").val()+"&categoria="+$("#ProductoCategoria").val()+"&existencia="+$("#ProductoExistencia").val()+"&minimo="+$("#ProductoMinimo").val()+"&maximo="+$("#ProductoMaximo").val();
-			
 		$.ajax({
-			url: 'php/productos.php',
+			url: 'php/proveedores.php',
 			type: 'POST',
-			data: datos,
+			data: data,
 			beforeSend: function() {
 	           	$("#carga").show();
 	        }
@@ -24,15 +23,15 @@ $(document).ready(function() {
 			if(res=="1"){
 				swal({
 				  	type: 'success',
-				  	title: 'El producto se ha guardado',
+				  	title: 'El proveedor se ha guardado',
 				}); 
-				$(".IntProductos").val("");
-				verProductos();	
+				$(".IntProveedores").val("");
+				proveedores();	
 			}else{
 				swal({
 				  	type: 'error',
 				  	title: 'Error:',
-				  	text: 'El producto no se ha podido guardar. Es posible que el código del producto ya exista',
+				  	text: 'El proveedor no se ha podido guardar. Es posible que el código del proveedor ya exista',
 				});
 				console.log(res);
 			}
@@ -43,9 +42,9 @@ $(document).ready(function() {
 		});
 	});
 
-	$(document).on('click', '.BorrarProducto', function() {
+	$(document).on('click', '.BorrarProveedor', function() {
 		swalWithBootstrapButtons({
-		  	title: '¿Estas seguro que quieres eliminar el producto del inventario?',
+		  	title: '¿Estas seguro que quieres eliminar el proveedor?',
 		  	text: "¡Una vez eliminado no podrá ser recuperado jamás!",
 		  	type: 'warning',
 		  	showCancelButton: true,
@@ -57,7 +56,7 @@ $(document).ready(function() {
 		    	var datos = "metodo=3&id="+$(this).attr('attrID');
 
 				$.ajax({
-					url: 'php/productos.php',
+					url: 'php/proveedores.php',
 					type: 'POST',
 					data: datos,
 					beforeSend: function() {
@@ -68,14 +67,14 @@ $(document).ready(function() {
 					if(res=="1"){
 						swal({
 						  	type: 'success',
-						  	title: 'El producto ha sido borrado',
+						  	title: 'El proveedor ha sido borrado',
 						});  
-						verProductos();	
+						proveedores();	
 					}else{
 						swal({
 						  	type: 'error',
 						  	title: 'Error:',
-						  	text: 'El producto no ha podido ser borrado',
+						  	text: 'El proveedor no ha podido ser borrado',
 						});
 						console.log(res);
 					}
@@ -90,39 +89,48 @@ $(document).ready(function() {
 		});	
 	});
 
-	$(document).on('click', '.ModificarProducto', function() {
+	$(document).on('click', '.ModificarProveedor', function() {
 		var padre = $(this).parent().parent();
-		$("#ProductoMCodigo").val(padre.children('td:eq(0)').text());
-		$("#ProductoMNombre").val(padre.children('td:eq(1)').text());
-		$("#ProductoMUME").val(padre.children('td:eq(2)').text());
-		$("#ProductoMExistencia").val(padre.children('td:eq(3)').text());
-		$("#ProductoMMinimo").val(padre.children('td:eq(4)').text());
-		$("#ProductoMMaximo").val(padre.children('td:eq(5)').text());
-		
-		if(padre.children('td:eq(6)').text() == 'Activo'){
-			$("#ProductoMActivo").attr('checked', true);
+
+		$("#proveedorMCodigo").val(padre.children('td:eq(0)').text());
+		$("#proveedorMNombre").val(padre.children('td:eq(1)').text());
+		$("#proveedorMDomicilio").val(padre.children('td:eq(2)').text());
+		$("#proveedorMCiudad").val(padre.children('td:eq(3)').text());
+		$("#proveedorMEstado").val(padre.children('td:eq(4)').text());
+		$("#proveedorMPais").val(padre.children('td:eq(5)').text());
+		$("#proveedorMCP").val(padre.children('td:eq(6)').text());
+		$("#proveedorMRZ").val(padre.children('td:eq(7)').text());
+		$("#proveedorMRFC").val(padre.children('td:eq(8)').text());
+		$("#proveedorMTelefono").val(padre.children('td:eq(9)').text());
+		$("#proveedorMEmail").val(padre.children('td:eq(10)').text());
+		$("#proveedorMContacto").val(padre.children('td:eq(11)').text());
+		$("#proveedorMContactoTel").val(padre.children('td:eq(12)').text());
+
+		if(padre.children('td:eq(13)').text() == 'Activo'){
+			$("#ProveedorMActivo").attr('checked', true);
 		}else{
-			$("#ProductoMActivo").attr('checked', false);
+			$("#ProveedorMActivo").attr('checked', false);
 		}
-		$("#GuardarMProducto").attr('attrID', $(this).attr('attrID'));
-		$("#GuardarMProducto").attr('disabled', true);
+
+		$("#GuardarMProveedor").attr('disabled', true);
+		$("#GuardarMProveedor").attr('attrID', $(this).attr('attrID'));
 	});
 
-	$(".ModiProductos").on('keyup change', function() {
-		$("#GuardarMProducto").attr('disabled', false);
+	$(".ModiProveedores").on('keyup change', function() {
+		$("#GuardarMProveedor").attr('disabled', false);
 	});
 
-	$("#FormModiProducto").submit(function(e) {
+	$("#FormModiProveedor").submit(function(e) {
 		e.preventDefault();
 		var activo=0;
-		if($("#ProductoMActivo").is(':checked')){
+		if($("#ProveedorMActivo").is(':checked')){
 			activo=1;
 		}else{
 			activo=0;
 		}
 		
 		swalWithBootstrapButtons({
-		  	title: '¿Estas seguro que quieres modificar los datos del producto?',
+		  	title: '¿Estas seguro que quieres modificar los datos del proveedor?',
 		  	text: "¡Una vez modificados no podrán ser recuperados jamás!",
 		  	type: 'warning',
 		  	showCancelButton: true,
@@ -131,10 +139,10 @@ $(document).ready(function() {
 		  	reverseButtons: true
 		}).then((result) => {
 		  	if (result.value) {
-		    	var datos = "metodo=4&id="+$("#GuardarMProducto").attr('attrID')+"&codigo="+$.trim($("#ProductoMCodigo").val())+"&nombre="+$.trim($("#ProductoMNombre").val())+"&ume="+$("#ProductoMUME").val()+"&existencia="+$("#ProductoMExistencia").val()+"&minimo="+$("#ProductoMMinimo").val()+"&maximo="+$("#ProductoMMaximo").val()+"&activo="+activo;
+		    	var datos = "metodo=4&id="+$("#GuardarMProveedor").attr('attrID')+"&codigo="+$.trim($("#proveedorMCodigo").val())+"&nombre="+$.trim($("#proveedorMNombre").val())+"&domicilio="+$.trim($("#proveedorMDomicilio").val())+"&ciudad="+$.trim($("#proveedorMCiudad").val())+"&estado="+$.trim($("#proveedorMEstado").val())+"&pais="+$.trim($("#proveedorMPais").val())+"&cp="+$("#proveedorMCP").val()+"&rz="+$.trim($("#proveedorMRZ").val())+"&rfc="+$.trim($("#proveedorMRFC").val())+"&telefono="+$.trim($("#proveedorMTelefono").val())+"&email="+$.trim($("#proveedorMEmail").val())+"&contacto="+$.trim($("#proveedorMContacto").val())+"&telconta="+$.trim($("#proveedorMContactoTel").val())+"&activo="+activo;
 
 				$.ajax({
-					url: 'php/productos.php',
+					url: 'php/proveedores.php',
 					type: 'POST',
 					data: datos,
 					beforeSend: function() {
@@ -145,15 +153,15 @@ $(document).ready(function() {
 					if(res=="1"){
 						swal({
 						  	type: 'success',
-						  	title: 'Los datos del producto han sido modificados',
+						  	title: 'Los datos del proveedor han sido modificados',
 						});  
-						verProductos();	
-						$("#GuardarMProducto").attr('disabled', true);
+						proveedores();	
+						$("#GuardarMProveedor").attr('disabled', true);
 					}else{
 						swal({
 						  	type: 'error',
 						  	title: 'Error:',
-				  			text: 'El producto no se ha podido guardar. Es posible que el código del producto ya exista',
+						  	text: 'Los datos del proveedor no han podido ser modificados. Es posible que el código del proveedor ya exista',
 						});
 						console.log(res);
 					}
@@ -167,30 +175,35 @@ $(document).ready(function() {
 		  	}
 		});	
 	});
-
-//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-	
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 	$.fn.dataTable.ext.errMode = 'none';
-	function productos(catego,tabla) {
-		tabla.dataTable({
+	function proveedores() {
+		$("#tablaProveedores").dataTable({
 			"destroy": true,
 			"ajax":{
-				"url": 'php/productos.php',
+				"url": 'php/proveedores.php',
 				"method": 'POST',
 				"data": {
-			        "metodo": '2',
-			        "categoria": catego
+			        "metodo": '2'
 			    }
 			},
 			"columns": [
-				{ "data": "Codigo" },
+	            { "data": "Codigo" },
 	            { "data": "Nombre" },
-	            { "data": "UME" },
-	            { "data": "Existencia" },
-	            { "data": "Max" },
-	            { "data": "Min" },
+	            { "data": "Domicilio" },
+	            { "data": "Ciudad" },
+	            { "data": "Estado" },
+	            { "data": "Pais" },
+	            { "data": "CP" },
+	            { "data": "RazonSocial" },
+	            { "data": "RFC" },
+	            { "data": "Telefono" },
+	            { "data": "Email" },
+	            { "data": "Contacto" },
+	            { "data": "TelContacto" },
 	            { "data": "Activo" },
-	            { "data": "Botones" }
+	            { "data": "Botones1" },
+	            { "data": "Botones2" }
 	        ], 
 	        "language": {
 			    "sProcessing":     "Procesando...",
@@ -238,26 +251,24 @@ $(document).ready(function() {
 	            	extend: 'excelHtml5',
 	            	text: "<i class='fas fa-file-excel'></i>",
 	            	titleAttr: 'Excel',
-	            	filename: catego,
-	            	title: catego
+	            	filename: 'Proveedores',
+	            	title: 'Proveedores'
 	            },
 	            {
 	            	extend: 'pdfHtml5',
 	            	text: "<i class='fas fa-file-pdf'></i>",
 	            	titleAttr: 'PDF',
-	            	filename: catego,
-	            	title: catego,
+	            	filename: 'Proveedores',
+	            	title: 'Proveedores',
+	            	orientation: 'landscape',
+	            	pageSize: 'TABLOID',
 	            	customize: function(doc) {
+					    doc.defaultStyle.fontSize = 11;
+					    doc.styles.tableHeader.fontSize = 12;
 					    doc.defaultStyle.alignment = 'center';
 					}
 	            }
 	        ]
 		});
-	}
-
-	function verProductos() {
-		productos('Producto Terminado',$("#tablaProductos1"));
-		productos('Materia Prima',$("#tablaProductos2"));
-		productos('Insumo',$("#tablaProductos3"));
 	}
 });

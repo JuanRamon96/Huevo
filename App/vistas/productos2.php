@@ -10,6 +10,7 @@
 					<div class="col-12 table-responsive">
 						<table class="table table-hover table-striped" id="tablaProductos2" width="100%">
 							<thead>
+								<th>Código</th>
 								<th>Nombre</th>
 								<th>UME</th>
 								<th>Existencia</th>

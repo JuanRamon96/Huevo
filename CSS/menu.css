@@ -114,6 +114,11 @@ table{
     font-size: 18px;
 }
 
+#FormArea, #FormPuesto{
+    padding: 50px 20px;
+    background: #FAFAFA;
+}
+
 /*>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
 
 .carga {

@@ -51,6 +51,36 @@ $(document).ready(function() {
 		$("#mySidenav").css('width', '0');
 	});
 
+	$("#verNuevoCliente").click(function() {
+		$(".oculto").hide();
+		$("#VistaNuevoCliente").show();
+		$("#mySidenav").css('width', '0');
+	});
+
+	$("#verClientes").click(function() {
+		$(".oculto").hide();
+		$("#VistaClientes").show();
+		$("#mySidenav").css('width', '0');
+	});
+
+	$("#verNuevoProveedor").click(function() {
+		$(".oculto").hide();
+		$("#VistaNuevoProveedor").show();
+		$("#mySidenav").css('width', '0');
+	});
+
+	$("#verProveedores").click(function() {
+		$(".oculto").hide();
+		$("#VistaProveedores").show();
+		$("#mySidenav").css('width', '0');
+	});
+
+	$("#verAyP").click(function() {
+		$(".oculto").hide();
+		$("#VistaAreasyPuestos").show();
+		$("#mySidenav").css('width', '0');
+	});
+
 	$(document).on('keyup change', '.generales', function() {
 		$("#GuardarGeneral").attr('disabled', false);
 	});
