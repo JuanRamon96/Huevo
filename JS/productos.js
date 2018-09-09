@@ -100,9 +100,9 @@ $(document).ready(function() {
 		$("#ProductoMMaximo").val(padre.children('td:eq(5)').text());
 		
 		if(padre.children('td:eq(6)').text() == 'Activo'){
-			$("#ProductoMActivo").attr('checked', true);
+			$("#ProductoMActivo").prop('checked', true);
 		}else{
-			$("#ProductoMActivo").attr('checked', false);
+			$("#ProductoMActivo").prop('checked', false);
 		}
 		$("#GuardarMProducto").attr('attrID', $(this).attr('attrID'));
 		$("#GuardarMProducto").attr('disabled', true);

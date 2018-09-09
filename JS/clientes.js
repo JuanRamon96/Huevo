@@ -107,9 +107,9 @@ $(document).ready(function() {
 		$("#clienteMContactoTel").val(padre.children('td:eq(12)').text());
 
 		if(padre.children('td:eq(13)').text() == 'Activo'){
-			$("#ClienteMActivo").attr('checked', true);
+			$("#ClienteMActivo").prop('checked', true);
 		}else{
-			$("#ClienteMActivo").attr('checked', false);
+			$("#ClienteMActivo").prop('checked', false);
 		}
 
 		$("#GuardarMCliente").attr('disabled', true);

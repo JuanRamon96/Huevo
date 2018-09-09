@@ -65,7 +65,7 @@
         <p><img class="logo" src="../Imagenes/logo.png"></p>
     </div>
 
-	<div id="mySidenav" class="sidenav">
+	<div id="mySidenav" tabindex="0" class="sidenav">
 	 	<a href="javascript:void(0)" class="closebtn" id="closeBtn">&times;</a>	  	
 	  	<?php
 	  		if ($productos[0]=='1' || $_SESSION['user']['Tipo']=='1') {
@@ -125,10 +125,10 @@
 	  			echo "<ul><span><i class='fas fa-people-carry'></i> Empleados</span>";
 
 	  			if($empleados[1]=='1' || $_SESSION['user']['Tipo']=='1'){
-	  				echo "<li>Nuevo Empleado <i class='fas fa-plus'></i></li>";
+	  				echo "<li id='verNuevoEmpleado'>Nuevo Empleado <i class='fas fa-plus'></i></li>";
 	  			}
-	  			echo "<li>Consultar Empleados <i class='fas fa-search'></i></li>
-	  					<li id='verAyP'>Areas y Puestos <i class='fas fa-sitemap'></i></li>
+	  			echo "<li id='verEmpleados'>Consultar Empleados <i class='fas fa-search'></i></li>
+	  					<li id='verAyP'>Áreas y Puestos <i class='fas fa-sitemap'></i></li>
 	  				</ul>";
 	  				
 	  		}
@@ -230,6 +230,14 @@
 			if ($_SESSION['user']['Tipo']=='1' || $empleados[0] =='1') {
 				require("vistas/AreasyPuestos.php");
 			}
+
+			if($_SESSION['user']['Tipo']=='1' || $empleados[1]=='1'){
+	  			require("vistas/NuevoEmpleado.php");
+	  		}
+
+	  		if($_SESSION['user']['Tipo']=='1' || $empleados[0]=='1'){
+	  			require("vistas/verEmpleados.php");
+	  		}
 		?>
 	</div>
 
@@ -251,5 +259,6 @@
 <script src="../JS/clientes.js"></script>
 <script src="../JS/proveedores.js"></script>
 <script src="../JS/AreasyPuestos.js"></script>	
+<script src="../JS/empleados.js"></script>	
 </body>
 </html>

@@ -20,6 +20,7 @@
 					  		<div class="col-12 table-responsive">
 					  			<table class="table table-striped table-hover" width="100%" id="tablaAreas">
 						  			<thead>
+						  				<th>Código</th>
 						  				<th>Nombre</th>
 						  				<th>Estatus</th>
 						  				<th></th>
@@ -39,6 +40,7 @@
 					  		<div class="col-12 table-responsive">
 					  			<table class="table table-striped table-hover" width="100%" id="tablaPuestos">
 						  			<thead>
+						  				<th>Código</th>
 						  				<th>Nombre</th>
 						  				<th>Área</th>
 						  				<th>Estatus</th>
@@ -72,6 +74,10 @@
 					<br>
 				</div>
 				<div class="form-group col-12">
+					<label for="areaMCodigo">Código:</label>
+					<input type="text" id="areaMCodigo" class="form-control ModiAreas" maxlength="30" required>
+				</div>	
+				<div class="form-group col-12">
 					<label for="areaMNombre">Nombre:</label>
 					<input type="text" id="areaMNombre" class="form-control ModiAreas" maxlength="60" required>
 				</div>	
@@ -102,6 +108,10 @@
 					<input type="checkbox" class="ModiPuestos" id="PuestoMActivo" value="1" checked>
 					<br>
 				</div>
+				<div class="form-group col-12">
+					<label for="puestoMCodigo">Código:</label>
+					<input type="text" id="puestoMCodigo" class="form-control ModiPuestos" maxlength="30" required>
+				</div>	
 				<div class="form-group col-12">
 					<label for="puestoMNombre">Nombre:</label>
 					<input type="text" id="puestoMNombre" class="form-control ModiPuestos" maxlength="60" required>

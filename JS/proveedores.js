@@ -107,9 +107,9 @@ $(document).ready(function() {
 		$("#proveedorMContactoTel").val(padre.children('td:eq(12)').text());
 
 		if(padre.children('td:eq(13)').text() == 'Activo'){
-			$("#ProveedorMActivo").attr('checked', true);
+			$("#ProveedorMActivo").prop('checked', true);
 		}else{
-			$("#ProveedorMActivo").attr('checked', false);
+			$("#ProveedorMActivo").prop('checked', false);
 		}
 
 		$("#GuardarMProveedor").attr('disabled', true);

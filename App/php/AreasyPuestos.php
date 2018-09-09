@@ -20,12 +20,20 @@
     if($_POST['metodo'] == '1'){
     	if($_SESSION['user']['Tipo']=="1" || $empleados[1] == '1'){
     		echo "<form class='row' id='FormArea'>
-				<div class='form-group col-6 offset-2'>
+    			<div class='form-group col-5'>
+					<div class='input-group'>
+						<div class='input-group-prepend'>
+							<span class='input-group-text'>Código</span>
+						</div>
+						<input type='text' class='form-control intArea' id='codigoArea' maxlength='30' required>
+					</div>
+				</div>
+				<div class='form-group col-5'>
 					<div class='input-group'>
 						<div class='input-group-prepend'>
 							<span class='input-group-text'>Nombre</span>
 						</div>
-						<input type='text' class='form-control' id='nombreArea' maxlength='60' required>
+						<input type='text' class='form-control intArea' id='nombreArea' maxlength='60' required>
 					</div>
 				</div>
 				<div class='form-group col-2'>
@@ -36,7 +44,7 @@
     }
 
     if($_POST['metodo'] == '2'){
-    	$sql = "INSERT INTO areas VALUES(null,'$_POST[nombre]','1','0')";
+    	$sql = "INSERT INTO areas VALUES(null,'$_POST[codigo]','$_POST[nombre]','1','0')";
 
     	if($con->query($sql)){
     		echo "1";
@@ -69,7 +77,7 @@
 						$bBorrar='';
 					}
 
-					$arreglo['data'][] = array('Nombre'=> $row['Nombre'], 'Activo'=> $activo, 'Botones'=> $bModificar.$bBorrar);	
+					$arreglo['data'][] = array('Codigo'=> $row['Codigo'],'Nombre'=> $row['Nombre'], 'Activo'=> $activo, 'Botones'=> $bModificar.$bBorrar);	
 				}
 				echo json_encode($arreglo);
 			}else{
@@ -92,7 +100,7 @@
     }
 
     if($_POST['metodo'] == '5'){
-    	$sql = "UPDATE areas SET Nombre='$_POST[nombre]', Activo='$_POST[activo]' WHERE ID_Area='$_POST[id]'";
+    	$sql = "UPDATE areas SET Codigo= '$_POST[codigo]', Nombre='$_POST[nombre]', Activo='$_POST[activo]' WHERE ID_Area='$_POST[id]'";
 
     	if($con->query($sql)){
     		echo "1";
@@ -104,7 +112,15 @@
     if($_POST['metodo'] == '6'){
     	if($_SESSION['user']['Tipo']=="1" || $empleados[1] == '1'){
     		echo "<form class='row' id='FormPuesto'>
-				<div class='form-group col-5'>
+    			<div class='form-group col-3'>
+					<div class='input-group'>
+						<div class='input-group-prepend'>
+							<span class='input-group-text'>Código</span>
+						</div>
+						<input type='text' class='form-control intPuesto' id='codigoPuesto' maxlength='60' required>
+					</div>
+				</div>
+				<div class='form-group col-4'>
 					<div class='input-group'>
 						<div class='input-group-prepend'>
 							<span class='input-group-text'>Nombre</span>
@@ -112,7 +128,7 @@
 						<input type='text' class='form-control intPuesto' id='nombrePuesto' maxlength='60' required>
 					</div>
 				</div>
-				<div class='form-group col-5'>
+				<div class='form-group col-3'>
 					<select class='form-control intPuesto' id='areaPuesto' required>
 
 					</select>
@@ -141,7 +157,7 @@
 	}
 
 	if($_POST['metodo'] == '8'){
-    	$sql = "INSERT INTO puestos VALUES(null,'$_POST[nombre]','$_POST[area]','1','0')";
+    	$sql = "INSERT INTO puestos VALUES(null,'$_POST[codigo]','$_POST[nombre]','$_POST[area]','1','0')";
 
     	if($con->query($sql)){
     		echo "1";
@@ -151,7 +167,7 @@
     }
 
     if($_POST['metodo'] == '9'){
-		$sql = "SELECT ID_Puesto, puestos.Nombre AS Nombre, FK_Area, puestos.Activo AS Activo, areas.Nombre AS Area FROM puestos INNER JOIN areas ON FK_Area=ID_Area WHERE puestos.Eliminado = '0'";
+		$sql = "SELECT ID_Puesto, puestos.Codigo AS Codigo, puestos.Nombre AS Nombre, FK_Area, puestos.Activo AS Activo, areas.Nombre AS Area FROM puestos INNER JOIN areas ON FK_Area=ID_Area WHERE puestos.Eliminado = '0'";
 
 		if($res=$con->query($sql)){
 			if ($res->num_rows > 0) {
@@ -174,7 +190,7 @@
 						$bBorrar='';
 					}
 
-					$arreglo['data'][] = array('Nombre'=> $row['Nombre'], 'Area'=> $row['Area'], 'Activo'=> $activo, 'Botones'=> $bModificar.$bBorrar);	
+					$arreglo['data'][] = array('Codigo'=> $row['Codigo'], 'Nombre'=> $row['Nombre'], 'Area'=> $row['Area'], 'Activo'=> $activo, 'Botones'=> $bModificar.$bBorrar);	
 				}
 				echo json_encode($arreglo);
 			}else{
@@ -197,7 +213,7 @@
     }
 
     if($_POST['metodo'] == '11'){
-    	$sql = "UPDATE puestos SET Nombre='$_POST[nombre]', FK_Area='$_POST[area]', Activo='$_POST[activo]' WHERE ID_Puesto='$_POST[id]'";
+    	$sql = "UPDATE puestos SET Codigo='$_POST[codigo]', Nombre='$_POST[nombre]', FK_Area='$_POST[area]', Activo='$_POST[activo]' WHERE ID_Puesto='$_POST[id]'";
 
     	if($con->query($sql)){
     		echo "1";

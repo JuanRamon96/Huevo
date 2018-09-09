@@ -74,7 +74,7 @@ $(document).ready(function() {
 	$(document).on('click', '.BorrarUsuario', function() {
 		swalWithBootstrapButtons({
 		  	title: '¿Estas seguro que quieres eliminar el usuario?',
-		  	text: "¡Una vez eliminado no podrá ser recuperados jamás!",
+		  	text: "¡Una vez eliminado no podrá ser recuperado jamás!",
 		  	type: 'warning',
 		  	showCancelButton: true,
 		 	confirmButtonText: 'Aceptar',

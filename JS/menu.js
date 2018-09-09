@@ -3,6 +3,11 @@ $(document).ready(function() {
 
 	$("#openBtn").click(function() {
 		$("#mySidenav").css('width', '250px');
+		$("#mySidenav").focus();
+	});
+
+	$("#mySidenav").focusout(function(){
+		$(this).css('width', '0');
 	});
 	
 	$("#closeBtn").click(function() {
@@ -78,6 +83,18 @@ $(document).ready(function() {
 	$("#verAyP").click(function() {
 		$(".oculto").hide();
 		$("#VistaAreasyPuestos").show();
+		$("#mySidenav").css('width', '0');
+	});
+
+	$("#verNuevoEmpleado").click(function() {
+		$(".oculto").hide();
+		$("#VistaNuevoEmpleado").show();
+		$("#mySidenav").css('width', '0');
+	});
+
+	$("#verEmpleados").click(function() {
+		$(".oculto").hide();
+		$("#VistaEmpleados").show();
 		$("#mySidenav").css('width', '0');
 	});
 
