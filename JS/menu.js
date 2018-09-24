@@ -98,6 +98,12 @@ $(document).ready(function() {
 		$("#mySidenav").css('width', '0');
 	});
 
+	$("#verNuevaOrden").click(function() {
+		$(".oculto").hide();
+		$("#VistaOrdendeCompra").show();
+		$("#mySidenav").css('width', '0');
+	});
+
 	$(document).on('keyup change', '.generales', function() {
 		$("#GuardarGeneral").attr('disabled', false);
 	});

@@ -119,6 +119,24 @@ table{
     background: #FAFAFA;
 }
 
+#OrdenDatosProveedor{
+    border: 1px solid #CCC;
+    border-radius: 5px;
+    height: 200px;
+    background: #F1F1F1;
+    overflow-x: auto;
+}
+
+#TablaOrden{
+    height: 500px;
+}
+
+.IntDetalles{
+    text-align: center;
+    border: none;
+    background: none;
+}
+
 /*>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
 
 .carga {

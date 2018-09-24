@@ -113,11 +113,11 @@
 	  		if ($compras[0] =='1' || $_SESSION['user']['Tipo']=='1') {
 	  			echo "<ul><span><i class='fas fa-shopping-cart'></i> Compras</span>";
 
-	  			if($proveedores[1] =='1' || $_SESSION['user']['Tipo']=='1'){
-	  				echo "<li>Nueva Orden Compra <i class='fas fa-plus'></i></li>";
+	  			if($compras[1] =='1' || $_SESSION['user']['Tipo']=='1'){
+	  				echo "<li id='verNuevaOrden'>Nueva Orden Compra <i class='fas fa-plus'></i></li>";
 	  			}
-	  			echo "<li>Consultar Compras <i class='fas fa-search'></i></li>
-	  					<li style='font-size:13px;'>Consultar Ordenes de Compra <i class='fas fa-search'></i></li>
+	  			echo "<li style='font-size:13px;'>Consultar Ordenes de Compra <i class='fas fa-search'></i></li>
+	  					<li>Consultar Compras <i class='fas fa-search'></i></li>
 	  				</ul>";
 	  				
 	  		}
@@ -238,6 +238,10 @@
 	  		if($_SESSION['user']['Tipo']=='1' || $empleados[0]=='1'){
 	  			require("vistas/verEmpleados.php");
 	  		}
+
+	  		if($_SESSION['user']['Tipo'] == "1" || $compras[1]=='1'){ 
+				require("vistas/OrdendeCompra.php"); 
+			}
 		?>
 	</div>
 
@@ -260,5 +264,6 @@
 <script src="../JS/proveedores.js"></script>
 <script src="../JS/AreasyPuestos.js"></script>	
 <script src="../JS/empleados.js"></script>	
+<script src="../JS/OrdenCompra.js"></script>	
 </body>
 </html>
