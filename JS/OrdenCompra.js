@@ -1,5 +1,5 @@
 $(document).ready(function() {
-	var folio="";
+	var folio="", proveedor="";
 
 	//$("#OrdenFecha").val(fecha()+'T'+hora());
 	
@@ -163,30 +163,7 @@ $(document).ready(function() {
 		folio = padre.children('td:eq(0)').text();
 		$("#OrdenNombreF").val(padre.children('td:eq(1)').text());
 		
-		var data = "metodo=5&folio="+folio; 
-
-		$.ajax({
-			url: 'php/OrdenCompra.php',
-			type: 'POST',
-			data: data
-		})
-		.done(function(res) {
-			if(res == ""){
-				$("#OrdenFolio").val(folio+'1');
-			}else if(!isNaN(res)){
-				$("#OrdenFolio").val(folio+(parseInt(res)+1));
-			}else{
-				swal({
-					type: 'error',
-					title: 'Error:',
-					text: 'No se ha podido obtener el folio',
-				});
-				console.log(res);
-			}
-		})
-		.fail(function() {
-			console.log("Error");
-		});
+		valorFolio();
 
 		$('#ModalOrdenFolio').modal('hide');
 	});
@@ -234,6 +211,7 @@ $(document).ready(function() {
 	$(document).on('click', '.seleccionarProveedor', function() {
 		var padre = $(this).parent().parent();
 		$("#OrdenProveedor").val(padre.children('td:eq(1)').text());
+		proveedor = $(this).attr('attrID');
 
 		var data="metodo=7&id="+$(this).attr('attrID');
 		$.ajax({
@@ -351,6 +329,71 @@ $(document).ready(function() {
 		});
 		$("#OrdenCostoTotal").val(suma);
 	}
+
+	$("#GuardarOrdenCompra").click(function() {
+		if($("#OrdenFolio").val() == ""){
+			swal({
+				type: 'warning',
+				title: 'Debes seleccionar un folio',
+			});
+			$("#OrdenBuscarFolio").click();
+		}else if($("#OrdenProveedor").val() == ""){
+			swal({
+				type: 'warning',
+				title: 'Debes seleccionar un proveedor',
+			});
+			$("#OrdenBuscarProveedor").click();
+		}else if($("#Ordendetalles").children('tr').index() < 0){
+			swal({
+				type: 'warning',
+				title: 'Debes ingresar productos a la orden',
+			});
+		}else{
+			var detalles = new Array();
+			$("#Ordendetalles").children('tr').each(function(index) {
+				detalles[index] = [$(this).children('td:eq(0)').children('span').text(),$(this).children('td:eq(3)').children('input').val(),$(this).children('td:eq(4)').children('input').val(),$(this).children('td:eq(5)').text(),$(this).children('td:eq(6)').children('input').val(),$(this).children('td:eq(7)').children('input').val(),$(this).children('td:eq(8)').text()];
+			});
+
+			var data="metodo=9&folio="+folio+"&proveedor="+proveedor+"&total="+$("#OrdenCostoTotal").val()+"&detalles="+JSON.stringify(detalles);
+
+			$.ajax({
+				url: 'php/OrdenCompra.php',
+				type: 'POST',
+				data: data,
+				beforeSend: function() {
+				    $("#carga").show();
+				}
+			})
+			.done(function(res) {
+				if(res=="Correcto"){
+					swal({
+						type: 'success',
+						title: 'La orden de compra ha sido guardada',
+					}); 
+					$("#Ordendetalles tr").remove();
+					proveedor="";
+					$(".IntOrPro").val("");
+		 			$(".IntOrDetalle").val("0");
+		 			$("#OrdenProveedor").val("");
+		 			$("#OrdenDatosProveedor").html("");
+		 			total();
+		 			valorFolio();
+		 			//ordenesCompra();
+				}else{
+					swal({
+						type: 'error',
+						title: 'Error:',
+						text: 'La orden de compra no ha podido ser guardada',
+					});
+					console.log(res);
+				}
+				$("#carga").hide();	
+			})
+			.fail(function() {
+				console.log("Error");
+			});
+		}
+	});
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 	function verFolios() {
 		$.ajax({
@@ -390,6 +433,33 @@ $(document).ready(function() {
 		.fail(function() {
 			console.log("Error");
 		});	
+	}
+
+	function valorFolio() {
+		var data = "metodo=5&folio="+folio; 
+
+		$.ajax({
+			url: 'php/OrdenCompra.php',
+			type: 'POST',
+			data: data
+		})
+		.done(function(res) {
+			if(res == ""){
+				$("#OrdenFolio").val(folio+'1');
+			}else if(!isNaN(res)){
+				$("#OrdenFolio").val(folio+(parseInt(res)+1));
+			}else{
+				swal({
+					type: 'error',
+					title: 'Error:',
+					text: 'No se ha podido obtener el folio',
+				});
+				console.log(res);
+			}
+		})
+		.fail(function() {
+			console.log("Error");
+		});
 	}
 
 	function fecha() {

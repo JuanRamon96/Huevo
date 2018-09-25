@@ -170,7 +170,8 @@
         if($res=$con->query($sql)){
             if($res->num_rows > 0){
                 $row = $res->fetch_assoc();
-                echo "<div style='font-size:13px; padding:10px 0px;'><p>Código: $row[Codigo]</p>
+                echo "<div style='font-size:13px; padding:10px 0px;'>
+                <p>Código: $row[Codigo]</p>
                 <p>Nombre: $row[Nombre]</p>
                 <p>Domicilio: $row[Domicilio]</p>
                 <p>Ciudad: $row[Ciudad]</p>
@@ -228,6 +229,46 @@
                     </table>
                 </div>
             </div>";    
+        }else{
+            echo "Error: ".mysqli_error($con);
+        }
+    }
+
+    if($_POST['metodo']=='9'){
+        $compro=0;
+        $numero = strlen($_POST['folio']);
+        $sql = "SELECT SUBSTR(MAX(Folio) FROM $numero+1) AS Numero FROM orden_compra WHERE SUBSTR(Folio,1,$numero)='$_POST[folio]'";
+
+        if($res=$con->query($sql)){
+            $row = $res->fetch_assoc();
+            if($row['Numero'] == ""){
+                $folio= $_POST['folio'].'1';
+            }else{
+               $folio= $_POST['folio'].($row['Numero']+1); 
+            }
+
+            $sql1 = "INSERT INTO orden_compra VALUES(null,'$folio','$_POST[proveedor]','$_POST[total]',NOW(),'0','0','0')";
+
+            if($con->query($sql1)){
+                $id=mysqli_insert_id($con);
+                $detalles=json_decode($_POST["detalles"]);
+
+                foreach($detalles as $deta){
+                    $sql2 = "INSERT INTO orden_compra_detalle VALUES(null,'$id','$deta[0]','$deta[1]','$deta[2]','$deta[3]','$deta[4]','$deta[5]','$deta[6]')";
+
+                    if(!$con->query($sql2)){
+                        $compro=1;
+                    }
+                }
+
+                if($compro == 1){
+                    echo "Error: ".mysqli_error();
+                }else{
+                    echo "Correcto";
+                }
+            }else{
+                echo "Error: ".mysqli_error();
+            } 
         }else{
             echo "Error: ".mysqli_error($con);
         }

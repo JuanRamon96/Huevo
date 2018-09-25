@@ -125,7 +125,7 @@
 						<hr>
 						<div class="row">
 							<div class="col-8 offset-2">
-								<button class="btn btn-success btn-block btn-lg">Guardar <i class="fas fa-save"></i></button>
+								<button class="btn btn-success btn-block btn-lg" id="GuardarOrdenCompra">Guardar <i class="fas fa-save"></i></button>
 							</div>
 						</div>
 					</div>
