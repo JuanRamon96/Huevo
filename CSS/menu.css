@@ -11,6 +11,10 @@ body{
 	background: #CACFD2;
 }
 
+.modal{
+    overflow-y: auto;
+}
+
 .sidenav {
     height: 100%;
     width: 0;
@@ -119,7 +123,7 @@ table{
     background: #FAFAFA;
 }
 
-#OrdenDatosProveedor{
+#OrdenDatosProveedor, #OrdenMDatosProveedor{
     border: 1px solid #CCC;
     border-radius: 5px;
     height: 200px;
@@ -127,14 +131,39 @@ table{
     overflow-x: auto;
 }
 
+#OrdenMDatosProveedor{
+    font-size: 12px;
+    margin: 0 auto;
+}
+
 #TablaOrden{
     height: 500px;
+}
+
+#TablaMOrden{
+    height: 300px;
 }
 
 .IntDetalles{
     text-align: center;
     border: none;
     background: none;
+}
+
+.masOrdenDetalle{
+    padding: 30px 100px;
+}
+
+.masOrdenDetalle table{
+    box-sizing: border-box;
+}
+
+.MDetalles{
+    width: 100%;
+}
+
+#TablaMOrden table{
+    font-size: 14px;
 }
 
 /*>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/

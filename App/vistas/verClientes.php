@@ -13,6 +13,7 @@
 								<th>Código</th>
 								<th>Nombre</th>
 								<th>Domicilio</th>
+								<th>Colonia</th>
 								<th>Ciudad</th>
 								<th>Estado</th>
 								<th>País</th>
@@ -64,19 +65,23 @@
 					<label for="clienteMDomicilio">Domicilio:</label>
 					<input type="text" id="clienteMDomicilio" class="form-control ModiClientes" maxlength="150" required>
 				</div>
+				<div class="form-group col-6">
+					<label for="clienteMColonia">Colonia:</label>
+					<input type="text" id="clienteMColonia" class="form-control ModiClientes" maxlength="50" required>
+				</div>
 				<div class="form-group col-3">
 					<label for="clienteMCiudad">Ciudad:</label>
 					<input type="text" id="clienteMCiudad" class="form-control ModiClientes" maxlength="40" required>
 				</div>
-				<div class="form-group col-3">
+				<div class="form-group col-4">
 					<label for="clienteMEstado">Estado:</label>
 					<input type="text" id="clienteMEstado" class="form-control ModiClientes" maxlength="40" required>
 				</div>
-				<div class="form-group col-4">
+				<div class="form-group col-5">
 					<label for="clienteMPais">País:</label>
 					<input type="text" id="clienteMPais" class="form-control ModiClientes" maxlength="40" required>
 				</div>
-				<div class="form-group col-4">
+				<div class="form-group col-3">
 					<label for="clienteMCP">Código Postal:</label>
 					<input type="number" id="clienteMCP" class="form-control ModiClientes" required>
 				</div>
@@ -84,7 +89,7 @@
 					<label for="clienteMRZ">Razón social:</label>
 					<input type="text" id="clienteMRZ" class="form-control ModiClientes" maxlength="60" required>
 				</div>
-				<div class="form-group col-6">
+				<div class="form-group col-5">
 					<label for="clienteMRFC">RFC:</label>
 					<input type="text" id="clienteMRFC" class="form-control ModiClientes" maxlength="60" required>
 				</div>

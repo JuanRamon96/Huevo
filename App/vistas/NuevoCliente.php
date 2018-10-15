@@ -22,6 +22,10 @@
 								<input type="text" id="clienteDomicilio" class="form-control IntClientes" maxlength="150" required>
 							</div>
 							<div class="form-group col-3">
+								<label for="clienteColonia">Colonia:</label>
+								<input type="text" id="clienteColonia" class="form-control IntClientes" maxlength="40" required>
+							</div>
+							<div class="form-group col-3">
 								<label for="clienteCiudad">Ciudad:</label>
 								<input type="text" id="clienteCiudad" class="form-control IntClientes" maxlength="40" required>
 							</div>
@@ -29,11 +33,11 @@
 								<label for="clienteEstado">Estado:</label>
 								<input type="text" id="clienteEstado" class="form-control IntClientes" maxlength="40" required>
 							</div>
-							<div class="form-group col-4">
+							<div class="form-group col-3">
 								<label for="clientePais">País:</label>
 								<input type="text" id="clientePais" class="form-control IntClientes" maxlength="40" required>
 							</div>
-							<div class="form-group col-4">
+							<div class="form-group col-2">
 								<label for="clienteCP">Código Postal:</label>
 								<input type="number" id="clienteCP" class="form-control IntClientes" required>
 							</div>

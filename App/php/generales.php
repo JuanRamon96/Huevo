@@ -1,14 +1,14 @@
 <?php  
 	require("../../conexion.php");
 
-	if(isset($_POST["metodo"])){
+	if($_POST["metodo"] == '1'){
 		$sql = "SELECT * FROM generales WHERE ID_General='1'";
 		
 		if($res=$con->query($sql)){
 			if ($res->num_rows > 0) {
 				$row = $res->fetch_assoc();
 				
-				echo "$row[Dentista]*$row[Nombre]*$row[Domicilio]*$row[Colonia]*$row[Ciudad]*$row[Estado]*$row[CP]*$row[Telefono]*$row[Email]";
+				echo "$row[Nombre]*$row[Domicilio]*$row[Colonia]*$row[Ciudad]*$row[Estado]*$row[Pais]*$row[CP]*$row[RazonSocial]*$row[RFC]*$row[Telefono]*$row[Email]";
 			} else {
 				echo "No se encontraron resultados";
 			}
@@ -16,8 +16,9 @@
 		    echo "Error: ".mysqli_error($con);
 		}
 		$con->close();	
-	}else{
-		$sql = "UPDATE generales SET Dentista='$_POST[GDentista]', Nombre='$_POST[GClinica]', Domicilio='$_POST[GDomicilio]', Colonia='$_POST[GColonia]', Ciudad='$_POST[GCiudad]', Estado='$_POST[GEstado]', CP='$_POST[GCP]', Telefono='$_POST[GTelefono]', Email='$_POST[GEmail]' WHERE ID_General='1'";
+	}
+	if($_POST["metodo"] == '2'){
+		$sql = "UPDATE generales SET Nombre='$_POST[nombre]', Domicilio='$_POST[domicilio]', Colonia='$_POST[colonia]', Ciudad='$_POST[ciudad]', Estado='$_POST[estado]', Pais='$_POST[pais]', CP='$_POST[CP]', RazonSocial='$_POST[RZ]', RFC='$_POST[RFC]', Telefono='$_POST[telefono]', Email='$_POST[email]' WHERE ID_General='1'";
 
         if($con->query($sql)){
             echo "1";

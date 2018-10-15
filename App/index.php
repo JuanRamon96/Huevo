@@ -116,7 +116,7 @@
 	  			if($compras[1] =='1' || $_SESSION['user']['Tipo']=='1'){
 	  				echo "<li id='verNuevaOrden'>Nueva Orden Compra <i class='fas fa-plus'></i></li>";
 	  			}
-	  			echo "<li style='font-size:13px;'>Consultar Ordenes de Compra <i class='fas fa-search'></i></li>
+	  			echo "<li style='font-size:13px;' id='verOrdenesCompra'>Consultar Ordenes de Compra <i class='fas fa-search'></i></li>
 	  					<li>Consultar Compras <i class='fas fa-search'></i></li>
 	  				</ul>";
 	  				
@@ -163,10 +163,10 @@
 	  		}
 
 	  		if($_SESSION['user']['Tipo']=='1'){ 
-	  			/*echo "<ul id='VerUsuarios'><span><i class='fas fa-users'></i> Usuarios</span></ul>
-	  			<ul id='DatosGenerales'><span><i class='fas fa-tasks'></i> Generales</span></ul>"; */
+	  			
 	  			echo "<ul id='VerUsuarios'><span><i class='fas fa-users'></i> Usuarios</span></ul>
-	  					<ul id='VerUsuarios'><span><i class='fas fa-trash-alt'></i> Papelera</span></ul>";
+	  				<ul id='DatosGenerales'><span><i class='fas fa-tasks'></i> Generales</span></ul>
+	  				<ul id='VerUsuarios'><span><i class='fas fa-trash-alt'></i> Papelera</span></ul>";
 	  		}
 	  	?>
 	</div>
@@ -198,7 +198,7 @@
 			if($_SESSION['user']['Tipo'] == "1"){ 
 				require("vistas/usuarios.php"); 
 				require("vistas/configuracion.php");
-				//require("vistas/generales.php"); 
+				require("vistas/generales.php"); 
 			} 
 
 			if($_SESSION['user']['Tipo'] == "1" || $productos[1]=='1'){ 
@@ -241,6 +241,10 @@
 
 	  		if($_SESSION['user']['Tipo'] == "1" || $compras[1]=='1'){ 
 				require("vistas/OrdendeCompra.php"); 
+			}
+
+			if($_SESSION['user']['Tipo']=='1' || $compras[0] =='1') {
+				require("vistas/verOrdenCompra.php"); 
 			}
 		?>
 	</div>

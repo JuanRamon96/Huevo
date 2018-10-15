@@ -18,7 +18,7 @@
     }
 
 	if($_POST['metodo'] == '1'){
-		$sql = "INSERT INTO clientes VALUES(null,'$_POST[codigo]','$_POST[nombre]','$_POST[domicilio]','$_POST[ciudad]','$_POST[estado]','$_POST[pais]','$_POST[cp]','$_POST[rz]','$_POST[rfc]','$_POST[telefono]','$_POST[email]','$_POST[contacto]','$_POST[telconta]','1','0')";
+		$sql = "INSERT INTO clientes VALUES(null,'$_POST[codigo]','$_POST[nombre]','$_POST[domicilio]','$_POST[colonia]','$_POST[ciudad]','$_POST[estado]','$_POST[pais]','$_POST[cp]','$_POST[rz]','$_POST[rfc]','$_POST[telefono]','$_POST[email]','$_POST[contacto]','$_POST[telconta]','1','0')";
 
 		if($con->query($sql)){
 			echo "1";
@@ -51,7 +51,7 @@
 						$bBorrar='';
 					}
 
-					$arreglo['data'][] = array('Codigo'=> $row['Codigo'], 'Nombre'=> $row['Nombre'], 'Domicilio'=> $row['Domicilio'], 'Ciudad'=> $row['Ciudad'], 'Estado'=> $row['Estado'], 'Pais'=> $row['Pais'], 'CP'=> $row['CP'], 'RazonSocial'=> $row['RazonSocial'], 'RFC'=> $row['RFC'], 'Telefono'=> $row['Telefono'], 'Email'=> $row['Email'], 'Contacto'=> $row['Contacto'], 'TelContacto'=> $row['TelContacto'], 'Activo'=> $activo, 'Botones1'=> $bModificar, 'Botones2'=> $bBorrar);	
+					$arreglo['data'][] = array('Codigo'=> $row['Codigo'], 'Nombre'=> $row['Nombre'], 'Domicilio'=> $row['Domicilio'], 'Colonia'=> $row['Colonia'], 'Ciudad'=> $row['Ciudad'], 'Estado'=> $row['Estado'], 'Pais'=> $row['Pais'], 'CP'=> $row['CP'], 'RazonSocial'=> $row['RazonSocial'], 'RFC'=> $row['RFC'], 'Telefono'=> $row['Telefono'], 'Email'=> $row['Email'], 'Contacto'=> $row['Contacto'], 'TelContacto'=> $row['TelContacto'], 'Activo'=> $activo, 'Botones1'=> $bModificar, 'Botones2'=> $bBorrar);	
 				}
 				echo json_encode($arreglo);
 			}else{
@@ -74,7 +74,7 @@
 	}
 
 	if($_POST['metodo'] == '4'){
-		$sql = "UPDATE clientes SET Codigo='$_POST[codigo]', Nombre='$_POST[nombre]', Domicilio='$_POST[domicilio]', Ciudad='$_POST[ciudad]', Estado='$_POST[estado]', Pais='$_POST[pais]', CP='$_POST[cp]', RazonSocial='$_POST[rz]', RFC='$_POST[rfc]', Telefono='$_POST[telefono]', Email='$_POST[email]', Contacto='$_POST[contacto]', TelContacto='$_POST[telconta]', Activo='$_POST[activo]' WHERE ID_Cliente='$_POST[id]'";
+		$sql = "UPDATE clientes SET Codigo='$_POST[codigo]', Nombre='$_POST[nombre]', Domicilio='$_POST[domicilio]', Colonia='$_POST[colonia]', Ciudad='$_POST[ciudad]', Estado='$_POST[estado]', Pais='$_POST[pais]', CP='$_POST[cp]', RazonSocial='$_POST[rz]', RFC='$_POST[rfc]', Telefono='$_POST[telefono]', Email='$_POST[email]', Contacto='$_POST[contacto]', TelContacto='$_POST[telconta]', Activo='$_POST[activo]' WHERE ID_Cliente='$_POST[id]'";
 
 		if($con->query($sql)){
 			echo "1";

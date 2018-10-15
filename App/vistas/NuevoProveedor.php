@@ -22,6 +22,10 @@
 								<input type="text" id="proveedorDomicilio" class="form-control IntProveedores" maxlength="150" required>
 							</div>
 							<div class="form-group col-3">
+								<label for="proveedorColonia">Colonia:</label>
+								<input type="text" id="proveedorColonia" class="form-control IntProveedores" maxlength="50" required>
+							</div>
+							<div class="form-group col-3">
 								<label for="proproveedoriudad">Ciudad:</label>
 								<input type="text" id="proproveedorCiudad" class="form-control IntProveedores" maxlength="40" required>
 							</div>
@@ -29,11 +33,11 @@
 								<label for="proveedorEstado">Estado:</label>
 								<input type="text" id="proveedorEstado" class="form-control IntProveedores" maxlength="40" required>
 							</div>
-							<div class="form-group col-4">
+							<div class="form-group col-3">
 								<label for="proveedorPais">País:</label>
 								<input type="text" id="proveedorPais" class="form-control IntProveedores" maxlength="40" required>
 							</div>
-							<div class="form-group col-4">
+							<div class="form-group col-2">
 								<label for="proveedorCP">Código Postal:</label>
 								<input type="number" id="proveedorCP" class="form-control IntProveedores" required>
 							</div>

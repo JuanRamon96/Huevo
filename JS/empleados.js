@@ -1,6 +1,7 @@
 $(document).ready(function() {
 	puestos();
 	empleados();
+	$("#empleadoFechaIn").val(fecha());
 	
 	const swalWithBootstrapButtons = swal.mixin({
 	  confirmButtonClass: 'btn btn-success',
@@ -14,7 +15,7 @@ $(document).ready(function() {
 
 	$("#FormGuardarEmpleado").submit(function(e) {
 		e.preventDefault();
-		var data = "metodo=2&codigo="+$.trim($("#empleadoCodigo").val())+"&nombre="+$.trim($("#empleadoNombre").val())+"&apPat="+$.trim($("#empleadoApPat").val())+"&apMat="+$.trim($("#empleadoApMat").val())+"&domicilio="+$.trim($("#empleadoDomicilio").val())+"&ciudad="+$.trim($("#empleadoCiudad").val())+"&estado="+$.trim($("#empleadoEstado").val())+"&pais="+$.trim($("#empleadoPais").val())+"&cp="+$("#empleadoCP").val()+"&telefono="+$.trim($("#empleadoTelefono").val())+"&email="+$.trim($("#empleadoEmail").val())+"&puesto="+$.trim($("#empleadoPuesto").val())+"&sdi="+$.trim($("#empleadoSDI").val())+"&alergias="+$.trim($("#empleadoAlergias").val())+"&ts="+$.trim($("#empleadoTS").val())+"&pEmergen="+$.trim($("#empleadoEmergencia").val())+"&telEmergen="+$.trim($("#empleadoTelEmergencia").val())+"&fechaIn="+$.trim($("#empleadoFechaIn").val());
+		var data = "metodo=2&codigo="+$.trim($("#empleadoCodigo").val())+"&nombre="+$.trim($("#empleadoNombre").val())+"&apPat="+$.trim($("#empleadoApPat").val())+"&apMat="+$.trim($("#empleadoApMat").val())+"&domicilio="+$.trim($("#empleadoDomicilio").val())+"&colonia="+$.trim($("#empleadoColonia").val())+"&ciudad="+$.trim($("#empleadoCiudad").val())+"&estado="+$.trim($("#empleadoEstado").val())+"&pais="+$.trim($("#empleadoPais").val())+"&cp="+$("#empleadoCP").val()+"&telefono="+$.trim($("#empleadoTelefono").val())+"&email="+$.trim($("#empleadoEmail").val())+"&puesto="+$.trim($("#empleadoPuesto").val())+"&sdi="+$.trim($("#empleadoSDI").val())+"&alergias="+$.trim($("#empleadoAlergias").val())+"&ts="+$.trim($("#empleadoTS").val())+"&pEmergen="+$.trim($("#empleadoEmergencia").val())+"&telEmergen="+$.trim($("#empleadoTelEmergencia").val())+"&fechaIn="+$.trim($("#empleadoFechaIn").val());
 
 		$.ajax({
 			url: 'php/empleados.php',
@@ -102,26 +103,27 @@ $(document).ready(function() {
 		$("#empleadoMApPat").val(padre.children('td:eq(2)').text());
 		$("#empleadoMApMat").val(padre.children('td:eq(3)').text());
 		$("#empleadoMDomicilio").val(padre.children('td:eq(4)').text());
-		$("#empleadoMCiudad").val(padre.children('td:eq(5)').text());
-		$("#empleadoMEstado").val(padre.children('td:eq(6)').text());
-		$("#empleadoMPais").val(padre.children('td:eq(7)').text());
-		$("#empleadoMCP").val(padre.children('td:eq(8)').text());
-		$("#empleadoMTelefono").val(padre.children('td:eq(9)').text());
-		$("#empleadoMEmail").val(padre.children('td:eq(10)').text());
-		$("#empleadoMArea").val(padre.children('td:eq(11)').children('span').text());
+		$("#empleadoMColonia").val(padre.children('td:eq(5)').text());
+		$("#empleadoMCiudad").val(padre.children('td:eq(6)').text());
+		$("#empleadoMEstado").val(padre.children('td:eq(7)').text());
+		$("#empleadoMPais").val(padre.children('td:eq(8)').text());
+		$("#empleadoMCP").val(padre.children('td:eq(9)').text());
+		$("#empleadoMTelefono").val(padre.children('td:eq(10)').text());
+		$("#empleadoMEmail").val(padre.children('td:eq(11)').text());
+		$("#empleadoMArea").val(padre.children('td:eq(12)').children('span').text());
 		puestos1();
 		setTimeout(function() {
-			$("#empleadoMPuesto").val(padre.children('td:eq(12)').children('span').text());
+			$("#empleadoMPuesto").val(padre.children('td:eq(13)').children('span').text());
 		},300);
-		$("#empleadoMSDI").val(padre.children('td:eq(13)').text());
-		$("#empleadoMTS").val(padre.children('td:eq(14)').text());
-		$("#empleadoMAlergias").val(padre.children('td:eq(15)').text());
-		$("#empleadoMEmergencia").val(padre.children('td:eq(16)').text());
-		$("#empleadoMTelEmergencia").val(padre.children('td:eq(17)').text());
-		$("#empleadoMFechaIn").val(padre.children('td:eq(18)').children('span').text());
-		$("#empleadoMFechaBa").val(padre.children('td:eq(19)').children('span').text());
-		$("#empleadoMFechaRe").val(padre.children('td:eq(20)').children('span').text());
-		if(padre.children('td:eq(21)').text() == 'Activo'){
+		$("#empleadoMSDI").val(padre.children('td:eq(14)').text());
+		$("#empleadoMTS").val(padre.children('td:eq(15)').text());
+		$("#empleadoMAlergias").val(padre.children('td:eq(16)').text());
+		$("#empleadoMEmergencia").val(padre.children('td:eq(17)').text());
+		$("#empleadoMTelEmergencia").val(padre.children('td:eq(18)').text());
+		$("#empleadoMFechaIn").val(padre.children('td:eq(19)').children('span').text());
+		$("#empleadoMFechaBa").val(padre.children('td:eq(20)').children('span').text());
+		$("#empleadoMFechaRe").val(padre.children('td:eq(21)').children('span').text());
+		if(padre.children('td:eq(22)').text() == 'Activo'){
 			$("#EmpleadoMActivo").prop('checked', true);
 		}else{
 			$("#EmpleadoMActivo").prop('checked', false);
@@ -157,7 +159,7 @@ $(document).ready(function() {
 		  	reverseButtons: true
 		}).then((result) => {
 		  	if (result.value) {
-		    	var datos = "metodo=5&id="+$("#GuardarMEmpleado").attr('attrID')+"&codigo="+$.trim($("#empleadoMCodigo").val())+"&nombre="+$.trim($("#empleadoMNombre").val())+"&apPat="+$.trim($("#empleadoMApPat").val())+"&apMat="+$.trim($("#empleadoMApMat").val())+"&domicilio="+$.trim($("#empleadoMDomicilio").val())+"&ciudad="+$.trim($("#empleadoMCiudad").val())+"&estado="+$.trim($("#empleadoMEstado").val())+"&pais="+$.trim($("#empleadoMPais").val())+"&cp="+$("#empleadoMCP").val()+"&telefono="+$.trim($("#empleadoMTelefono").val())+"&email="+$.trim($("#empleadoMEmail").val())+"&puesto="+$.trim($("#empleadoMPuesto").val())+"&sdi="+$.trim($("#empleadoMSDI").val())+"&alergias="+$.trim($("#empleadoMAlergias").val())+"&ts="+$.trim($("#empleadoMTS").val())+"&pEmergen="+$.trim($("#empleadoMEmergencia").val())+"&telEmergen="+$.trim($("#empleadoMTelEmergencia").val())+"&fechaIn="+$.trim($("#empleadoMFechaIn").val())+"&fechaBa="+$.trim($("#empleadoMFechaBa").val())+"&fechaRe="+$.trim($("#empleadoMFechaRe").val())+"&activo="+activo;
+		    	var datos = "metodo=5&id="+$("#GuardarMEmpleado").attr('attrID')+"&codigo="+$.trim($("#empleadoMCodigo").val())+"&nombre="+$.trim($("#empleadoMNombre").val())+"&apPat="+$.trim($("#empleadoMApPat").val())+"&apMat="+$.trim($("#empleadoMApMat").val())+"&domicilio="+$.trim($("#empleadoMDomicilio").val())+"&colonia="+$.trim($("#empleadoMColonia").val())+"&ciudad="+$.trim($("#empleadoMCiudad").val())+"&estado="+$.trim($("#empleadoMEstado").val())+"&pais="+$.trim($("#empleadoMPais").val())+"&cp="+$("#empleadoMCP").val()+"&telefono="+$.trim($("#empleadoMTelefono").val())+"&email="+$.trim($("#empleadoMEmail").val())+"&puesto="+$.trim($("#empleadoMPuesto").val())+"&sdi="+$.trim($("#empleadoMSDI").val())+"&alergias="+$.trim($("#empleadoMAlergias").val())+"&ts="+$.trim($("#empleadoMTS").val())+"&pEmergen="+$.trim($("#empleadoMEmergencia").val())+"&telEmergen="+$.trim($("#empleadoMTelEmergencia").val())+"&fechaIn="+$.trim($("#empleadoMFechaIn").val())+"&fechaBa="+$.trim($("#empleadoMFechaBa").val())+"&fechaRe="+$.trim($("#empleadoMFechaRe").val())+"&activo="+activo;
 
 				$.ajax({
 					url: 'php/empleados.php',
@@ -242,6 +244,7 @@ $(document).ready(function() {
 	            { "data": "ApPat" },
 	            { "data": "ApMat" },
 	            { "data": "Domicilio" },
+	            { "data": "Colonia" },
 	            { "data": "Ciudad" },
 	            { "data": "Estado" },
 	            { "data": "Pais" },
@@ -327,5 +330,17 @@ $(document).ready(function() {
 	            }
 	        ]
 		});
+	}
+
+	function fecha() {
+	    var d = new Date(),
+	        month = '' + (d.getMonth() + 1),
+	        day = '' + d.getDate(),
+	        year = d.getFullYear();
+
+	    if (month.length < 2) month = '0' + month;
+	    if (day.length < 2) day = '0' + day;
+
+	    return [year, month, day].join('-');
 	}
 });

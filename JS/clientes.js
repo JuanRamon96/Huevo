@@ -9,7 +9,7 @@ $(document).ready(function() {
 
 	$("#FormGuardarCliente").submit(function(e) {
 		e.preventDefault();
-		var data = "metodo=1&codigo="+$.trim($("#clienteCodigo").val())+"&nombre="+$.trim($("#clienteNombre").val())+"&domicilio="+$.trim($("#clienteDomicilio").val())+"&ciudad="+$.trim($("#clienteCiudad").val())+"&estado="+$.trim($("#clienteEstado").val())+"&pais="+$.trim($("#clientePais").val())+"&cp="+$("#clienteCP").val()+"&rz="+$.trim($("#clienteRZ").val())+"&rfc="+$.trim($("#clienteRFC").val())+"&telefono="+$.trim($("#clienteTelefono").val())+"&email="+$.trim($("#clienteEmail").val())+"&contacto="+$.trim($("#clienteContacto").val())+"&telconta="+$.trim($("#clienteContactoTel").val());
+		var data = "metodo=1&codigo="+$.trim($("#clienteCodigo").val())+"&nombre="+$.trim($("#clienteNombre").val())+"&domicilio="+$.trim($("#clienteDomicilio").val())+"&colonia="+$.trim($("#clienteColonia").val())+"&ciudad="+$.trim($("#clienteCiudad").val())+"&estado="+$.trim($("#clienteEstado").val())+"&pais="+$.trim($("#clientePais").val())+"&cp="+$("#clienteCP").val()+"&rz="+$.trim($("#clienteRZ").val())+"&rfc="+$.trim($("#clienteRFC").val())+"&telefono="+$.trim($("#clienteTelefono").val())+"&email="+$.trim($("#clienteEmail").val())+"&contacto="+$.trim($("#clienteContacto").val())+"&telconta="+$.trim($("#clienteContactoTel").val());
 
 		$.ajax({
 			url: 'php/clientes.php',
@@ -95,18 +95,19 @@ $(document).ready(function() {
 		$("#clienteMCodigo").val(padre.children('td:eq(0)').text());
 		$("#clienteMNombre").val(padre.children('td:eq(1)').text());
 		$("#clienteMDomicilio").val(padre.children('td:eq(2)').text());
-		$("#clienteMCiudad").val(padre.children('td:eq(3)').text());
-		$("#clienteMEstado").val(padre.children('td:eq(4)').text());
-		$("#clienteMPais").val(padre.children('td:eq(5)').text());
-		$("#clienteMCP").val(padre.children('td:eq(6)').text());
-		$("#clienteMRZ").val(padre.children('td:eq(7)').text());
-		$("#clienteMRFC").val(padre.children('td:eq(8)').text());
-		$("#clienteMTelefono").val(padre.children('td:eq(9)').text());
-		$("#clienteMEmail").val(padre.children('td:eq(10)').text());
-		$("#clienteMContacto").val(padre.children('td:eq(11)').text());
-		$("#clienteMContactoTel").val(padre.children('td:eq(12)').text());
+		$("#clienteMColonia").val(padre.children('td:eq(3)').text());
+		$("#clienteMCiudad").val(padre.children('td:eq(4)').text());
+		$("#clienteMEstado").val(padre.children('td:eq(5)').text());
+		$("#clienteMPais").val(padre.children('td:eq(6)').text());
+		$("#clienteMCP").val(padre.children('td:eq(7)').text());
+		$("#clienteMRZ").val(padre.children('td:eq(8)').text());
+		$("#clienteMRFC").val(padre.children('td:eq(9)').text());
+		$("#clienteMTelefono").val(padre.children('td:eq(10)').text());
+		$("#clienteMEmail").val(padre.children('td:eq(11)').text());
+		$("#clienteMContacto").val(padre.children('td:eq(12)').text());
+		$("#clienteMContactoTel").val(padre.children('td:eq(13)').text());
 
-		if(padre.children('td:eq(13)').text() == 'Activo'){
+		if(padre.children('td:eq(14)').text() == 'Activo'){
 			$("#ClienteMActivo").prop('checked', true);
 		}else{
 			$("#ClienteMActivo").prop('checked', false);
@@ -139,7 +140,7 @@ $(document).ready(function() {
 		  	reverseButtons: true
 		}).then((result) => {
 		  	if (result.value) {
-		    	var datos = "metodo=4&id="+$("#GuardarMCliente").attr('attrID')+"&codigo="+$.trim($("#clienteMCodigo").val())+"&nombre="+$.trim($("#clienteMNombre").val())+"&domicilio="+$.trim($("#clienteMDomicilio").val())+"&ciudad="+$.trim($("#clienteMCiudad").val())+"&estado="+$.trim($("#clienteMEstado").val())+"&pais="+$.trim($("#clienteMPais").val())+"&cp="+$("#clienteMCP").val()+"&rz="+$.trim($("#clienteMRZ").val())+"&rfc="+$.trim($("#clienteMRFC").val())+"&telefono="+$.trim($("#clienteMTelefono").val())+"&email="+$.trim($("#clienteMEmail").val())+"&contacto="+$.trim($("#clienteMContacto").val())+"&telconta="+$.trim($("#clienteMContactoTel").val())+"&activo="+activo;
+		    	var datos = "metodo=4&id="+$("#GuardarMCliente").attr('attrID')+"&codigo="+$.trim($("#clienteMCodigo").val())+"&nombre="+$.trim($("#clienteMNombre").val())+"&domicilio="+$.trim($("#clienteMDomicilio").val())+"&colonia="+$.trim($("#clienteMColonia").val())+"&ciudad="+$.trim($("#clienteMCiudad").val())+"&estado="+$.trim($("#clienteMEstado").val())+"&pais="+$.trim($("#clienteMPais").val())+"&cp="+$("#clienteMCP").val()+"&rz="+$.trim($("#clienteMRZ").val())+"&rfc="+$.trim($("#clienteMRFC").val())+"&telefono="+$.trim($("#clienteMTelefono").val())+"&email="+$.trim($("#clienteMEmail").val())+"&contacto="+$.trim($("#clienteMContacto").val())+"&telconta="+$.trim($("#clienteMContactoTel").val())+"&activo="+activo;
 
 				$.ajax({
 					url: 'php/clientes.php',
@@ -191,6 +192,7 @@ $(document).ready(function() {
 	            { "data": "Codigo" },
 	            { "data": "Nombre" },
 	            { "data": "Domicilio" },
+	            { "data": "Colonia" },
 	            { "data": "Ciudad" },
 	            { "data": "Estado" },
 	            { "data": "Pais" },

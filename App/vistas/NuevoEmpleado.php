@@ -29,6 +29,10 @@
 								<label for="empleadoDomicilio">Domicilio:</label>
 								<input type="text" id="empleadoDomicilio" class="form-control IntEmpleado" maxlength="150" required>
 							</div>
+							<div class="form-group col-6">
+								<label for="empleadoColonia">Colonia:</label>
+								<input type="text" id="empleadoColonia" class="form-control IntEmpleado" maxlength="50" required>
+							</div>
 							<div class="form-group col-3">
 								<label for="empleadoCiudad">Ciudad:</label>
 								<input type="text" id="empleadoCiudad" class="form-control IntEmpleado" maxlength="40" required>
@@ -41,15 +45,15 @@
 								<label for="empleadoPais">País:</label>
 								<input type="text" id="empleadoPais" class="form-control IntEmpleado" maxlength="40" required>
 							</div>
-							<div class="form-group col-4">
+							<div class="form-group col-2">
 								<label for="empleadoeCP">Código Postal:</label>
 								<input type="number" id="empleadoCP" class="form-control IntEmpleado" required>
 							</div>
-							<div class="form-group col-4">
+							<div class="form-group col-5">
 								<label for="empleadoTelefono">Teléfono:</label>
 								<input type="text" id="empleadoTelefono" class="form-control IntEmpleado" maxlength="30" required>
 							</div>
-							<div class="form-group col-6">
+							<div class="form-group col-7">
 								<label for="empleadoEmail">Email:</label>
 								<input type="email" id="empleadoEmail" class="form-control IntEmpleado" maxlength="150" required>
 							</div>

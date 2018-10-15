@@ -15,6 +15,7 @@
 								<th>Apellido Paterno</th>
 								<th>Apellido Materno</th>
 								<th>Domicilio</th>
+								<th>Colonia</th>
 								<th>Ciudad</th>
 								<th>Estado</th>
 								<th>País</th>
@@ -80,11 +81,15 @@
 					<label for="empleadoMDomicilio">Domicilio:</label>
 					<input type="text" id="empleadoMDomicilio" class="form-control ModiEmpleados" maxlength="150" required>
 				</div>
-				<div class="form-group col-3">
+				<div class="form-group col-6">
+					<label for="empleadoMColonia">Colonia:</label>
+					<input type="text" id="empleadoMColonia" class="form-control ModiEmpleados" maxlength="50" required>
+				</div>
+				<div class="form-group col-4">
 					<label for="empleadoMCiudad">Ciudad:</label>
 					<input type="text" id="empleadoMCiudad" class="form-control ModiEmpleados" maxlength="40" required>
 				</div>
-				<div class="form-group col-3">
+				<div class="form-group col-4">
 					<label for="empleadoMEstado">Estado:</label>
 					<input type="text" id="empleadoMEstado" class="form-control ModiEmpleados" maxlength="40" required>
 				</div>
@@ -92,7 +97,7 @@
 					<label for="empleadoMPais">País:</label>
 					<input type="text" id="empleadoMPais" class="form-control ModiEmpleados" maxlength="40" required>
 				</div>
-				<div class="form-group col-4">
+				<div class="form-group col-3">
 					<label for="empleadoMCP">Código Postal:</label>
 					<input type="number" id="empleadoMCP" class="form-control ModiEmpleados" required>
 				</div>
@@ -100,17 +105,17 @@
 					<label for="empleadoMTelefono">Teléfono:</label>
 					<input type="text" id="empleadoMTelefono" class="form-control ModiEmpleados" maxlength="30" required>
 				</div>
-				<div class="form-group col-6">
+				<div class="form-group col-5">
 					<label for="empleadoMEmail">Email:</label>
 					<input type="email" id="empleadoMEmail" class="form-control ModiEmpleados" maxlength="150" required>
 				</div>
-				<div class="form-group col-3">
+				<div class="form-group col-4">
 					<label for="empleadoMArea">Área:</label>
 					<select id="empleadoMArea" class="form-control ModiEmpleados" required>
 									
 					</select>
 				</div>
-				<div class="form-group col-3">
+				<div class="form-group col-4">
 					<label for="empleadoMPuesto">Puesto:</label>
 					<select id="empleadoMPuesto" class="form-control ModiEmpleados" required>
 									
@@ -120,13 +125,13 @@
 					<label for="empleadoMSDI">Salario Diario Integrado:</label>
 					<input type="number" id="empleadoMSDI" class="form-control ModiEmpleados" min="0" step="any" required>
 				</div>
-				<div class="form-group col-2">
-					<label for="empleadoMTS">Tipo de Sangre:</label>
-					<input type="text" id="empleadoMTS" class="form-control ModiEmpleados" maxlength="5" required>
-				</div>
 				<div class="form-group col-6">
 					<label for="empleadoMAlergias">Alergias:</label>
 					<textarea id="empleadoMAlergias" class="form-control ModiEmpleados" maxlength="200" cols="30" rows="5"></textarea>
+				</div>
+				<div class="form-group col-4">
+					<label for="empleadoMTS">Tipo de Sangre:</label>
+					<input type="text" id="empleadoMTS" class="form-control ModiEmpleados" maxlength="5" required>
 				</div>
 				<div class="form-group col-7">
 					<label for="empleadoMEmergencia">Llamar en caso de emergencia a:</label>

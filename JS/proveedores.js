@@ -9,7 +9,7 @@ $(document).ready(function() {
 
 	$("#FormGuardarProveedor").submit(function(e) {
 		e.preventDefault();
-		var data = "metodo=1&codigo="+$.trim($("#proveedorCodigo").val())+"&nombre="+$.trim($("#proveedorNombre").val())+"&domicilio="+$.trim($("#proveedorDomicilio").val())+"&ciudad="+$.trim($("#proveedorCiudad").val())+"&estado="+$.trim($("#proveedorEstado").val())+"&pais="+$.trim($("#proveedorPais").val())+"&cp="+$("#proveedorCP").val()+"&rz="+$.trim($("#proveedorRZ").val())+"&rfc="+$.trim($("#proveedorRFC").val())+"&telefono="+$.trim($("#proveedorTelefono").val())+"&email="+$.trim($("#proveedorEmail").val())+"&contacto="+$.trim($("#proveedorContacto").val())+"&telconta="+$.trim($("#proveedorContactoTel").val());
+		var data = "metodo=1&codigo="+$.trim($("#proveedorCodigo").val())+"&nombre="+$.trim($("#proveedorNombre").val())+"&domicilio="+$.trim($("#proveedorDomicilio").val())+"&colonia="+$.trim($("#proveedorColonia").val())+"&ciudad="+$.trim($("#proveedorCiudad").val())+"&estado="+$.trim($("#proveedorEstado").val())+"&pais="+$.trim($("#proveedorPais").val())+"&cp="+$("#proveedorCP").val()+"&rz="+$.trim($("#proveedorRZ").val())+"&rfc="+$.trim($("#proveedorRFC").val())+"&telefono="+$.trim($("#proveedorTelefono").val())+"&email="+$.trim($("#proveedorEmail").val())+"&contacto="+$.trim($("#proveedorContacto").val())+"&telconta="+$.trim($("#proveedorContactoTel").val());
 
 		$.ajax({
 			url: 'php/proveedores.php',
@@ -95,18 +95,19 @@ $(document).ready(function() {
 		$("#proveedorMCodigo").val(padre.children('td:eq(0)').text());
 		$("#proveedorMNombre").val(padre.children('td:eq(1)').text());
 		$("#proveedorMDomicilio").val(padre.children('td:eq(2)').text());
-		$("#proveedorMCiudad").val(padre.children('td:eq(3)').text());
-		$("#proveedorMEstado").val(padre.children('td:eq(4)').text());
-		$("#proveedorMPais").val(padre.children('td:eq(5)').text());
-		$("#proveedorMCP").val(padre.children('td:eq(6)').text());
-		$("#proveedorMRZ").val(padre.children('td:eq(7)').text());
-		$("#proveedorMRFC").val(padre.children('td:eq(8)').text());
-		$("#proveedorMTelefono").val(padre.children('td:eq(9)').text());
-		$("#proveedorMEmail").val(padre.children('td:eq(10)').text());
-		$("#proveedorMContacto").val(padre.children('td:eq(11)').text());
-		$("#proveedorMContactoTel").val(padre.children('td:eq(12)').text());
+		$("#proveedorMColonia").val(padre.children('td:eq(3)').text());
+		$("#proveedorMCiudad").val(padre.children('td:eq(4)').text());
+		$("#proveedorMEstado").val(padre.children('td:eq(5)').text());
+		$("#proveedorMPais").val(padre.children('td:eq(6)').text());
+		$("#proveedorMCP").val(padre.children('td:eq(7)').text());
+		$("#proveedorMRZ").val(padre.children('td:eq(8)').text());
+		$("#proveedorMRFC").val(padre.children('td:eq(9)').text());
+		$("#proveedorMTelefono").val(padre.children('td:eq(10)').text());
+		$("#proveedorMEmail").val(padre.children('td:eq(11)').text());
+		$("#proveedorMContacto").val(padre.children('td:eq(12)').text());
+		$("#proveedorMContactoTel").val(padre.children('td:eq(13)').text());
 
-		if(padre.children('td:eq(13)').text() == 'Activo'){
+		if(padre.children('td:eq(14)').text() == 'Activo'){
 			$("#ProveedorMActivo").prop('checked', true);
 		}else{
 			$("#ProveedorMActivo").prop('checked', false);
@@ -139,7 +140,7 @@ $(document).ready(function() {
 		  	reverseButtons: true
 		}).then((result) => {
 		  	if (result.value) {
-		    	var datos = "metodo=4&id="+$("#GuardarMProveedor").attr('attrID')+"&codigo="+$.trim($("#proveedorMCodigo").val())+"&nombre="+$.trim($("#proveedorMNombre").val())+"&domicilio="+$.trim($("#proveedorMDomicilio").val())+"&ciudad="+$.trim($("#proveedorMCiudad").val())+"&estado="+$.trim($("#proveedorMEstado").val())+"&pais="+$.trim($("#proveedorMPais").val())+"&cp="+$("#proveedorMCP").val()+"&rz="+$.trim($("#proveedorMRZ").val())+"&rfc="+$.trim($("#proveedorMRFC").val())+"&telefono="+$.trim($("#proveedorMTelefono").val())+"&email="+$.trim($("#proveedorMEmail").val())+"&contacto="+$.trim($("#proveedorMContacto").val())+"&telconta="+$.trim($("#proveedorMContactoTel").val())+"&activo="+activo;
+		    	var datos = "metodo=4&id="+$("#GuardarMProveedor").attr('attrID')+"&codigo="+$.trim($("#proveedorMCodigo").val())+"&nombre="+$.trim($("#proveedorMNombre").val())+"&domicilio="+$.trim($("#proveedorMDomicilio").val())+"&colonia="+$.trim($("#proveedorMColonia").val())+"&ciudad="+$.trim($("#proveedorMCiudad").val())+"&estado="+$.trim($("#proveedorMEstado").val())+"&pais="+$.trim($("#proveedorMPais").val())+"&cp="+$("#proveedorMCP").val()+"&rz="+$.trim($("#proveedorMRZ").val())+"&rfc="+$.trim($("#proveedorMRFC").val())+"&telefono="+$.trim($("#proveedorMTelefono").val())+"&email="+$.trim($("#proveedorMEmail").val())+"&contacto="+$.trim($("#proveedorMContacto").val())+"&telconta="+$.trim($("#proveedorMContactoTel").val())+"&activo="+activo;
 
 				$.ajax({
 					url: 'php/proveedores.php',
@@ -191,6 +192,7 @@ $(document).ready(function() {
 	            { "data": "Codigo" },
 	            { "data": "Nombre" },
 	            { "data": "Domicilio" },
+	            { "data": "Colonia" },
 	            { "data": "Ciudad" },
 	            { "data": "Estado" },
 	            { "data": "Pais" },

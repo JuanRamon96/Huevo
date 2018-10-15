@@ -104,6 +104,12 @@ $(document).ready(function() {
 		$("#mySidenav").css('width', '0');
 	});
 
+	$("#verOrdenesCompra").click(function() {
+		$(".oculto").hide();
+		$("#VistaVerOrdenCompra").show();
+		$("#mySidenav").css('width', '0');
+	});
+
 	$(document).on('keyup change', '.generales', function() {
 		$("#GuardarGeneral").attr('disabled', false);
 	});
@@ -113,7 +119,7 @@ $(document).ready(function() {
 		var confir= confirm("Estas seguro que quieres cambiar los datos generales");
 
         if(confir==true){
-        	var datos = $(this).serializeArray();
+        	var datos = "metodo=2&Nombre=";
 			$.ajax({
 				url: 'php/generales.php',
 				type: 'POST',

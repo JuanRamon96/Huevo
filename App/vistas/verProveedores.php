@@ -13,6 +13,7 @@
 								<th>Código</th>
 								<th>Nombre</th>
 								<th>Domicilio</th>
+								<th>Colonia</th>
 								<th>Ciudad</th>
 								<th>Estado</th>
 								<th>País</th>
@@ -64,11 +65,15 @@
 					<label for="proveedorMDomicilio">Domicilio:</label>
 					<input type="text" id="proveedorMDomicilio" class="form-control ModiProveedores" maxlength="150" required>
 				</div>
-				<div class="form-group col-3">
+				<div class="form-group col-6">
+					<label for="proveedorMColonia">Colonia:</label>
+					<input type="text" id="proveedorMColonia" class="form-control ModiProveedores" maxlength="150" required>
+				</div>
+				<div class="form-group col-4">
 					<label for="proveedorMCiudad">Ciudad:</label>
 					<input type="text" id="proveedorMCiudad" class="form-control ModiProveedores" maxlength="40" required>
 				</div>
-				<div class="form-group col-3">
+				<div class="form-group col-4">
 					<label for="proveedorMEstado">Estado:</label>
 					<input type="text" id="proveedorMEstado" class="form-control ModiProveedores" maxlength="40" required>
 				</div>
@@ -76,7 +81,7 @@
 					<label for="proveedorMPais">País:</label>
 					<input type="text" id="proveedorMPais" class="form-control ModiProveedores" maxlength="40" required>
 				</div>
-				<div class="form-group col-4">
+				<div class="form-group col-3">
 					<label for="proveedorMCP">Código Postal:</label>
 					<input type="number" id="proveedorMCP" class="form-control ModiProveedores" required>
 				</div>
@@ -84,7 +89,7 @@
 					<label for="proveedorMRZ">Razón social:</label>
 					<input type="text" id="proveedorMRZ" class="form-control ModiProveedores" maxlength="60" required>
 				</div>
-				<div class="form-group col-6">
+				<div class="form-group col-5">
 					<label for="proveedorMRFC">RFC:</label>
 					<input type="text" id="proveedorMRFC" class="form-control ModiProveedores" maxlength="60" required>
 				</div>
