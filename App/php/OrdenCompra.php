@@ -18,7 +18,7 @@
     }
 
     if($_POST['metodo']=='1'){
-    	$sql = "SELECT * FROM folios WHERE Tipo='1'";
+    	$sql = "SELECT * FROM folios WHERE Tipo='$_POST[tipod]'";
 
     	if($compras[1] == '1' || $_SESSION['user']['Tipo']=="1"){
     		$nuevo="<div class='row'>
@@ -55,7 +55,7 @@
     				</tr>";
     			}
     		}else{
-    			$filas = "No se encontraron resultados";
+    			$filas = "";
     		}
 
     		echo "$nuevo
@@ -83,7 +83,7 @@
     }
 
     if($_POST['metodo']=='2'){
-     	$sql = "INSERT INTO folios VALUES(null,'$_POST[nombre]','$_POST[serie]','1')";
+     	$sql = "INSERT INTO folios VALUES(null,'$_POST[nombre]','$_POST[serie]','$_POST[tipo]')";
 
      	if($con->query($sql)){
      		echo "1";
@@ -296,7 +296,7 @@
         }else{
             $fechas="AND Fecha BETWEEN '$_POST[desde]' AND '$_POST[hasta]'";
         }
-        $sql = "SELECT ID_Orden, Folio, (SELECT Nombre FROM folios WHERE Folio LIKE CONCAT(Serie,'%')) AS NFolio, FK_Proveedor, proveedores.Nombre AS Nombre, CONCAT('<p>Código: ',proveedores.Codigo,'</p><p>Nombre: ',proveedores.Nombre,'</p><p>Domicilio: ',proveedores.Domicilio,'</p><p>Ciudad: ',proveedores.Ciudad,'</p><p>Estado: ',proveedores.Estado,'</p><p>País: ',proveedores.Pais,'</p><p>Código Postal: ',proveedores.CP,'</p><p>Razón social: ',proveedores.RazonSocial,'</p><p>RFC: ',proveedores.RFC,'</p><p>Teléfono: ',proveedores.Telefono,'</p><p>Email: ',proveedores.Email,'</p><p>Contacto: ',proveedores.Contacto,'</p><p>Contacto Teléfono: ',proveedores.TelContacto,'</p>') AS DatosPro,Total, Fecha, DATE_FORMAT(Fecha, '%d-%m-%Y %h:%i %p') AS FechaE, Convertida, Eliminada FROM orden_compra INNER JOIN proveedores ON FK_Proveedor=ID_Proveedor WHERE Folio LIKE '%$_POST[buscar]%' AND Eliminada='0' $tipo $fechas ORDER BY Folio";
+        $sql = "SELECT ID_Orden, Folio, (SELECT Nombre FROM folios WHERE Folio LIKE CONCAT(Serie,'%')) AS NFolio, FK_Proveedor, proveedores.Nombre AS Nombre, CONCAT('<p>Código: ',proveedores.Codigo,'</p><p>Nombre: ',proveedores.Nombre,'</p><p>Domicilio: ',proveedores.Domicilio,'</p><p>Ciudad: ',proveedores.Ciudad,'</p><p>Estado: ',proveedores.Estado,'</p><p>País: ',proveedores.Pais,'</p><p>Código Postal: ',proveedores.CP,'</p><p>Razón social: ',proveedores.RazonSocial,'</p><p>RFC: ',proveedores.RFC,'</p><p>Teléfono: ',proveedores.Telefono,'</p><p>Email: ',proveedores.Email,'</p><p>Contacto: ',proveedores.Contacto,'</p><p>Contacto Teléfono: ',proveedores.TelContacto,'</p>') AS DatosPro,Total, Fecha, DATE_FORMAT(Fecha, '%d-%m-%Y %h:%i %p') AS FechaE, Convertida, Eliminada FROM orden_compra INNER JOIN proveedores ON FK_Proveedor=ID_Proveedor WHERE Folio LIKE '%$_POST[buscar]%' AND Eliminada='0' $tipo $fechas ORDER BY ID_Orden DESC";
 
         if($res=$con->query($sql)){
             if($res->num_rows > 0){
@@ -340,7 +340,7 @@
                     } 
 
                     if(($_SESSION['user']['Tipo'] == "1" || $compras[1] == "1") && $row['Convertida'] == "0"){
-                        $bConvertir="<button type='button' class='btn btn-success btn-sm' attrID='$row[ID_Orden]'>Convertir a Compra <i class='fas fa-plus'></i></button>";
+                        $bConvertir="<button type='button' class='btn btn-success btn-sm bConvertir' attrID='$row[ID_Orden]' data-toggle='modal' data-target='#ModalOrdenFolio'>Convertir a Compra <i class='fas fa-plus'></i></button>";
                     }else{
                         $bConvertir="";
                     } 
@@ -350,7 +350,7 @@
                         <td><span hidden>$row[FK_Proveedor]</span><p>$row[Nombre]</p><span hidden>$row[DatosPro]</span></td>
                         <td>$row[Total]</td>
                         <td><span hidden>$row[Fecha]</span><p>$row[FechaE]</p></td>
-                        <td><a href='#' class='btn btn-light'><i class='fas fa-print'></i></a></td>
+                        <td><a href='OrdenCompra.php?id=$row[ID_Orden]&proveedor=$row[FK_Proveedor]' target='_blank' class='btn btn-light'><i class='fas fa-print'></i></a></td>
                         <td><button type='button' class='btn btn-outline-info vermasOrden'><i class='fas fa-eye'></i></button></td>
                     </tr>
                     <tr class='oculto' style='background: #F7F7F7;'>

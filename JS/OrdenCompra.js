@@ -1,5 +1,5 @@
 $(document).ready(function() {
-	var folio="", proveedor="",tipo="0",lfolio=0,lproveedor=0,lproducto=0,fila=0;
+	var folio="", proveedor="",tipo="0",lfolio=0,lproveedor=0,lproducto=0,fila=0,tipof=0;
 	var eliminarOC = new Array();
 	ordenesCompra();
 
@@ -12,15 +12,23 @@ $(document).ready(function() {
 	});
 
 
-	$("#OrdenBuscarFolio").click(function() {
-		verFolios();	
+	$("#OrdenBuscarFolio").click(function() {	
 		lfolio=1;
+		tipof=1;
+		verFolios(tipof);
 	});
 
 	$("#OrdenMBuscarFolio").click(function() {
-		verFolios();
-		$('#ModalOrdenFolio').css('z-index', '1100');	
+		$('#ModalOrdenFolio').css('z-index', '1060');	
 		lfolio=2;
+		tipof=1;
+		verFolios(tipof);
+	});
+
+	$(document).on('click', '.bConvertir', function() {
+		lfolio=1;
+		tipof=2;
+		verFolios(tipof);
 	});
 
 	$('#ModalOrdenFolio').on('hidden.bs.modal',function() {
@@ -31,7 +39,7 @@ $(document).ready(function() {
 
 	$("#formGuardarFolio").submit(function(e) {
 		e.preventDefault();
-		var data="metodo=2&serie="+$.trim($("#folioSerie").val())+"&nombre="+$.trim($("#folioNombre").val());
+		var data="metodo=2&serie="+$.trim($("#folioSerie").val())+"&nombre="+$.trim($("#folioNombre").val())+"&tipo="+tipof;
 
 		$.ajax({
 			url: 'php/OrdenCompra.php',
@@ -48,7 +56,7 @@ $(document).ready(function() {
 				  	title: 'El folio se ha guardado',
 				}); 
 				$(".intFolio").val("");
-				verFolios();	
+				verFolios(tipof);	
 			}else{
 				swal({
 				  	type: 'error',
@@ -90,7 +98,7 @@ $(document).ready(function() {
 						  	type: 'success',
 						  	title: 'El folio ha sido borrado',
 						});  
-						verFolios();	
+						verFolios(tipof);	
 					}else{
 						swal({
 						  	type: 'error',
@@ -149,7 +157,7 @@ $(document).ready(function() {
 						  	type: 'success',
 						  	title: 'Los datos del folio han sido modificados',
 						});  
-						verFolios();	
+						verFolios(tipof);	
 					}else{
 						swal({
 						  	type: 'error',
@@ -171,19 +179,59 @@ $(document).ready(function() {
 
 	$(document).on("click","#agregarFolio",function() {
 		$(".intFolio").val("");
+		$("#ModalAgregarFolio").css('z-index', '1060');	
+		$("#ModalModificarFolio").css('z-index', '1060');	
 	});
 
 	$(document).on('click', '.seleccionarFolio', function() {
 		var padre = $(this).parent().parent();
-		folio = padre.children('td:eq(0)').text();
-		if(lfolio == 1){
-			$("#OrdenNombreF").val(padre.children('td:eq(1)').text());
+		if(tipof == 1){
+			folio = padre.children('td:eq(0)').text();
+			if(lfolio == 1){
+				$("#OrdenNombreF").val(padre.children('td:eq(1)').text());
+			}else{
+				$("#OrdenMNombreF").val(padre.children('td:eq(1)').text());
+				$("#OrdenMNombreF").attr('attrFolio', folio);
+			}
+			
+			valorFolio();
 		}else{
-			$("#OrdenMNombreF").val(padre.children('td:eq(1)').text());
-			$("#OrdenMNombreF").attr('attrFolio', folio);
+			var Npadre=$(this).parent().parent().parent().parent().parent().parent().index();
+			var padreS=$("#ContenidoOrden").children('tr').eq(Npadre-1);
+			var detalles = new Array();
+			if($(this).parent().parent().children('div:eq(0)').children('table').children('tbody').children('tr').children('td').text() != "No se encontraron detalles"){
+				$(this).parent().parent().children('div:eq(0)').children('table').children('tbody').children('tr').each(function(index) {
+					detalles[index]=[$(this).children('td:eq(1)').children('span').text(),$(this).children('td:eq(3)').text(),$(this).children('td:eq(4)').text(),$(this).children('td:eq(5)').text(),$(this).children('td:eq(6)').text(),$(this).children('td:eq(7)').text(),$(this).children('td:eq(8)').text()];
+				});
+			}
+
+			var data = "metodo=13&folio="+padreS.children('td:eq(0)').children('p').text()+"&proveedor="+padreS.children('td:eq(1)').children('span').text()+"&total="+padreS.children('td:eq(2)').text()+"&detalles="+JSON.stringify(detalles); 
+
+			$.ajax({
+				url: 'php/OrdenCompra.php',
+				type: 'POST',
+				data: data
+			})
+			.done(function(res) {
+				if(res == "Correcto"){
+					swal({
+						type: 'success',
+						title: 'La compra se ha guardado',
+						text: '',
+					});
+				}else{
+					swal({
+						type: 'error',
+						title: 'Error:',
+						text: 'No se ha podido guardar la compra',
+					});
+					console.log(res);
+				}
+			})
+			.fail(function() {
+				console.log("Error");
+			});
 		}
-		
-		valorFolio();
 
 		$('#ModalOrdenFolio').modal('hide');
 	});
@@ -195,7 +243,7 @@ $(document).ready(function() {
 
 	$("#OrdenMBuscarProveedor").click(function() {
 		proveedores();
-		$('#ModalSeleProveedor').css('z-index', '1100');
+		$('#ModalSeleProveedor').css('z-index', '1060');
 		lproveedor=2;
 	});
 
@@ -241,7 +289,7 @@ $(document).ready(function() {
 
 	$("#OrdenMBuscarProducto").click(function() {
 		productos();
-		$('#ModalSeleProducto').css('z-index', '1100');
+		$('#ModalSeleProducto').css('z-index', '1060');
 		lproducto=2;
 	});
 
@@ -617,11 +665,12 @@ $(document).ready(function() {
 		
 	}
 
-	function verFolios() {
+	function verFolios(tipod) {
+		var data='metodo=1&tipod='+tipod;
 		$.ajax({
 			url: 'php/OrdenCompra.php',
 			type: 'POST',
-			data: 'metodo=1'
+			data: data
 		})
 		.done(function(res) {
 			$("#verOrdenFolios").html(res);

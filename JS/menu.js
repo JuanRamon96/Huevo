@@ -1,6 +1,12 @@
 $(document).ready(function() {
 	generales();
 
+	const swalWithBootstrapButtons = swal.mixin({
+	  confirmButtonClass: 'btn btn-success',
+	  cancelButtonClass: 'btn btn-danger',
+	  buttonsStyling: false,
+	});
+
 	$("#openBtn").click(function() {
 		$("#mySidenav").css('width', '250px');
 		$("#mySidenav").focus();
@@ -116,34 +122,48 @@ $(document).ready(function() {
 
 	$("#FormGenerales").submit(function(e) {
 		e.preventDefault();
-		var confir= confirm("Estas seguro que quieres cambiar los datos generales");
-
-        if(confir==true){
-        	var datos = "metodo=2&Nombre=";
-			$.ajax({
-				url: 'php/generales.php',
-				type: 'POST',
-				data: datos,
-				beforeSend: function() {
-		            $("#carga").show();
-		        }
-			})
-			.done(function(res) {
-				if(res=="1"){
-					alert("Los datos se han cambiado"); 
-					$("#GuardarGeneral").attr('disabled', false);
-				}else{
-					alert("Error: No se han podido cambiar los datos");
-					console.log(res);
-				}
-				$("#carga").hide();	
-			})
-			.fail(function() {
-				console.log("Error");
-			});  
-        }else{
-          alert("Has cancelado la operación");
-        }
+		swalWithBootstrapButtons({
+		  	title: '¿Estas seguro que quieres cambiar los datos generales?',
+		  	type: 'warning',
+		  	showCancelButton: true,
+		 	confirmButtonText: 'Aceptar',
+		  	cancelButtonText: 'Cancelar',
+		  	reverseButtons: true
+		}).then((result) => {
+		  	if (result.value) {
+	        	var datos = "metodo=2&nombre="+$.trim($("#GNombre").val())+"&domicilio="+$.trim($("#GDomicilio").val())+"&colonia="+$.trim($("#GColonia").val())+"&ciudad="+$.trim($("#GCiudad").val())+"&estado="+$.trim($("#GEstado").val())+"&pais="+$.trim($("#GPais").val())+"&CP="+$("#GCP").val()+"&RZ="+$.trim($("#GRZ").val())+"&RFC="+$.trim($("#GRFC").val())+"&telefono="+$.trim($("#GTelefono").val())+"&email="+$.trim($("#GEmail").val());
+				$.ajax({
+					url: 'php/generales.php',
+					type: 'POST',
+					data: datos,
+					beforeSend: function() {
+			            $("#carga").show();
+			        }
+				})
+				.done(function(res) {
+					if(res=="1"){
+						swal({
+						  	type: 'success',
+						  	title: 'Los datos se han cambiado',
+						});
+						$("#GuardarGeneral").attr('disabled', false);
+					}else{
+						swal({
+						  	type: 'error',
+						  	title: 'Error:',
+						  	text: 'No se han podido cambiar los datos',
+						});
+						console.log(res);
+					}
+					$("#carga").hide();	
+				})
+				.fail(function() {
+					console.log("Error");
+				});  
+        	} else if (result.dismiss === swal.DismissReason.cancel) {
+		    	swal('Has cancelado la operación');
+		  	}
+		});	
 	});
 
 	$("#mySidenav").children("ul").children('span').click(function() {
@@ -158,15 +178,17 @@ $(document).ready(function() {
 		})
 		.done(function(res) {
 			var separa =  res.split("*");
-			$("#GDentista").val(separa[0]);
-			$("#GClinica").val(separa[1]);
-			$("#GDomicilio").val(separa[2]);
-			$("#GColonia").val(separa[3]);
-			$("#GCiudad").val(separa[4]);
-			$("#GEstado").val(separa[5]);
+			$("#GNombre").val(separa[0]);
+			$("#GDomicilio").val(separa[1]);
+			$("#GColonia").val(separa[2]);
+			$("#GCiudad").val(separa[3]);
+			$("#GEstado").val(separa[4]);
+			$("#GPais").val(separa[5]);
 			$("#GCP").val(separa[6]);
-			$("#GTelefono").val(separa[7]);
-			$("#GEmail").val(separa[8]);
+			$("#GRZ").val(separa[7]);
+			$("#GRFC").val(separa[8]);
+			$("#GTelefono").val(separa[9]);
+			$("#GEmail").val(separa[10]);
 		})
 		.fail(function() {
 			console.log("Error");
