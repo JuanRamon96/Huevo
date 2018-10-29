@@ -1,5 +1,5 @@
 $(document).ready(function() {
-	var folio="", proveedor="",tipo="0",lfolio=0,lproveedor=0,lproducto=0,fila=0,tipof=0;
+	var folio="", proveedor="",tipo="0",lfolio=0,lproveedor=0,lproducto=0,fila=0,tipof=0,superpa="";
 	var eliminarOC = new Array();
 	ordenesCompra();
 
@@ -29,6 +29,8 @@ $(document).ready(function() {
 		lfolio=1;
 		tipof=2;
 		verFolios(tipof);
+		superpa=$(this).parent().parent().children('div:eq(0)').children('table').children('tbody').children('tr');
+		fila = $(this).parent().parent().parent().parent().parent().parent().index();
 	});
 
 	$('#ModalOrdenFolio').on('hidden.bs.modal',function() {
@@ -196,17 +198,16 @@ $(document).ready(function() {
 			
 			valorFolio();
 		}else{
-			var Npadre=$(this).parent().parent().parent().parent().parent().parent().index();
-			var padreS=$("#ContenidoOrden").children('tr').eq(Npadre-1);
+			var padreS=$("#ContenidoOrden").children('tr').eq(fila-1);
 			var detalles = new Array();
-			if($(this).parent().parent().children('div:eq(0)').children('table').children('tbody').children('tr').children('td').text() != "No se encontraron detalles"){
-				$(this).parent().parent().children('div:eq(0)').children('table').children('tbody').children('tr').each(function(index) {
+
+			if(superpa.children('td').text() != "No se encontraron detalles"){
+				superpa.each(function(index) {
 					detalles[index]=[$(this).children('td:eq(1)').children('span').text(),$(this).children('td:eq(3)').text(),$(this).children('td:eq(4)').text(),$(this).children('td:eq(5)').text(),$(this).children('td:eq(6)').text(),$(this).children('td:eq(7)').text(),$(this).children('td:eq(8)').text()];
 				});
 			}
 
-			var data = "metodo=13&folio="+padreS.children('td:eq(0)').children('p').text()+"&proveedor="+padreS.children('td:eq(1)').children('span').text()+"&total="+padreS.children('td:eq(2)').text()+"&detalles="+JSON.stringify(detalles); 
-
+			var data = "metodo=13&id="+padreS.children('td:eq(4)').children('span').text()+"&folio="+$(this).parent().parent().children('td:eq(0)').text()+"&proveedor="+padreS.children('td:eq(1)').children('span').text()+"&total="+padreS.children('td:eq(2)').text()+"&detalles="+JSON.stringify(detalles); 
 			$.ajax({
 				url: 'php/OrdenCompra.php',
 				type: 'POST',
@@ -219,6 +220,11 @@ $(document).ready(function() {
 						title: 'La compra se ha guardado',
 						text: '',
 					});
+					ordenesCompra();
+					verProductos();
+					setTimeout(function() {
+						$("#ContenidoOrden").children('tr').eq(fila).show();
+					},1000);
 				}else{
 					swal({
 						type: 'error',
@@ -818,6 +824,95 @@ $(document).ready(function() {
 		})
 		.fail(function() {
 			console.log("Error");
+		});
+	}
+
+	function verProductos() {
+		productos1('Materia Prima',$("#tablaProductos2"));
+		productos1('Insumo',$("#tablaProductos3"));
+	}
+
+	function productos1(catego,tabla) {
+		tabla.dataTable({
+			"destroy": true,
+			"ajax":{
+				"url": 'php/productos.php',
+				"method": 'POST',
+				"data": {
+			        "metodo": '2',
+			        "categoria": catego
+			    }
+			},
+			"columns": [
+				{ "data": "Codigo" },
+	            { "data": "Nombre" },
+	            { "data": "UME" },
+	            { "data": "Existencia" },
+	            { "data": "Max" },
+	            { "data": "Min" },
+	            { "data": "Activo" },
+	            { "data": "Botones" }
+	        ], 
+	        "language": {
+			    "sProcessing":     "Procesando...",
+			    "sLengthMenu":     "Mostrar _MENU_ registros",
+			    "sZeroRecords":    "No se encontraron resultados",
+			    "sEmptyTable":     "Ningún dato disponible en esta tabla",
+			    "sInfo":           "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+			    "sInfoEmpty":      "Mostrando registros del 0 al 0 de un total de 0 registros",
+			    "sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
+			    "sInfoPostFix":    "",
+			    "sSearch":         "Buscar:",
+			    "sUrl":            "",
+			    "sInfoThousands":  ",",
+			    "sLoadingRecords": "Cargando...",
+			    "oPaginate": {
+			        "sFirst":    "Primero",
+			        "sLast":     "Último",
+			        "sNext":     "Siguiente",
+			        "sPrevious": "Anterior"
+			    },
+			    "oAria": {
+			        "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
+			        "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+			    },
+			     buttons: {
+		            copy: 'Copiar',
+				    copySuccess: {
+				        1: "Se ha copiado una fila",
+				        _: "Se han copiado %d filas"
+				    },
+				    copyTitle: 'Elementos copiados'
+		        }
+			},
+			dom:"<'row'<'col-sm-12 col-md-12'B>>"+ 
+				"<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>" +
+				"<'row'<'col-sm-12'tr>>" +
+				"<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",//'Bfrtip',
+	        buttons: [
+	            {
+	            	extend: 'copyHtml5',
+	            	text: "<i class='fas fa-copy'></i>",
+	            	titleAttr: 'Copiar'
+	            },
+	            {
+	            	extend: 'excelHtml5',
+	            	text: "<i class='fas fa-file-excel'></i>",
+	            	titleAttr: 'Excel',
+	            	filename: catego,
+	            	title: catego
+	            },
+	            {
+	            	extend: 'pdfHtml5',
+	            	text: "<i class='fas fa-file-pdf'></i>",
+	            	titleAttr: 'PDF',
+	            	filename: catego,
+	            	title: catego,
+	            	customize: function(doc) {
+					    doc.defaultStyle.alignment = 'center';
+					}
+	            }
+	        ]
 		});
 	}
 

@@ -88,7 +88,7 @@
      	if($con->query($sql)){
      		echo "1";
      	}else{
-     		echo "Error: ".mysqli_error();
+     		echo "Error: ".mysqli_error($con);
      	}
     }
 
@@ -98,7 +98,7 @@
      	if($con->query($sql)){
      		echo "1";
      	}else{
-     		echo "Error: ".mysqli_error();
+     		echo "Error: ".mysqli_error($con);
      	}
     }
 
@@ -108,7 +108,7 @@
      	if($con->query($sql)){
      		echo "1";
      	}else{
-     		echo "Error: ".mysqli_error();
+     		echo "Error: ".mysqli_error($con);
      	}
     }
 
@@ -267,12 +267,12 @@
                 }
 
                 if($compro == 1){
-                    echo "Error: ".mysqli_error();
+                    echo "Error: ".mysqli_error($con);
                 }else{
                     echo "Correcto";
                 }
             }else{
-                echo "Error: ".mysqli_error();
+                echo "Error: ".mysqli_error($con);
             } 
         }else{
             echo "Error: ".mysqli_error($con);
@@ -296,7 +296,7 @@
         }else{
             $fechas="AND Fecha BETWEEN '$_POST[desde]' AND '$_POST[hasta]'";
         }
-        $sql = "SELECT ID_Orden, Folio, (SELECT Nombre FROM folios WHERE Folio LIKE CONCAT(Serie,'%')) AS NFolio, FK_Proveedor, proveedores.Nombre AS Nombre, CONCAT('<p>Código: ',proveedores.Codigo,'</p><p>Nombre: ',proveedores.Nombre,'</p><p>Domicilio: ',proveedores.Domicilio,'</p><p>Ciudad: ',proveedores.Ciudad,'</p><p>Estado: ',proveedores.Estado,'</p><p>País: ',proveedores.Pais,'</p><p>Código Postal: ',proveedores.CP,'</p><p>Razón social: ',proveedores.RazonSocial,'</p><p>RFC: ',proveedores.RFC,'</p><p>Teléfono: ',proveedores.Telefono,'</p><p>Email: ',proveedores.Email,'</p><p>Contacto: ',proveedores.Contacto,'</p><p>Contacto Teléfono: ',proveedores.TelContacto,'</p>') AS DatosPro,Total, Fecha, DATE_FORMAT(Fecha, '%d-%m-%Y %h:%i %p') AS FechaE, Convertida, Eliminada FROM orden_compra INNER JOIN proveedores ON FK_Proveedor=ID_Proveedor WHERE Folio LIKE '%$_POST[buscar]%' AND Eliminada='0' $tipo $fechas ORDER BY ID_Orden DESC";
+        $sql = "SELECT ID_Orden, Folio, (SELECT Nombre FROM folios WHERE Folio LIKE CONCAT(Serie,'%') LIMIT 1) AS NFolio, FK_Proveedor, proveedores.Nombre AS Nombre, CONCAT('<p>Código: ',proveedores.Codigo,'</p><p>Nombre: ',proveedores.Nombre,'</p><p>Domicilio: ',proveedores.Domicilio,'</p><p>Ciudad: ',proveedores.Ciudad,'</p><p>Estado: ',proveedores.Estado,'</p><p>País: ',proveedores.Pais,'</p><p>Código Postal: ',proveedores.CP,'</p><p>Razón social: ',proveedores.RazonSocial,'</p><p>RFC: ',proveedores.RFC,'</p><p>Teléfono: ',proveedores.Telefono,'</p><p>Email: ',proveedores.Email,'</p><p>Contacto: ',proveedores.Contacto,'</p><p>Contacto Teléfono: ',proveedores.TelContacto,'</p>') AS DatosPro,Total, Fecha, DATE_FORMAT(Fecha, '%d-%m-%Y %h:%i %p') AS FechaE, Convertida, Eliminada FROM orden_compra INNER JOIN proveedores ON FK_Proveedor=ID_Proveedor WHERE Folio LIKE '%$_POST[buscar]%' AND Eliminada='0' $tipo $fechas ORDER BY ID_Orden DESC";
 
         if($res=$con->query($sql)){
             if($res->num_rows > 0){
@@ -342,7 +342,7 @@
                     if(($_SESSION['user']['Tipo'] == "1" || $compras[1] == "1") && $row['Convertida'] == "0"){
                         $bConvertir="<button type='button' class='btn btn-success btn-sm bConvertir' attrID='$row[ID_Orden]' data-toggle='modal' data-target='#ModalOrdenFolio'>Convertir a Compra <i class='fas fa-plus'></i></button>";
                     }else{
-                        $bConvertir="";
+                        $bConvertir="<h5>Convertida</h5>";
                     } 
 
                     echo "<tr>
@@ -350,7 +350,7 @@
                         <td><span hidden>$row[FK_Proveedor]</span><p>$row[Nombre]</p><span hidden>$row[DatosPro]</span></td>
                         <td>$row[Total]</td>
                         <td><span hidden>$row[Fecha]</span><p>$row[FechaE]</p></td>
-                        <td><a href='OrdenCompra.php?id=$row[ID_Orden]&proveedor=$row[FK_Proveedor]' target='_blank' class='btn btn-light'><i class='fas fa-print'></i></a></td>
+                        <td><span hidden>$row[ID_Orden]</span><a href='OrdenCompra.php?id=$row[ID_Orden]&proveedor=$row[FK_Proveedor]' target='_blank' class='btn btn-light'><i class='fas fa-print'></i></a></td>
                         <td><button type='button' class='btn btn-outline-info vermasOrden'><i class='fas fa-eye'></i></button></td>
                     </tr>
                     <tr class='oculto' style='background: #F7F7F7;'>
@@ -413,7 +413,7 @@
         if($con->query($sql)){
             echo "1";
         }else{
-            echo "Error: ".mysqli_error();
+            echo "Error: ".mysqli_error($con);
         }
     }
 
@@ -484,12 +484,66 @@
             }
 
             if($compro == 1){
-                echo "Error: ".mysqli_error();
+                echo "Error: ".mysqli_error($con);
             }else{
                 echo "Correcto";
             }
         }else{
-            echo "Error: ".mysqli_error();
+            echo "Error: ".mysqli_error($con);
+        }
+        $con->close();
+    }
+
+    if($_POST['metodo']=='13'){
+        $compro=0;
+        $folio="";
+        if($_POST['folio'] != ""){
+            $numero = strlen($_POST['folio']);
+            $sql = "SELECT SUBSTR(MAX(Folio) FROM $numero+1) AS Numero FROM compras WHERE SUBSTR(Folio,1,$numero)='$_POST[folio]'";
+
+            if($res=$con->query($sql)){
+                $row = $res->fetch_assoc();
+                if($row['Numero'] == ""){
+                    $folio= $_POST['folio'].'1';
+                }else{
+                   $folio= $_POST['folio'].($row['Numero']+1); 
+                }
+            }else{
+                echo "Error 1: ".mysqli_error($con);
+            }
+        }
+
+
+        $sql = "INSERT INTO compras VALUES(null,'$_POST[id]','$folio','$_POST[proveedor]','$_POST[total]',NOW(),0,0)";
+
+
+        if($con->query($sql)){
+            $id=mysqli_insert_id($con);
+            $insertar=json_decode($_POST["detalles"]);
+
+            if(isset($insertar)){
+                foreach($insertar as $inse){
+                    $sql1 = "INSERT INTO compras_detalle VALUES(null,'$id','$inse[0]','$inse[1]','$inse[2]','$inse[3]','$inse[4]','$inse[5]','$inse[6]')";
+
+                    if(!$con->query($sql1)){
+                        $compro=1;
+                    }
+                }
+            }
+
+            if($compro == 1){
+                echo "Error 2: ".mysqli_error($con);
+            }else{
+                $sql2 = "UPDATE orden_compra SET Convertida='1' WHERE ID_Orden='$_POST[id]'";
+
+                if($con->query($sql2)){
+                    echo "Correcto";
+                }else{
+                   echo "Error 3: ".mysqli_error($con); 
+                }
+            }
+        }else{
+            echo "Error 4: ".mysqli_error($con);
         }
         $con->close();
     }
