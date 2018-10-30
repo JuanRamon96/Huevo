@@ -284,6 +284,8 @@
         if($_POST['tipo'] == '0'){
             $tipo="";
         }else if($_POST['tipo'] == '1'){
+            $tipo="AND Convertida = '0'";
+        }else{
             $tipo="AND Convertida = '1'";
         }
 

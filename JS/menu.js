@@ -116,6 +116,12 @@ $(document).ready(function() {
 		$("#mySidenav").css('width', '0');
 	});
 
+	$("#verPrecios").click(function() {
+		$(".oculto").hide();
+		$("#VistaPrecios").show();
+		$("#mySidenav").css('width', '0');
+	});
+
 	$(document).on('keyup change', '.generales', function() {
 		$("#GuardarGeneral").attr('disabled', false);
 	});

@@ -7,7 +7,7 @@
     }else{
     	$nombre = $_SESSION["user"]["Nombre"];
     	$id = $_SESSION['user']['ID_Usuario'];
-    	$productos = array('0','0','0','0');
+    	$productos = array('0','0','0','0','0','0');
 		$clientes = array('0','0','0','0');
 		$ventas = array('0','0','0','0');
 		$proveedores = array('0','0','0','0');
@@ -17,7 +17,6 @@
 		$reportes = '0';
 		$etiquetas = '0';
 		$empleados = array('0','0','0','0');
-		$precios = array('0','0','0','0');
     	
     	if($_SESSION['user']['Tipo']=="2"){
     		$sql = "SELECT * FROM permisos WHERE FK_Usuario = '$id'";
@@ -36,7 +35,6 @@
 					$reportes = $row["Reportes"];
 					$etiquetas = $row["Etiquetas"];
 					$empleados = explode("*", $row["Empleados"]);
-					$precios = explode("*", $row["Precios"]);	
 				}
 			}else{
 			    echo "Error: ".mysqli_error($con);
@@ -76,8 +74,12 @@
 	  			}
 	  			echo "<li style='font-size:13px;' id='verProductos1'>Inventario Producto Terminado <i class='fas fa-pallet'></i></li>
 	  					<li style='font-size:16px;' id='verProductos2'>Inventario Materia Prima <i class='fas fa-box-open'></i></li>
-	  					<li id='verProductos3'>Inventario Insumos <i class='fas fa-archive'></i></li>
-	  				</ul>";
+	  					<li id='verProductos3'>Inventario Insumos <i class='fas fa-archive'></i></li>";
+	  			
+	  			if($productos[4]=='1' || $_SESSION['user']['Tipo']=='1'){
+	  				echo "<li id='verPrecios'>Precios <i class='fas fa-dollar-sign'></i></li>";
+	  			}
+	  			echo "</ul>";
 	  				
 	  		}
 	  		if ($clientes[0]=='1' || $_SESSION['user']['Tipo']=='1') {
@@ -245,6 +247,10 @@
 
 			if($_SESSION['user']['Tipo']=='1' || $compras[0] =='1') {
 				require("vistas/verOrdenCompra.php"); 
+			}
+
+			if($_SESSION['user']['Tipo']=='1' || $productos[4]=='1'){
+				require("vistas/precios.php");
 			}
 		?>
 	</div>

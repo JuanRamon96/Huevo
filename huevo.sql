@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 22-10-2018 a las 05:18:19
+-- Tiempo de generación: 30-10-2018 a las 06:06:02
 -- Versión del servidor: 10.1.25-MariaDB
 -- Versión de PHP: 5.6.31
 
@@ -102,6 +102,16 @@ CREATE TABLE `compras` (
   `Eliminada` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Volcado de datos para la tabla `compras`
+--
+
+INSERT INTO `compras` (`ID_Compra`, `FK_Orden`, `Folio`, `FK_Proveedor`, `Total`, `Fecha`, `Cancelada`, `Eliminada`) VALUES
+(2, 2, 'CPG1', 1, 700, '2018-10-28 21:00:49', 0, 0),
+(3, 1, 'CPG2', 2, 423.4, '2018-10-28 21:01:36', 0, 0),
+(4, 2, 'CPG3', 1, 700, '2018-10-28 21:18:53', 0, 0),
+(5, 3, 'CPG4', 2, 400, '2018-10-28 21:21:21', 0, 0);
+
 -- --------------------------------------------------------
 
 --
@@ -119,6 +129,33 @@ CREATE TABLE `compras_detalle` (
   `IVA` double NOT NULL,
   `Total` double NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `compras_detalle`
+--
+
+INSERT INTO `compras_detalle` (`ID_Compras_Detalle`, `FK_Compra`, `FK_Producto`, `Cantidad`, `Precio_Unitario`, `Subtotal`, `Descuento`, `IVA`, `Total`) VALUES
+(2, 2, 3, 200, 3.5, 700, 0, 0, 700),
+(3, 3, 1, 50, 6.5, 325, 0, 16, 377),
+(4, 3, 4, 5, 8, 40, 0, 16, 46.4),
+(5, 4, 3, 200, 3.5, 700, 0, 0, 700),
+(6, 5, 3, 100, 4, 400, 0, 0, 400);
+
+--
+-- Disparadores `compras_detalle`
+--
+DELIMITER $$
+CREATE TRIGGER `aumentar_inventario` AFTER INSERT ON `compras_detalle` FOR EACH ROW BEGIN
+	IF (SELECT Costo_Actual FROM precios WHERE FK_Producto=New.FK_Producto) > 0 THEN
+		UPDATE precios SET Costo_Actual=New.Precio_Unitario,Costo_Promedio=(((SELECT Existencia FROM productos WHERE ID_Producto=New.FK_Producto)*Costo_Promedio)+(New.Cantidad*New.Precio_Unitario))/((SELECT Existencia FROM productos WHERE ID_Producto=New.FK_Producto)+New.Cantidad) WHERE precios.FK_Producto=New.FK_Producto;
+    ELSE
+    	UPDATE precios SET Costo_Actual=New.Precio_Unitario,Costo_Promedio=New.Precio_Unitario WHERE precios.FK_Producto=New.FK_Producto;
+    END IF;
+    
+	UPDATE productos SET Existencia=Existencia+New.Cantidad WHERE ID_Producto=New.FK_Producto;
+END
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -237,7 +274,8 @@ CREATE TABLE `orden_compra` (
 
 INSERT INTO `orden_compra` (`ID_Orden`, `Folio`, `FK_Proveedor`, `Total`, `Fecha`, `Convertida`, `Eliminada`) VALUES
 (1, 'OCAG1', 2, 423.4, '2018-10-21 14:58:07', 0, 0),
-(2, 'OCP1', 1, 700, '2018-10-21 15:04:01', 0, 0);
+(2, 'OCP1', 1, 700, '2018-10-21 15:04:01', 1, 0),
+(3, 'OCPP1', 2, 400, '2018-10-28 21:04:04', 1, 0);
 
 -- --------------------------------------------------------
 
@@ -264,7 +302,8 @@ CREATE TABLE `orden_compra_detalle` (
 INSERT INTO `orden_compra_detalle` (`ID_Orden_Detalle`, `FK_Orden_Compra`, `FK_Producto`, `Cantidad`, `Precio_Unitario`, `Subtotal`, `Descuento`, `IVA`, `Total`) VALUES
 (1, 1, 1, 50, 6.5, 325, 0, 16, 377),
 (2, 1, 4, 5, 8, 40, 0, 16, 46.4),
-(3, 2, 3, 200, 3.5, 700, 0, 0, 700);
+(3, 2, 3, 200, 3.5, 700, 0, 0, 700),
+(4, 3, 3, 100, 4, 400, 0, 0, 400);
 
 -- --------------------------------------------------------
 
@@ -284,16 +323,15 @@ CREATE TABLE `permisos` (
   `Entregas` varchar(20) NOT NULL,
   `Reportes` varchar(20) NOT NULL,
   `Etiquetas` varchar(10) NOT NULL,
-  `Empleados` varchar(20) NOT NULL,
-  `Precios` varchar(20) NOT NULL
+  `Empleados` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `permisos`
 --
 
-INSERT INTO `permisos` (`ID_Permiso`, `FK_Usuario`, `Productos`, `Clientes`, `Ventas`, `Proveedores`, `Compras`, `Produccion`, `Entregas`, `Reportes`, `Etiquetas`, `Empleados`, `Precios`) VALUES
-(2, 4, '1*1*1*1*', '1*0*0*0*', '1*1*0*0*', '1*0*0*0*', '1*0*0*0*', '0*0*0*0*', '0*0*0*0*', '1*', '1*', '0*0*0*0*', '0*0*0*0*');
+INSERT INTO `permisos` (`ID_Permiso`, `FK_Usuario`, `Productos`, `Clientes`, `Ventas`, `Proveedores`, `Compras`, `Produccion`, `Entregas`, `Reportes`, `Etiquetas`, `Empleados`) VALUES
+(2, 4, '1*0*0*0*1*0*', '1*0*0*0*', '1*1*0*0*', '1*0*0*0*', '1*0*0*0*', '0*0*0*0*', '0*0*0*0*', '1*', '1*', '0*0*0*0*');
 
 -- --------------------------------------------------------
 
@@ -317,7 +355,7 @@ CREATE TABLE `precios` (
 INSERT INTO `precios` (`ID_Precio`, `FK_Producto`, `Costo_Actual`, `Costo_Promedio`, `Precio1`, `Precio2`) VALUES
 (1, 1, 0, 0, 0, 0),
 (2, 2, 0, 0, 0, 0),
-(3, 3, 0, 0, 0, 0),
+(3, 3, 4, 3.5625, 0, 0),
 (4, 4, 0, 0, 0, 0);
 
 -- --------------------------------------------------------
@@ -344,10 +382,10 @@ CREATE TABLE `productos` (
 --
 
 INSERT INTO `productos` (`ID_Producto`, `Codigo`, `Nombre`, `UME`, `Categoria`, `Existencia`, `Max`, `Min`, `Activo`, `Eliminado`) VALUES
-(1, 'ABC123', 'JabÃ³n', 'Pieza', 'Insumo', 200, 300, 50, 1, 0),
-(2, 'TUI123', 'Huevo liquido', 'Litro', 'Producto Terminado', 2000, 10000, 1000, 1, 0),
-(3, 'ERT123', 'Huevo frÃ¡gil', 'Kg', 'Materia Prima', 500, 20000, 200, 1, 0),
-(4, 'KUI123', 'Prueba', 'Pieza', 'Insumo', 20, 100, 10, 1, 0);
+(1, 'ABC123', 'JabÃ³n', 'Pieza', 'Insumo', 400, 50, 300, 1, 0),
+(2, 'TUI123', 'Huevo liquido', 'Litro', 'Producto Terminado', 2255, 10000, 1000, 1, 0),
+(3, 'ERT123', 'Huevo frÃ¡gil', 'Kg', 'Materia Prima', 800, 200, 20000, 1, 0),
+(4, 'KUI123', 'Prueba', 'Pieza', 'Insumo', 200, 10, 100, 1, 0);
 
 --
 -- Disparadores `productos`
@@ -448,7 +486,7 @@ INSERT INTO `usuarios` (`ID_Usuario`, `Nombre`, `Contrasena`, `Email`, `Tipo`) V
 DELIMITER $$
 CREATE TRIGGER `agregar_permisos` AFTER INSERT ON `usuarios` FOR EACH ROW BEGIN
 IF New.Tipo = '2' THEN
-	INSERT INTO permisos VALUES('',New.ID_Usuario,'0*0*0*0*','0*0*0*0*','0*0*0*0*','0*0*0*0*','0*0*0*0*','0*0*0*0*','0*0*0*0*','0*','0*','0*0*0*0*','0*0*0*0*'); 
+	INSERT INTO permisos VALUES('',New.ID_Usuario,'0*0*0*0*0*0*','0*0*0*0*','0*0*0*0*','0*0*0*0*','0*0*0*0*','0*0*0*0*','0*0*0*0*','0*','0*','0*0*0*0*','0*0*'); 
 END IF;
 END
 $$
@@ -581,12 +619,12 @@ ALTER TABLE `clientes`
 -- AUTO_INCREMENT de la tabla `compras`
 --
 ALTER TABLE `compras`
-  MODIFY `ID_Compra` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `ID_Compra` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 --
 -- AUTO_INCREMENT de la tabla `compras_detalle`
 --
 ALTER TABLE `compras_detalle`
-  MODIFY `ID_Compras_Detalle` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `ID_Compras_Detalle` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 --
 -- AUTO_INCREMENT de la tabla `empleados`
 --
@@ -606,12 +644,12 @@ ALTER TABLE `generales`
 -- AUTO_INCREMENT de la tabla `orden_compra`
 --
 ALTER TABLE `orden_compra`
-  MODIFY `ID_Orden` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `ID_Orden` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT de la tabla `orden_compra_detalle`
 --
 ALTER TABLE `orden_compra_detalle`
-  MODIFY `ID_Orden_Detalle` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `ID_Orden_Detalle` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT de la tabla `permisos`
 --

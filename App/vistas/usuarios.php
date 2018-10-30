@@ -67,7 +67,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="row" style="margin-top: 10px;">
+	<div class="row" style="margin-top: 10px; font-size: 14px;">
 		<div class="col-12">
 			<div class="card table-responsive">
 				<h2 class="text-center">Modificar Permisos</h2><br>

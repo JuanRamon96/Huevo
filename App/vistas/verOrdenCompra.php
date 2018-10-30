@@ -41,7 +41,11 @@
 						</div>
 						<div class="form-check form-check-inline">
 						  	<input class="form-check-input" type="radio" name="ROrdenC" value="1">
-						  	<label class="form-check-label" for="inlineRadio2">Convertidas</label>
+						  	<label class="form-check-label" for="inlineRadio2">No Convertidas</label>
+						</div>
+						<div class="form-check form-check-inline">
+						  	<input class="form-check-input" type="radio" name="ROrdenC" value="2">
+						  	<label class="form-check-label" for="inlineRadio3">Convertidas</label>
 						</div>
 					</div>
 				</div>

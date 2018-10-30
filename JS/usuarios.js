@@ -339,8 +339,11 @@ $(document).ready(function() {
 	});
 
 	$(document).on('click', '.checkPermiso', function() {
-		if(($(this).val()=="2" || $(this).val()=="3" || $(this).val()=="4" || $(this).val()=="5") && $(this).prop('checked')){
+		if(parseInt($(this).val()) >= 2 && $(this).prop('checked')){
         	$(this).parent().parent().children('label:eq(0)').children('input').prop('checked', true);
+        	if ($(this).val() == "6") {
+        		$(this).parent().parent().children('label:eq(4)').children('input').prop('checked', true);
+        	}
         }else if($(this).val()=="1" && !$(this).prop('checked')){
         	$(this).parent().parent().children('label').each(function(){ 
 				$(this).children('input').prop('checked', false);

@@ -105,7 +105,7 @@
 		if($res=$con->query($sql)){
 		    if ($res->num_rows > 0) {
 				while($row = $res->fetch_assoc()) {
-					$permitir= array('','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','');
+					$permitir= array('','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','');
 					$sql1 = "SELECT * FROM permisos WHERE FK_Usuario = '$row[ID_Usuario]'";
 					
 					if($res1=$con->query($sql1)){
@@ -132,7 +132,7 @@
 						<td attrModulo='Productos'>
 							<label class='check-inline'>
 		                    	<input type='checkbox' class='checkPermiso' value='1' $permitir[0]> Ver
-		                    </label>
+		                    </label><br>
 		                    <label class='check-inline'>
 		                    	<input type='checkbox' class='checkPermiso' value='2' $permitir[1]> Agregar
 		                    </label>
@@ -142,113 +142,119 @@
 		                    <label class='check-inline'>
 		                      	<input type='checkbox' class='checkPermiso' value='4' $permitir[3]> Eliminar
 		                    </label>
+		                    <label class='check-inline'>
+		                      	<input type='checkbox' class='checkPermiso' value='5' $permitir[4]> Ver Precios
+		                    </label>
+		                    <label class='check-inline'>
+		                      	<input type='checkbox' class='checkPermiso' value='6' $permitir[5]> Modificar Precios
+		                    </label>
 		                </td>		                	
 						<td attrModulo='Clientes'>
 							<label class='check-inline'>
-		                    	<input type='checkbox' class='checkPermiso' value='1' $permitir[4]> Ver
+		                    	<input type='checkbox' class='checkPermiso' value='1' $permitir[6]> Ver
 		                    </label>
 		                    <label class='check-inline'>
-		                    	<input type='checkbox' class='checkPermiso' value='2' $permitir[5]> Agregar
+		                    	<input type='checkbox' class='checkPermiso' value='2' $permitir[7]> Agregar
 		                    </label>
 		                    <label class='check-inline'>
-		                      	<input type='checkbox' class='checkPermiso' value='3' $permitir[6]> Modificar
+		                      	<input type='checkbox' class='checkPermiso' value='3' $permitir[8]> Modificar
 		                    </label>
 		                    <label class='check-inline'>
-		                      	<input type='checkbox' class='checkPermiso' value='4' $permitir[7]> Eliminar
+		                      	<input type='checkbox' class='checkPermiso' value='4' $permitir[9]> Eliminar
 		                    </label>
 						</td>
 						<td attrModulo='Ventas'> 
 							<label class='check-inline'>
-		                    	<input type='checkbox' class='checkPermiso' value='1' $permitir[8]> Ver
+		                    	<input type='checkbox' class='checkPermiso' value='1' $permitir[10]> Ver
 		                    </label>
 		                    <label class='check-inline'>
-		                    	<input type='checkbox' class='checkPermiso' value='2' $permitir[9]> Agregar
+		                    	<input type='checkbox' class='checkPermiso' value='2' $permitir[11]> Agregar
 		                    </label>
 		                    <label class='check-inline'>
-		                      	<input type='checkbox' class='checkPermiso' value='3' $permitir[10]> Modificar
+		                      	<input type='checkbox' class='checkPermiso' value='3' $permitir[12]> Modificar
 		                    </label>
 		                    <label class='check-inline'>
-		                      	<input type='checkbox' class='checkPermiso' value='4' $permitir[11]> Eliminar
+		                      	<input type='checkbox' class='checkPermiso' value='4' $permitir[13]> Eliminar
 		                    </label>
 						</td>
 						<td attrModulo='Proveedores'> 
 							<label class='check-inline'>
-		                    	<input type='checkbox' class='checkPermiso' value='1' $permitir[12]> Ver
+		                    	<input type='checkbox' class='checkPermiso' value='1' $permitir[14]> Ver
 		                    </label>
 		                    <label class='check-inline'>
-		                    	<input type='checkbox' class='checkPermiso' value='2' $permitir[13]> Agregar
+		                    	<input type='checkbox' class='checkPermiso' value='2' $permitir[15]> Agregar
 		                    </label>
 		                    <label class='check-inline'>
-		                      	<input type='checkbox' class='checkPermiso' value='3' $permitir[14]> Modificar
+		                      	<input type='checkbox' class='checkPermiso' value='3' $permitir[16]> Modificar
 		                    </label>
 		                    <label class='check-inline'>
-		                      	<input type='checkbox' class='checkPermiso' value='4' $permitir[15]> Eliminar
+		                      	<input type='checkbox' class='checkPermiso' value='4' $permitir[17]> Eliminar
 		                    </label>
 						</td>
 						<td attrModulo='Compras'> 
 							<label class='check-inline'>
-		                    	<input type='checkbox' class='checkPermiso' value='1' $permitir[16]> Ver
+		                    	<input type='checkbox' class='checkPermiso' value='1' $permitir[18]> Ver
 		                    </label>
 		                    <label class='check-inline'>
-		                    	<input type='checkbox' class='checkPermiso' value='2' $permitir[17]> Agregar
+		                    	<input type='checkbox' class='checkPermiso' value='2' $permitir[19]> Agregar
 		                    </label>
 		                    <label class='check-inline'>
-		                      	<input type='checkbox' class='checkPermiso' value='3' $permitir[18]> Modificar
+		                      	<input type='checkbox' class='checkPermiso' value='3' $permitir[20]> Modificar
 		                    </label>
 		                    <label class='check-inline'>
-		                      	<input type='checkbox' class='checkPermiso' value='4' $permitir[19]> Eliminar
+		                      	<input type='checkbox' class='checkPermiso' value='4' $permitir[21]> Eliminar
 		                    </label>
 						</td>
 						<td attrModulo='Empleados'> 
 							<label class='check-inline'>
-		                    	<input type='checkbox' class='checkPermiso' value='1' $permitir[20]> Ver
+		                    	<input type='checkbox' class='checkPermiso' value='1' $permitir[22]> Ver
 		                    </label>
 		                    <label class='check-inline'>
-		                    	<input type='checkbox' class='checkPermiso' value='2' $permitir[21]> Agregar
+		                    	<input type='checkbox' class='checkPermiso' value='2' $permitir[23]> Agregar
 		                    </label>
 		                    <label class='check-inline'>
-		                      	<input type='checkbox' class='checkPermiso' value='3' $permitir[22]> Modificar
+		                      	<input type='checkbox' class='checkPermiso' value='3' $permitir[24]> Modificar
 		                    </label>
 		                    <label class='check-inline'>
-		                      	<input type='checkbox' class='checkPermiso' value='4' $permitir[23]> Eliminar
+		                      	<input type='checkbox' class='checkPermiso' value='4' $permitir[25]> Eliminar
 		                    </label>
 						</td>
 						<td attrModulo='Entregas'> 
 							<label class='check-inline'>
-		                    	<input type='checkbox' class='checkPermiso' value='1' $permitir[24]> Ver
+		                    	<input type='checkbox' class='checkPermiso' value='1' $permitir[26]> Ver
 		                    </label>
 		                    <label class='check-inline'>
-		                    	<input type='checkbox' class='checkPermiso' value='2' $permitir[25]> Agregar
+		                    	<input type='checkbox' class='checkPermiso' value='2' $permitir[27]> Agregar
 		                    </label>
 		                    <label class='check-inline'>
-		                      	<input type='checkbox' class='checkPermiso' value='3' $permitir[26]> Modificar
+		                      	<input type='checkbox' class='checkPermiso' value='3' $permitir[28]> Modificar
 		                    </label>
 		                    <label class='check-inline'>
-		                      	<input type='checkbox' class='checkPermiso' value='4' $permitir[27]> Eliminar
+		                      	<input type='checkbox' class='checkPermiso' value='4' $permitir[29]> Eliminar
 		                    </label>
 						</td>
 						<td attrModulo='Produccion'> 
 							<label class='check-inline'>
-		                    	<input type='checkbox' class='checkPermiso' value='1' $permitir[28]> Ver
+		                    	<input type='checkbox' class='checkPermiso' value='1' $permitir[30]> Ver
 		                    </label>
 		                    <label class='check-inline'>
-		                    	<input type='checkbox' class='checkPermiso' value='2' $permitir[29]> Agregar
+		                    	<input type='checkbox' class='checkPermiso' value='2' $permitir[31]> Agregar
 		                    </label>
 		                    <label class='check-inline'>
-		                      	<input type='checkbox' class='checkPermiso' value='3' $permitir[30]> Modificar
+		                      	<input type='checkbox' class='checkPermiso' value='3' $permitir[32]> Modificar
 		                    </label>
 		                    <label class='check-inline'>
-		                      	<input type='checkbox' class='checkPermiso' value='4' $permitir[31]> Eliminar
+		                      	<input type='checkbox' class='checkPermiso' value='4' $permitir[33]> Eliminar
 		                    </label>
 						</td>
 						<td attrModulo='Reportes'> 
 							<label class='check-inline'>
-		                    	<input type='checkbox' class='checkPermiso' value='1' $permitir[32]> Ver
+		                    	<input type='checkbox' class='checkPermiso' value='1' $permitir[34]> Ver
 		                    </label>
 						</td>
 						<td attrModulo='Etiquetas'> 
 							<label class='check-inline'>
-		                    	<input type='checkbox' class='checkPermiso' value='1' $permitir[33]> Ver
+		                    	<input type='checkbox' class='checkPermiso' value='1' $permitir[36]> Ver
 		                    </label>
 						</td>
 					</tr>";
