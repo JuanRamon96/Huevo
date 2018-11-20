@@ -122,6 +122,24 @@ $(document).ready(function() {
 		$("#mySidenav").css('width', '0');
 	});
 
+	$("#verNuevaEntrega").click(function() {
+		$(".oculto").hide();
+		$("#VistaNuevaEntrega").show();
+		$("#mySidenav").css('width', '0');
+	});
+
+	$("#verCompras").click(function() {
+		$(".oculto").hide();
+		$("#VistaCompras").show();
+		$("#mySidenav").css('width', '0');
+	});
+
+	$("#verEntregas").click(function() {
+		$(".oculto").hide();
+		$("#VistaVerEntregas").show();
+		$("#mySidenav").css('width', '0');
+	});
+
 	$(document).on('keyup change', '.generales', function() {
 		$("#GuardarGeneral").attr('disabled', false);
 	});

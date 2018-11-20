@@ -119,7 +119,7 @@
 	  				echo "<li id='verNuevaOrden'>Nueva Orden Compra <i class='fas fa-plus'></i></li>";
 	  			}
 	  			echo "<li style='font-size:13px;' id='verOrdenesCompra'>Consultar Ordenes de Compra <i class='fas fa-search'></i></li>
-	  					<li>Consultar Compras <i class='fas fa-search'></i></li>
+	  					<li id='verCompras'>Consultar Compras <i class='fas fa-search'></i></li>
 	  				</ul>";
 	  				
 	  		}
@@ -138,9 +138,9 @@
 	  			echo "<ul><span><i class='fas fa-handshake'></i> Entregas</span>";
 
 	  			if($entregas[1]=='1' || $_SESSION['user']['Tipo']=='1'){
-	  				echo "<li>Nueva Entrega <i class='fas fa-plus'></i></li>";
+	  				echo "<li id='verNuevaEntrega'>Nueva Entrega <i class='fas fa-plus'></i></li>";
 	  			}
-	  			echo "<li>Consultar Entrgas <i class='fas fa-search'></i></li>
+	  			echo "<li id='verEntregas'>Consultar Entrgas <i class='fas fa-search'></i></li>
 	  				</ul>";
 	  				
 	  		}
@@ -247,10 +247,19 @@
 
 			if($_SESSION['user']['Tipo']=='1' || $compras[0] =='1') {
 				require("vistas/verOrdenCompra.php"); 
+				require("vistas/compras.php"); 
 			}
 
 			if($_SESSION['user']['Tipo']=='1' || $productos[4]=='1'){
 				require("vistas/precios.php");
+			}
+
+			if($_SESSION['user']['Tipo']=='1' || $entregas[1]=='1'){
+				require("vistas/NuevaEntrega.php");
+			}
+
+			if($_SESSION['user']['Tipo']=='1' || $entregas[0]=='1'){
+				require("vistas/verEntregas.php");
 			}
 		?>
 	</div>
@@ -274,6 +283,8 @@
 <script src="../JS/proveedores.js"></script>
 <script src="../JS/AreasyPuestos.js"></script>	
 <script src="../JS/empleados.js"></script>	
-<script src="../JS/OrdenCompra.js"></script>	
+<script src="../JS/OrdenCompra.js"></script>
+<script src="../JS/precios.js"></script>	
+<script src="../JS/entregas.js"></script>
 </body>
 </html>

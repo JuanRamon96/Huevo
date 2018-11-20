@@ -79,7 +79,7 @@
 								</div>
 								<div class="form-group col-1">
 									<label for="OrdenIVA">IVA %:</label>
-									<input type="number" id="OrdenIVA" class="form-control form-control-sm IntOrDetalle" min="0" step="any" value="0" required>
+									<input type="number" id="OrdenIVA" class="form-control form-control-sm IntOrDetalle" min="0" step="any" value="0" required disabled>
 								</div>
 								<div class="form-group col-3">
 									<label for="OrdenTotal">Total:</label>

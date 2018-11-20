@@ -20,7 +20,7 @@
     if($_POST['metodo']=='1'){
     	$sql = "SELECT * FROM folios WHERE Tipo='$_POST[tipod]'";
 
-    	if($compras[1] == '1' || $_SESSION['user']['Tipo']=="1"){
+    	if($_SESSION['user']['Tipo']=="1"){
     		$nuevo="<div class='row'>
 				<div class='col-3 offset-9'>
 					<button type='button' class='btn btn-success btn-block' id='agregarFolio' data-toggle='modal' data-target='#ModalAgregarFolio'>Agregar Folio <i class='fas fa-plus'></i></button>
@@ -114,7 +114,7 @@
 
     if($_POST['metodo']=='5'){
     	$numero = strlen($_POST['folio']);
-        $sql = "SELECT SUBSTR(MAX(Folio) FROM $numero+1) AS Numero FROM orden_compra WHERE SUBSTR(Folio,1,$numero)='$_POST[folio]'";
+        $sql = "SELECT SUBSTR(MAX(Folio) FROM $numero+1) AS Numero FROM $_POST[tabla] WHERE SUBSTR(Folio,1,$numero)='$_POST[folio]'";
 
         if($res=$con->query($sql)){
             if ($res->num_rows > 0) {
@@ -177,6 +177,7 @@
                 <p>Código: $row[Codigo]</p>
                 <p>Nombre: $row[Nombre]</p>
                 <p>Domicilio: $row[Domicilio]</p>
+                <p>Colonia: $row[Colonia]</p>
                 <p>Ciudad: $row[Ciudad]</p>
                 <p>Estado: $row[Estado]</p>
                 <p>País: $row[Pais]</p>
@@ -208,6 +209,7 @@
                         <td>$row[Nombre]</td>
                         <td>$row[UME]</td>
                         <td>$row[Categoria]</td>
+                        <td>$row[IVA]</td>
                         <td><button type='button' class='btn btn-outline-info seleccionarProducto' attrID='$row[ID_Producto]'>Seleccionar</button></td>
                     </tr>";
                 }
@@ -224,6 +226,7 @@
                                 <th>Nombre</th>
                                 <th>UME</th>
                                 <th>Categoría</th>
+                                <th>IVA%</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -269,7 +272,7 @@
                 if($compro == 1){
                     echo "Error: ".mysqli_error($con);
                 }else{
-                    echo "Correcto";
+                    echo "$id*$_POST[proveedor]*Correcto";
                 }
             }else{
                 echo "Error: ".mysqli_error($con);
@@ -304,7 +307,7 @@
             if($res->num_rows > 0){
                 while($row = $res->fetch_assoc()){
                     
-                    $sql1 = "SELECT ID_Orden_Detalle, FK_Orden_Compra, FK_Producto,  Codigo, Nombre, UME, Cantidad, Precio_Unitario, Subtotal, Descuento, IVA, Total FROM orden_compra_detalle INNER JOIN productos ON FK_Producto=ID_Producto WHERE FK_Orden_Compra='$row[ID_Orden]' ORDER BY Codigo";
+                    $sql1 = "SELECT ID_Orden_Detalle, FK_Orden_Compra, FK_Producto,  Codigo, Nombre, UME, Cantidad, Precio_Unitario, Subtotal, Descuento, orden_compra_detalle.IVA AS IVA, Total FROM orden_compra_detalle INNER JOIN productos ON FK_Producto=ID_Producto WHERE FK_Orden_Compra='$row[ID_Orden]' ORDER BY Codigo";
 
                     if($res1=$con->query($sql1)){
                         if($res1->num_rows > 0){

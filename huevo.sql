@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 30-10-2018 a las 06:06:02
+-- Tiempo de generación: 20-11-2018 a las 04:51:12
 -- Versión del servidor: 10.1.25-MariaDB
 -- Versión de PHP: 5.6.31
 
@@ -110,7 +110,9 @@ INSERT INTO `compras` (`ID_Compra`, `FK_Orden`, `Folio`, `FK_Proveedor`, `Total`
 (2, 2, 'CPG1', 1, 700, '2018-10-28 21:00:49', 0, 0),
 (3, 1, 'CPG2', 2, 423.4, '2018-10-28 21:01:36', 0, 0),
 (4, 2, 'CPG3', 1, 700, '2018-10-28 21:18:53', 0, 0),
-(5, 3, 'CPG4', 2, 400, '2018-10-28 21:21:21', 0, 0);
+(5, 3, 'CPG4', 2, 400, '2018-10-28 21:21:21', 0, 0),
+(6, 1, 'CPP1', 2, 423.4, '2018-10-30 12:48:48', 0, 0),
+(7, 4, 'CPG5', 2, 162.4, '2018-10-30 12:51:19', 0, 0);
 
 -- --------------------------------------------------------
 
@@ -139,7 +141,10 @@ INSERT INTO `compras_detalle` (`ID_Compras_Detalle`, `FK_Compra`, `FK_Producto`,
 (3, 3, 1, 50, 6.5, 325, 0, 16, 377),
 (4, 3, 4, 5, 8, 40, 0, 16, 46.4),
 (5, 4, 3, 200, 3.5, 700, 0, 0, 700),
-(6, 5, 3, 100, 4, 400, 0, 0, 400);
+(6, 5, 3, 100, 4, 400, 0, 0, 400),
+(7, 6, 1, 50, 6.5, 325, 0, 16, 377),
+(8, 6, 4, 5, 8, 40, 0, 16, 46.4),
+(9, 7, 1, 20, 7, 140, 0, 16, 162.4);
 
 --
 -- Disparadores `compras_detalle`
@@ -202,6 +207,68 @@ INSERT INTO `empleados` (`ID_Empleado`, `Codigo`, `Nombre`, `Ap_Pat`, `Ap_Mat`, 
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `entregas`
+--
+
+CREATE TABLE `entregas` (
+  `ID_Entrega` int(11) NOT NULL,
+  `Folio` varchar(30) NOT NULL,
+  `FK_Empleado` int(11) NOT NULL,
+  `Total` double NOT NULL,
+  `Fecha` datetime NOT NULL,
+  `Cancelada` tinyint(1) NOT NULL,
+  `Eliminada` tinyint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `entregas`
+--
+
+INSERT INTO `entregas` (`ID_Entrega`, `Folio`, `FK_Empleado`, `Total`, `Fecha`, `Cancelada`, `Eliminada`) VALUES
+(2, 'EGHJ1', 1, 61.53, '2018-11-19 18:59:30', 0, 0),
+(3, 'EGHJ2', 1, 27.84, '2018-11-19 19:02:42', 0, 0),
+(4, 'EGHJ3', 2, 22.69, '2018-11-19 19:04:16', 0, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `entregas_detalles`
+--
+
+CREATE TABLE `entregas_detalles` (
+  `ID_Entrega_Detalle` int(11) NOT NULL,
+  `FK_Entrega` int(11) NOT NULL,
+  `FK_Producto` int(11) NOT NULL,
+  `Cantidad` double NOT NULL,
+  `Costo` double NOT NULL,
+  `Subtotal` double NOT NULL,
+  `IVA` double NOT NULL,
+  `Total` double NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `entregas_detalles`
+--
+
+INSERT INTO `entregas_detalles` (`ID_Entrega_Detalle`, `FK_Entrega`, `FK_Producto`, `Cantidad`, `Costo`, `Subtotal`, `IVA`, `Total`) VALUES
+(1, 2, 1, 2, 6.52, 13.04, 16, 15.13),
+(2, 2, 4, 5, 8, 40, 16, 46.4),
+(3, 3, 4, 3, 8, 24, 16, 27.84),
+(4, 4, 1, 3, 6.52, 19.56, 16, 22.69);
+
+--
+-- Disparadores `entregas_detalles`
+--
+DELIMITER $$
+CREATE TRIGGER `quitar_entregas` AFTER INSERT ON `entregas_detalles` FOR EACH ROW BEGIN
+	UPDATE productos SET Existencia = Existencia - New.Cantidad WHERE ID_Producto = New.FK_Producto;
+END
+$$
+DELIMITER ;
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `folios`
 --
 
@@ -218,11 +285,12 @@ CREATE TABLE `folios` (
 
 INSERT INTO `folios` (`ID_Folio`, `Nombre`, `Serie`, `Tipo`) VALUES
 (1, 'Almacen General', 'OCAG', 1),
-(2, 'prueba1', 'OCP', 1),
 (4, 'Prueba2', 'OCPP', 1),
 (5, 'Prueba', 'CPP', 2),
 (8, 'AlmacÃ©n General', 'CPG', 2),
-(18, 'Prueba4', 'OCYU', 1);
+(18, 'Prueba4', 'OCYU', 1),
+(19, 'Entrega Prueba', 'EGHJ', 3),
+(20, 'gfcjbknmjl', 'UIOY', 1);
 
 -- --------------------------------------------------------
 
@@ -273,9 +341,15 @@ CREATE TABLE `orden_compra` (
 --
 
 INSERT INTO `orden_compra` (`ID_Orden`, `Folio`, `FK_Proveedor`, `Total`, `Fecha`, `Convertida`, `Eliminada`) VALUES
-(1, 'OCAG1', 2, 423.4, '2018-10-21 14:58:07', 0, 0),
+(1, 'OCAG1', 2, 423.4, '2018-10-21 14:58:07', 1, 0),
 (2, 'OCP1', 1, 700, '2018-10-21 15:04:01', 1, 0),
-(3, 'OCPP1', 2, 400, '2018-10-28 21:04:04', 1, 0);
+(3, 'OCPP1', 2, 400, '2018-10-28 21:04:04', 1, 0),
+(4, 'OCAG2', 2, 162.4, '2018-10-30 12:51:03', 1, 0),
+(5, 'OCAG3', 2, 63.8, '2018-11-04 18:27:13', 0, 0),
+(6, 'OCAG4', 1, 24.36, '2018-11-19 19:16:02', 0, 0),
+(7, 'OCAG5', 1, 24.36, '2018-11-19 19:27:28', 0, 0),
+(8, 'OCAG6', 1, 98.6, '2018-11-19 19:28:13', 0, 0),
+(9, 'OCPP2', 2, 59.16, '2018-11-19 19:33:58', 0, 0);
 
 -- --------------------------------------------------------
 
@@ -303,7 +377,13 @@ INSERT INTO `orden_compra_detalle` (`ID_Orden_Detalle`, `FK_Orden_Compra`, `FK_P
 (1, 1, 1, 50, 6.5, 325, 0, 16, 377),
 (2, 1, 4, 5, 8, 40, 0, 16, 46.4),
 (3, 2, 3, 200, 3.5, 700, 0, 0, 700),
-(4, 3, 3, 100, 4, 400, 0, 0, 400);
+(4, 3, 3, 100, 4, 400, 0, 0, 400),
+(5, 4, 1, 20, 7, 140, 0, 16, 162.4),
+(6, 5, 5, 10, 5.5, 55, 0, 16, 63.8),
+(7, 6, 5, 3, 7, 21, 0, 16, 24.36),
+(8, 7, 5, 3, 7, 21, 0, 16, 24.36),
+(9, 8, 4, 10, 8.5, 85, 0, 16, 98.6),
+(10, 9, 4, 6, 8.5, 51, 0, 16, 59.16);
 
 -- --------------------------------------------------------
 
@@ -353,10 +433,11 @@ CREATE TABLE `precios` (
 --
 
 INSERT INTO `precios` (`ID_Precio`, `FK_Producto`, `Costo_Actual`, `Costo_Promedio`, `Precio1`, `Precio2`) VALUES
-(1, 1, 0, 0, 0, 0),
+(1, 1, 7, 6.5212765957446805, 0, 0),
 (2, 2, 0, 0, 0, 0),
 (3, 3, 4, 3.5625, 0, 0),
-(4, 4, 0, 0, 0, 0);
+(4, 4, 8, 8, 0, 0),
+(5, 5, 0, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -373,6 +454,7 @@ CREATE TABLE `productos` (
   `Existencia` int(11) NOT NULL,
   `Max` int(11) NOT NULL,
   `Min` int(11) NOT NULL,
+  `IVA` double NOT NULL,
   `Activo` tinyint(1) NOT NULL,
   `Eliminado` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -381,11 +463,12 @@ CREATE TABLE `productos` (
 -- Volcado de datos para la tabla `productos`
 --
 
-INSERT INTO `productos` (`ID_Producto`, `Codigo`, `Nombre`, `UME`, `Categoria`, `Existencia`, `Max`, `Min`, `Activo`, `Eliminado`) VALUES
-(1, 'ABC123', 'JabÃ³n', 'Pieza', 'Insumo', 400, 50, 300, 1, 0),
-(2, 'TUI123', 'Huevo liquido', 'Litro', 'Producto Terminado', 2255, 10000, 1000, 1, 0),
-(3, 'ERT123', 'Huevo frÃ¡gil', 'Kg', 'Materia Prima', 800, 200, 20000, 1, 0),
-(4, 'KUI123', 'Prueba', 'Pieza', 'Insumo', 200, 10, 100, 1, 0);
+INSERT INTO `productos` (`ID_Producto`, `Codigo`, `Nombre`, `UME`, `Categoria`, `Existencia`, `Max`, `Min`, `IVA`, `Activo`, `Eliminado`) VALUES
+(1, 'ABC123', 'JabÃ³n', 'Pieza', 'Insumo', 470, 300, 50, 16, 1, 0),
+(2, 'TUI123', 'Huevo liquido', 'Litro', 'Producto Terminado', 2255, 10000, 1000, 0, 1, 0),
+(3, 'ERT123', 'Huevo frÃ¡gil', 'Kg', 'Materia Prima', 800, 200, 20000, 0, 1, 0),
+(4, 'KUI123', 'Prueba', 'Pieza', 'Insumo', 205, 100, 10, 16, 1, 0),
+(5, 'GHY123', 'Guantes', 'Litro', 'Insumo', 20, 50, 10, 16, 1, 0);
 
 --
 -- Disparadores `productos`
@@ -533,6 +616,21 @@ ALTER TABLE `empleados`
   ADD KEY `FK_Puesto` (`FK_Puesto`);
 
 --
+-- Indices de la tabla `entregas`
+--
+ALTER TABLE `entregas`
+  ADD PRIMARY KEY (`ID_Entrega`),
+  ADD KEY `FK_Empleado` (`FK_Empleado`);
+
+--
+-- Indices de la tabla `entregas_detalles`
+--
+ALTER TABLE `entregas_detalles`
+  ADD PRIMARY KEY (`ID_Entrega_Detalle`),
+  ADD KEY `FK_Entrega` (`FK_Entrega`),
+  ADD KEY `FK_Producto` (`FK_Producto`);
+
+--
 -- Indices de la tabla `folios`
 --
 ALTER TABLE `folios`
@@ -619,22 +717,32 @@ ALTER TABLE `clientes`
 -- AUTO_INCREMENT de la tabla `compras`
 --
 ALTER TABLE `compras`
-  MODIFY `ID_Compra` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `ID_Compra` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 --
 -- AUTO_INCREMENT de la tabla `compras_detalle`
 --
 ALTER TABLE `compras_detalle`
-  MODIFY `ID_Compras_Detalle` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `ID_Compras_Detalle` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 --
 -- AUTO_INCREMENT de la tabla `empleados`
 --
 ALTER TABLE `empleados`
   MODIFY `ID_Empleado` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
+-- AUTO_INCREMENT de la tabla `entregas`
+--
+ALTER TABLE `entregas`
+  MODIFY `ID_Entrega` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+--
+-- AUTO_INCREMENT de la tabla `entregas_detalles`
+--
+ALTER TABLE `entregas_detalles`
+  MODIFY `ID_Entrega_Detalle` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+--
 -- AUTO_INCREMENT de la tabla `folios`
 --
 ALTER TABLE `folios`
-  MODIFY `ID_Folio` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `ID_Folio` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 --
 -- AUTO_INCREMENT de la tabla `generales`
 --
@@ -644,12 +752,12 @@ ALTER TABLE `generales`
 -- AUTO_INCREMENT de la tabla `orden_compra`
 --
 ALTER TABLE `orden_compra`
-  MODIFY `ID_Orden` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `ID_Orden` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 --
 -- AUTO_INCREMENT de la tabla `orden_compra_detalle`
 --
 ALTER TABLE `orden_compra_detalle`
-  MODIFY `ID_Orden_Detalle` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `ID_Orden_Detalle` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 --
 -- AUTO_INCREMENT de la tabla `permisos`
 --
@@ -659,12 +767,12 @@ ALTER TABLE `permisos`
 -- AUTO_INCREMENT de la tabla `precios`
 --
 ALTER TABLE `precios`
-  MODIFY `ID_Precio` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `ID_Precio` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 --
 -- AUTO_INCREMENT de la tabla `productos`
 --
 ALTER TABLE `productos`
-  MODIFY `ID_Producto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `ID_Producto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 --
 -- AUTO_INCREMENT de la tabla `proveedores`
 --
@@ -703,6 +811,19 @@ ALTER TABLE `compras_detalle`
 --
 ALTER TABLE `empleados`
   ADD CONSTRAINT `empleados_ibfk_1` FOREIGN KEY (`FK_Puesto`) REFERENCES `puestos` (`ID_Puesto`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Filtros para la tabla `entregas`
+--
+ALTER TABLE `entregas`
+  ADD CONSTRAINT `entregas_ibfk_1` FOREIGN KEY (`FK_Empleado`) REFERENCES `empleados` (`ID_Empleado`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Filtros para la tabla `entregas_detalles`
+--
+ALTER TABLE `entregas_detalles`
+  ADD CONSTRAINT `entregas_detalles_ibfk_1` FOREIGN KEY (`FK_Entrega`) REFERENCES `entregas` (`ID_Entrega`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `entregas_detalles_ibfk_2` FOREIGN KEY (`FK_Producto`) REFERENCES `productos` (`ID_Producto`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `orden_compra`

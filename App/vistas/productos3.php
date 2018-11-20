@@ -16,6 +16,7 @@
 								<th>Existencia</th>
 								<th>Stock Mínimo</th>
 								<th>Stock Máximo</th>
+								<th>IVA%</th>
 								<th>Estatus</th>
 								<th></th>
 							</thead>

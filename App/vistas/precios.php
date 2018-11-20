@@ -8,8 +8,20 @@
 					</div>
 				</div>
 				<div class="row">
-					<div class="col-12">
-						Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rerum incidunt hic id dolor, quod sequi dicta, accusamus molestiae. Dolores praesentium temporibus quasi id. Quas iste, nam at numquam aliquid fugiat.
+					<div class="col-12 table-responsive">
+						<table class="table table-hover table-striped" id="tablaPrecios" width="100%">
+							<thead>
+								<tr>
+									<th>Código</th>
+									<th>Nombre</th>
+									<th>Costo Actual</th>
+									<th>Costo Promedio</th>
+									<th>Precio 1</th>
+									<th>Pecio 2</th>
+									<th></th>
+								</tr>
+							</thead>
+						</table>
 					</div>
 				</div>
 			</div>

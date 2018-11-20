@@ -123,7 +123,7 @@ table{
     background: #FAFAFA;
 }
 
-#OrdenDatosProveedor, #OrdenMDatosProveedor{
+#OrdenDatosProveedor, #OrdenMDatosProveedor, #EntregaDatosResponsable{
     border: 1px solid #CCC;
     border-radius: 5px;
     height: 200px;
@@ -131,12 +131,12 @@ table{
     overflow-x: auto;
 }
 
-#OrdenMDatosProveedor{
+#OrdenMDatosProveedor, #EntregaDatosResponsable{
     font-size: 12px;
     margin: 0 auto;
 }
 
-#TablaOrden{
+#TablaOrden, #TablaEntrega{
     height: 500px;
 }
 
@@ -144,7 +144,7 @@ table{
     height: 300px;
 }
 
-.IntDetalles{
+.IntDetalles, .CantidadM{
     text-align: center;
     border: none;
     background: none;
@@ -158,7 +158,7 @@ table{
     box-sizing: border-box;
 }
 
-.MDetalles{
+.MDetalles, .CantidadM{
     width: 100%;
 }
 

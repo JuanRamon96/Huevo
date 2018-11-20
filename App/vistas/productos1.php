@@ -16,6 +16,7 @@
 								<th>Existencia</th>
 								<th>Stock Mínimo</th>
 								<th>Stock Máximo</th>
+								<th>IVA%</th>
 								<th>Estatus</th>
 								<th></th>
 							</thead>
@@ -72,6 +73,10 @@
 				<div class="form-group col-4">
 					<label for="ProductoMMaximo">Stock Máximo:</label>
 					<input type="number" id="ProductoMMaximo" class="form-control ModiProductos" min="0" required>
+				</div>
+				<div class="form-group col-4">
+					<label for="ProductoMIVA">IVA %:</label>
+					<input type="number" step="any" id="ProductoMIVA" class="form-control ModiProductos" min="0" required>
 				</div>
       		</div>
       		<div class="modal-footer">

@@ -18,7 +18,7 @@
     }
 
 	if($_POST['metodo'] == '1'){
-		$sql = "INSERT INTO productos VALUES(null, '$_POST[codigo]','$_POST[nombre]','$_POST[ume]','$_POST[categoria]','$_POST[existencia]','$_POST[maximo]','$_POST[minimo]','1','0')";
+		$sql = "INSERT INTO productos VALUES(null, '$_POST[codigo]','$_POST[nombre]','$_POST[ume]','$_POST[categoria]','$_POST[existencia]','$_POST[maximo]','$_POST[minimo]','$_POST[IVA]','1','0')";
 
 		if($con->query($sql)){
 			echo "1";
@@ -51,7 +51,7 @@
 						$bBorrar='';
 					}
 
-					$arreglo['data'][] = array('Codigo'=> $row['Codigo'], 'Nombre'=> $row['Nombre'], 'UME'=> $row['UME'], 'Existencia'=> $row['Existencia'], 'Max'=> $row['Max'], 'Min'=> $row['Min'], 'Activo'=> $activo, 'Botones'=> $bModificar.$bBorrar);	
+					$arreglo['data'][] = array('Codigo'=> $row['Codigo'], 'Nombre'=> $row['Nombre'], 'UME'=> $row['UME'], 'Existencia'=> $row['Existencia'], 'Max'=> $row['Max'], 'Min'=> $row['Min'], 'IVA'=> $row['IVA'], 'Activo'=> $activo, 'Botones'=> $bModificar.$bBorrar);	
 				}
 				echo json_encode($arreglo);
 			}else{
@@ -74,7 +74,7 @@
 	}
 
 	if($_POST['metodo'] == '4'){
-		$sql = "UPDATE productos SET Codigo='$_POST[codigo]', Nombre='$_POST[nombre]',UME='$_POST[ume]',Existencia='$_POST[existencia]',Max='$_POST[maximo]',Min='$_POST[minimo]',Activo='$_POST[activo]' WHERE ID_Producto='$_POST[id]'";
+		$sql = "UPDATE productos SET Codigo='$_POST[codigo]', Nombre='$_POST[nombre]',UME='$_POST[ume]',Existencia='$_POST[existencia]',Max='$_POST[maximo]',Min='$_POST[minimo]', IVA='$_POST[IVA]', Activo='$_POST[activo]' WHERE ID_Producto='$_POST[id]'";
 
 		if($con->query($sql)){
 			echo "1";

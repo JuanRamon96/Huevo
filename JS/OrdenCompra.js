@@ -18,6 +18,12 @@ $(document).ready(function() {
 		verFolios(tipof);
 	});
 
+	$("#EntregaBuscarFolio").click(function() {	
+		lfolio=3;
+		tipof=3;
+		verFolios(tipof);
+	});
+
 	$("#OrdenMBuscarFolio").click(function() {
 		$('#ModalOrdenFolio').css('z-index', '1060');	
 		lfolio=2;
@@ -187,16 +193,20 @@ $(document).ready(function() {
 
 	$(document).on('click', '.seleccionarFolio', function() {
 		var padre = $(this).parent().parent();
-		if(tipof == 1){
+		if(tipof == 1 || tipof == 3){
 			folio = padre.children('td:eq(0)').text();
 			if(lfolio == 1){
 				$("#OrdenNombreF").val(padre.children('td:eq(1)').text());
-			}else{
+				valorFolio('orden_compra');
+			}else if(lfolio == 2){
 				$("#OrdenMNombreF").val(padre.children('td:eq(1)').text());
 				$("#OrdenMNombreF").attr('attrFolio', folio);
+				valorFolio('orden_compra');
+			}else{
+				$("#EntregaNombreF").val(padre.children('td:eq(1)').text());
+				$("#EntregaNombreF").attr('attrFolio', folio);
+				valorFolio('entregas');
 			}
-			
-			valorFolio();
 		}else{
 			var padreS=$("#ContenidoOrden").children('tr').eq(fila-1);
 			var detalles = new Array();
@@ -311,11 +321,13 @@ $(document).ready(function() {
 			$("#OrdenProducto").val(padre.children('td:eq(1)').text());
 			$("#OrdenCodigoP").val(padre.children('td:eq(0)').text());
 			$("#OrdenUMEP").val(padre.children('td:eq(2)').text());
+			$("#OrdenIVA").val(padre.children('td:eq(4)').text());
 			$("#OrdenCodigoP").attr('attrID', $(this).attr('attrID'));
 		}else{
 			$("#OrdenMProducto").val(padre.children('td:eq(1)').text());
 			$("#OrdenMCodigoP").val(padre.children('td:eq(0)').text());
 			$("#OrdenMUMEP").val(padre.children('td:eq(2)').text());
+			$("#OrdenMIVA").val(padre.children('td:eq(4)').text());
 			$("#OrdenMCodigoP").attr('attrID', $(this).attr('attrID'));
 		}
 		$("#ModalSeleProducto").modal('hide');
@@ -323,11 +335,13 @@ $(document).ready(function() {
 
 	$(".IntOrDetalle").on('keyup change', function() {
 		if(parseFloat($("#OrdenCantidad").val()) >= 0 && parseFloat($("#OrdenPrecio").val()) >= 0){
-			$("#OrdenSubtotal").val(parseFloat($("#OrdenCantidad").val())*parseFloat($("#OrdenPrecio").val()));
+			var num = parseFloat($("#OrdenCantidad").val())*parseFloat($("#OrdenPrecio").val());
+			$("#OrdenSubtotal").val(num.toFixed(2));
 
 			if(parseFloat($("#OrdenDescuento").val()) >= 0 && parseFloat($("#OrdenIVA").val()) >= 0){
 				var subtotal= parseFloat($("#OrdenSubtotal").val())-(parseFloat($("#OrdenSubtotal").val())*(parseFloat($("#OrdenDescuento").val())/100));
-				$("#OrdenTotal").val(subtotal + ((parseFloat($("#OrdenIVA").val())/100)*subtotal));
+				var total = subtotal + ((parseFloat($("#OrdenIVA").val())/100)*subtotal);
+				$("#OrdenTotal").val(total.toFixed(2));
 			}
 		}
 	});
@@ -419,7 +433,8 @@ $(document).ready(function() {
 				}
 			})
 			.done(function(res) {
-				if(res=="Correcto"){
+				var separa = res.split('*');
+				if(separa[2]=="Correcto"){
 					swal({
 						type: 'success',
 						title: 'La orden de compra ha sido guardada',
@@ -431,8 +446,9 @@ $(document).ready(function() {
 		 			$("#OrdenProveedor").val("");
 		 			$("#OrdenDatosProveedor").html("");
 		 			total($("#Ordendetalles"),$("#OrdenCostoTotal"));
-		 			valorFolio();
+		 			valorFolio('orden_compra');
 		 			ordenesCompra();
+		 			window.open("OrdenCompra.php?id="+separa[0]+"&proveedor="+separa[1]);
 				}else{
 					swal({
 						type: 'error',
@@ -546,11 +562,13 @@ $(document).ready(function() {
 
 	$(".IntMOrDetalle").on('keyup change', function() {
 		if(parseFloat($("#OrdenMCantidad").val()) >= 0 && parseFloat($("#OrdenMPrecio").val()) >= 0){
-			$("#OrdenMSubtotal").val(parseFloat($("#OrdenMCantidad").val())*parseFloat($("#OrdenMPrecio").val()));
+			var num = parseFloat($("#OrdenMCantidad").val())*parseFloat($("#OrdenMPrecio").val());
+			$("#OrdenMSubtotal").val(num.toFixed(2));
 
 			if(parseFloat($("#OrdenMDescuento").val()) >= 0 && parseFloat($("#OrdenMIVA").val()) >= 0){
-				var subtotal= parseFloat($("#OrdenMSubtotal").val())-(parseFloat($("#OrdenMSubtotal").val())*(parseFloat($("#OrdenMDescuento").val())/100));
-				$("#OrdenMTotal").val(subtotal + ((parseFloat($("#OrdenMIVA").val())/100)*subtotal));
+				var subtotal = parseFloat($("#OrdenMSubtotal").val())-(parseFloat($("#OrdenMSubtotal").val())*(parseFloat($("#OrdenMDescuento").val())/100));
+				var total = subtotal + ((parseFloat($("#OrdenMIVA").val())/100)*subtotal);
+				$("#OrdenMTotal").val(total.toFixed(2));
 			}
 		}
 	});
@@ -792,8 +810,8 @@ $(document).ready(function() {
 		});	
 	}
 
-	function valorFolio() {
-		var data = "metodo=5&folio="+folio; 
+	function valorFolio(tabla) {
+		var data = "metodo=5&folio="+folio+"&tabla="+tabla; 
 
 		$.ajax({
 			url: 'php/OrdenCompra.php',
@@ -804,14 +822,18 @@ $(document).ready(function() {
 			if(res == ""){
 				if (lfolio == 1) {
 					$("#OrdenFolio").val(folio+'1');
-				}else{
+				}else if(lfolio == 2){
 					$("#OrdenMFolio").val(folio+'1');
+				}else{
+					$("#EntregaFolio").val(folio+'1');
 				}
 			}else if(!isNaN(res)){
 				if(lfolio == 1){
 					$("#OrdenFolio").val(folio+(parseInt(res)+1));
-				}else{
+				}else if(lfolio == 2){
 					$("#OrdenMFolio").val(folio+(parseInt(res)+1));
+				}else{
+					$("#EntregaFolio").val(folio+(parseInt(res)+1));
 				}
 			}else{
 				swal({

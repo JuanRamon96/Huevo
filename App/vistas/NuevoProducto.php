@@ -22,8 +22,9 @@
 								<select id="ProductoUME" class="form-control form-control-lg IntProductos" required>
 									<option value="">--Selecciona una unidad de medida--</option>
 									<option value="Kg">Kg</option>
-									<option value="Pieza">Pieza</option>
 									<option value="Litro">Litro</option>
+									<option value="Pieza">Pieza</option>
+									<option value="Litro">Par</option>
 								</select>
 							</div>
 							<div class="form-group col-4">
@@ -46,6 +47,10 @@
 							<div class="form-group col-4">
 								<label for="ProductoMaximo">Stock Máximo:</label>
 								<input type="number" id="ProductoMaximo" class="form-control form-control-lg IntProductos" min="0" required>
+							</div>
+							<div class="form-group col-4">
+								<label for="ProductoIVA">IVA %:</label>
+								<input type="number" step="any" id="ProductoIVA" class="form-control form-control-lg IntProductos" min="0" required>
 							</div>
 							<div class="form-group col-12">
 								<br>

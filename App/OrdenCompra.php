@@ -75,7 +75,7 @@
 
 			$this->SetFont('Arial','',12);
 			$this->SetFillColor(225, 225, 225);
-			$this->Cell(90,6,utf8_decode('Cliente'),1,0,'C',true);
+			$this->Cell(90,6,utf8_decode('Empresa'),1,0,'C',true);
 			$this->SetX(108);
 			$this->Cell(90,6,utf8_decode('Proveedor'),1,1,'C',true);
 			$this->Rect(10, 39, 90, 32);
@@ -109,7 +109,7 @@
 			$this->Cell(20,6,utf8_decode("Total"),1,1,'C',true);
 			$this->SetFont('Arial','',8);
 
-			$sql2 = "SELECT Codigo, Nombre, UME, Cantidad, Precio_Unitario, Subtotal, Descuento, IVA, Total FROM orden_compra_detalle INNER JOIN productos ON FK_Producto=ID_Producto WHERE FK_Orden_Compra='$_GET[id]' ORDER BY Codigo";
+			$sql2 = "SELECT Codigo, Nombre, UME, Cantidad, Precio_Unitario, Subtotal, Descuento, productos.IVA, Total FROM orden_compra_detalle INNER JOIN productos ON FK_Producto=ID_Producto WHERE FK_Orden_Compra='$_GET[id]' ORDER BY Codigo";
 			$subtotal=0;
 
 			if($res2=$con->query($sql2)){

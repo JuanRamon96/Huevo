@@ -10,7 +10,7 @@ $(document).ready(function() {
 	$("#FormGuardarProducto").submit(function(e) {
 		e.preventDefault();
 
-		var datos = "metodo=1&codigo="+$.trim($("#ProductoCodigo").val())+"&nombre="+$.trim($("#ProductoNombre").val())+"&ume="+$("#ProductoUME").val()+"&categoria="+$("#ProductoCategoria").val()+"&existencia="+$("#ProductoExistencia").val()+"&minimo="+$("#ProductoMinimo").val()+"&maximo="+$("#ProductoMaximo").val();
+		var datos = "metodo=1&codigo="+$.trim($("#ProductoCodigo").val())+"&nombre="+$.trim($("#ProductoNombre").val())+"&ume="+$("#ProductoUME").val()+"&categoria="+$("#ProductoCategoria").val()+"&existencia="+$("#ProductoExistencia").val()+"&minimo="+$("#ProductoMinimo").val()+"&maximo="+$("#ProductoMaximo").val()+"&IVA="+$("#ProductoIVA").val();
 			
 		$.ajax({
 			url: 'php/productos.php',
@@ -98,8 +98,9 @@ $(document).ready(function() {
 		$("#ProductoMExistencia").val(padre.children('td:eq(3)').text());
 		$("#ProductoMMinimo").val(padre.children('td:eq(4)').text());
 		$("#ProductoMMaximo").val(padre.children('td:eq(5)').text());
+		$("#ProductoMIVA").val(padre.children('td:eq(6)').text());
 		
-		if(padre.children('td:eq(6)').text() == 'Activo'){
+		if(padre.children('td:eq(7)').text() == 'Activo'){
 			$("#ProductoMActivo").prop('checked', true);
 		}else{
 			$("#ProductoMActivo").prop('checked', false);
@@ -131,7 +132,7 @@ $(document).ready(function() {
 		  	reverseButtons: true
 		}).then((result) => {
 		  	if (result.value) {
-		    	var datos = "metodo=4&id="+$("#GuardarMProducto").attr('attrID')+"&codigo="+$.trim($("#ProductoMCodigo").val())+"&nombre="+$.trim($("#ProductoMNombre").val())+"&ume="+$("#ProductoMUME").val()+"&existencia="+$("#ProductoMExistencia").val()+"&minimo="+$("#ProductoMMinimo").val()+"&maximo="+$("#ProductoMMaximo").val()+"&activo="+activo;
+		    	var datos = "metodo=4&id="+$("#GuardarMProducto").attr('attrID')+"&codigo="+$.trim($("#ProductoMCodigo").val())+"&nombre="+$.trim($("#ProductoMNombre").val())+"&ume="+$("#ProductoMUME").val()+"&existencia="+$("#ProductoMExistencia").val()+"&minimo="+$("#ProductoMMinimo").val()+"&maximo="+$("#ProductoMMaximo").val()+"&IVA="+$("#ProductoMIVA").val()+"&activo="+activo;
 
 				$.ajax({
 					url: 'php/productos.php',
@@ -189,6 +190,7 @@ $(document).ready(function() {
 	            { "data": "Existencia" },
 	            { "data": "Max" },
 	            { "data": "Min" },
+	            { "data": "IVA" },
 	            { "data": "Activo" },
 	            { "data": "Botones" }
 	        ], 
