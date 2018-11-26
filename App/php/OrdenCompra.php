@@ -407,7 +407,7 @@
                 echo "No se encontraron resultados";
             }
         }else{
-            echo "Error: ".mysqli_error($con).$sql;
+            echo "Error: ".mysqli_error($con);
         }
         $con->close();
     }
@@ -542,7 +542,7 @@
                 $sql2 = "UPDATE orden_compra SET Convertida='1' WHERE ID_Orden='$_POST[id]'";
 
                 if($con->query($sql2)){
-                    echo "Correcto";
+                    echo "$id*$_POST[proveedor]*Correcto";
                 }else{
                    echo "Error 3: ".mysqli_error($con); 
                 }
@@ -551,5 +551,198 @@
             echo "Error 4: ".mysqli_error($con);
         }
         $con->close();
+    }
+
+    if($_POST['metodo']=='14'){
+        if($_POST['tipo'] == '0'){
+            $tipo="";
+        }else if($_POST['tipo'] == '1'){
+            $tipo="AND Cancelada = '0'";
+        }else{
+            $tipo="AND Cancelada = '1'";
+        }
+
+        if($_POST['desde'] == "" && $_POST['hasta'] == ""){
+            $fechas="";
+        }else if($_POST['desde'] == ""){
+            $fechas="AND Fecha <= '$_POST[hasta]'";
+        }else if($_POST['hasta'] == ""){
+            $fechas="AND Fecha >= '$_POST[desde]'";
+        }else{
+            $fechas="AND Fecha BETWEEN '$_POST[desde]' AND '$_POST[hasta]'";
+        }
+        $sql = "SELECT ID_Compra, compras.Folio AS Folio, orden_compra.Folio AS Folio1, FK_Orden, (SELECT Nombre FROM folios WHERE compras.Folio LIKE CONCAT(Serie,'%') LIMIT 1) AS NFolio, compras.FK_Proveedor, proveedores.Nombre AS Nombre,compras.Total, compras.Fecha, DATE_FORMAT(compras.Fecha, '%d-%m-%Y %h:%i %p') AS FechaE, Cancelada, compras.Eliminada FROM compras INNER JOIN proveedores ON FK_Proveedor=ID_Proveedor INNER JOIN orden_compra ON FK_Orden=ID_Orden WHERE compras.Folio LIKE '%$_POST[buscar]%' AND compras.Eliminada='0' $tipo $fechas ORDER BY ID_Compra DESC";
+
+        if($res=$con->query($sql)){
+            if($res->num_rows > 0){
+                while($row = $res->fetch_assoc()){
+                    
+                    $sql1 = "SELECT ID_Compras_Detalle, FK_Compra, FK_Producto,  Codigo, Nombre, UME, Cantidad, Precio_Unitario, Subtotal, Descuento, compras_detalle.IVA AS IVA, Total FROM compras_detalle INNER JOIN productos ON FK_Producto=ID_Producto WHERE FK_Compra='$row[ID_Compra]' ORDER BY Codigo";
+
+                    if($res1=$con->query($sql1)){
+                        if($res1->num_rows > 0){
+                            $orden="";
+                            while($row1 = $res1->fetch_assoc()){
+                                $orden .= "<tr>
+                                    <td><span hidden>$row1[ID_Compras_Detalle]</span><p>$row1[Codigo]</p></td>
+                                    <td><span hidden>$row1[FK_Producto]</span><p>$row1[Nombre]</p></td>
+                                    <td>$row1[UME]</td>
+                                    <td>$row1[Cantidad]</td>
+                                    <td>$row1[Precio_Unitario]</td>
+                                    <td>$row1[Subtotal]</td>
+                                    <td>$row1[Descuento]</td>
+                                    <td>$row1[IVA]</td>
+                                    <td>$row1[Total]</td>
+                                </tr>";       
+                            }
+                        }else{
+                            $orden = "<tr><td colspan='9'>No se encontraron detalles</td></tr>";
+                        }
+                    }else{
+                        echo "Error: ".mysqli_error($con);
+                    }
+
+                    if(($_SESSION['user']['Tipo'] == "1" || $compras[3] == "1") && $row['Cancelada'] == "0"){
+                        $bCancelar="<button type='button' class='btn btn-warning btn-sm bCancelarCompra' attrFK='$row[FK_Orden]' attrID='$row[ID_Compra]'>Cancelar <i class='fas fa-ban'></i></button>";
+                    }else{
+                        $bCancelar="";
+                    } 
+
+                    if($_SESSION['user']['Tipo'] == "1" || $compras[2] == "1"){
+                        $bEliminar="<button type='button' class='btn btn-danger btn-sm bEliminarCompra' attrFK='$row[FK_Orden]' attrID='$row[ID_Compra]' attrCAN='$row[Cancelada]'><i class='fas fa-trash-alt'></i></button>";
+                    }else{
+                        $bEliminar="";
+                    } 
+
+                    if($row['Cancelada'] == '0'){
+                        $clase="";
+                    }else{
+                        $clase="table-danger";
+                    }
+
+                    echo "<tr class='$clase'>
+                        <td><span hidden>$row[NFolio]</span><p>$row[Folio]</p></td>
+                        <td><span hidden>$row[FK_Proveedor]</span><p>$row[Nombre]</p></td>
+                        <td>$row[Total]</td>
+                        <td><span hidden>$row[Fecha]</span><p>$row[FechaE]</p></td>
+                        <td>$row[Folio1]</td>
+                        <td><span hidden>$row[ID_Compra]</span><a href='Compra.php?id=$row[ID_Compra]&proveedor=$row[FK_Proveedor]' target='_blank' class='btn btn-light'><i class='fas fa-print'></i></a></td>
+                        <td><button type='button' class='btn btn-outline-info vermasOrden'><i class='fas fa-eye'></i></button></td>
+                    </tr>
+                    <tr class='oculto' style='background: #F7F7F7;'>
+                        <td colspan='7'>
+                            <div class='row'>
+                                <div class='col-12'>
+                                    <div class='row'>
+                                        <div class='col-12 table-responsive'>
+                                            <table class='table table-hover table-sm table-bordered'>
+                                                <thead>
+                                                    <tr>
+                                                        <th>Código</th>
+                                                        <th>Producto</th>
+                                                        <th>UME</th>
+                                                        <th>Cantidad</th>
+                                                        <th>Precio</th>
+                                                        <th>Subtotal</th>
+                                                        <th>Descuento %</th>
+                                                        <th>IVA %</th>
+                                                        <th>Total</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    $orden
+                                                </tbody>
+                                                <tfoot>
+                                                    <tr class='table-active'>
+                                                        <th colspan='8' class='text-right'>Total:</th>
+                                                        <th>$row[Total]</th>
+                                                    </tr>
+                                                </tfoot>
+                                            </table>
+                                        </div>
+                                        <br>
+                                        <div class='col-6 text-left'>
+                                            $bCancelar
+                                            $bEliminar
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>";
+                }
+            }else{
+                echo "No se encontraron resultados";
+            }
+        }else{
+            echo "Error: ".mysqli_error($con);
+        }
+        $con->close();
+    }
+
+    if($_POST['metodo']=='15'){
+        $sql = "UPDATE compras SET Cancelada = 1 WHERE ID_Compra='$_POST[compra]'";
+
+        if($con->query($sql)){
+            $sql1 = "UPDATE orden_compra SET Convertida = 0 WHERE ID_Orden='$_POST[orden]'";
+
+            if($con->query($sql1)){
+                $actualizar=json_decode($_POST['actua']);
+                $compro=0;
+
+                foreach($actualizar as $actua){
+                    $sql2 = "UPDATE productos SET Existencia=Existencia-$actua[1] WHERE ID_Producto='$actua[0]'";
+
+                    if(!$con->query($sql2)){
+                        $compro=1;
+                    }
+                }
+
+                if($compro == 0){
+                    echo "Correcto";
+                }else{
+                    echo "Error 2: ".mysqli_error($con);    
+                }
+            }else{
+                echo "Error 1: ".mysqli_error($con);
+            }
+        }else{
+            echo "Error: ".mysqli_error($con);
+        }
+    }
+
+    if($_POST['metodo']=='16'){
+        $sql = "UPDATE compras SET Eliminada = 1 WHERE ID_Compra='$_POST[compra]'";
+
+        if($con->query($sql)){
+            $sql1 = "UPDATE orden_compra SET Convertida = 0 WHERE ID_Orden='$_POST[orden]'";
+
+            if($con->query($sql1)){
+                if($_POST['cance']=='0'){
+                    $actualizar=json_decode($_POST['actua']);
+                    $compro=0;
+
+                    foreach($actualizar as $actua){
+                        $sql2 = "UPDATE productos SET Existencia=Existencia-$actua[1] WHERE ID_Producto='$actua[0]'";
+
+                        if(!$con->query($sql2)){
+                            $compro=1;
+                        }
+                    }
+
+                    if($compro == 0){
+                        echo "Correcto";
+                    }else{
+                        echo "Error 2: ".mysqli_error($con);    
+                    }
+                }else{
+                    echo "Correcto";
+                }
+            }else{
+                echo "Error 1: ".mysqli_error($con);
+            }
+        }else{
+            echo "Error: ".mysqli_error($con);
+        }
     }
 ?>

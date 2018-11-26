@@ -188,8 +188,8 @@ $(document).ready(function() {
 	            { "data": "Nombre" },
 	            { "data": "UME" },
 	            { "data": "Existencia" },
-	            { "data": "Max" },
 	            { "data": "Min" },
+	            { "data": "Max" },
 	            { "data": "IVA" },
 	            { "data": "Activo" },
 	            { "data": "Botones" }

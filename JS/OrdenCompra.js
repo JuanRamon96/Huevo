@@ -1,7 +1,8 @@
 $(document).ready(function() {
-	var folio="", proveedor="",tipo="0",lfolio=0,lproveedor=0,lproducto=0,fila=0,tipof=0,superpa="";
+	var folio="", proveedor="",tipo="0",lfolio=0,lproveedor=0,lproducto=0,fila=0,tipof=0,superpa="",tipo1="0";
 	var eliminarOC = new Array();
 	ordenesCompra();
+	Compras();
 
 	//$("#OrdenFecha").val(fecha()+'T'+hora());
 	
@@ -217,14 +218,15 @@ $(document).ready(function() {
 				});
 			}
 
-			var data = "metodo=13&id="+padreS.children('td:eq(4)').children('span').text()+"&folio="+$(this).parent().parent().children('td:eq(0)').text()+"&proveedor="+padreS.children('td:eq(1)').children('span').text()+"&total="+padreS.children('td:eq(2)').text()+"&detalles="+JSON.stringify(detalles); 
+			var data = "metodo=13&id="+padreS.children('td:eq(4)').children('span').text()+"&folio="+$(this).parent().parent().children('td:eq(0)').text()+"&proveedor="+padreS.children('td:eq(1)').children('span:eq(0)').text()+"&total="+padreS.children('td:eq(2)').text()+"&detalles="+JSON.stringify(detalles); 
 			$.ajax({
 				url: 'php/OrdenCompra.php',
 				type: 'POST',
 				data: data
 			})
 			.done(function(res) {
-				if(res == "Correcto"){
+				var separa = res.split("*");
+				if(separa[2] == "Correcto"){
 					swal({
 						type: 'success',
 						title: 'La compra se ha guardado',
@@ -232,9 +234,13 @@ $(document).ready(function() {
 					});
 					ordenesCompra();
 					verProductos();
-					setTimeout(function() {
-						$("#ContenidoOrden").children('tr').eq(fila).show();
-					},1000);
+					if(tipo==0){
+						setTimeout(function() {
+							$("#ContenidoOrden").children('tr').eq(fila).show();
+						},1500);
+					}
+					Compras();
+					window.open("Compra.php?id="+separa[0]+"&proveedor="+separa[1]);
 				}else{
 					swal({
 						type: 'error',
@@ -470,6 +476,11 @@ $(document).ready(function() {
 		ordenesCompra();
 	});
 
+	$("input[name=RCompra]").click(function() {
+		tipo1=$(this).val();
+		Compras();
+	});
+
 	$(".busOrden").on('keyup change', function() {
 		ordenesCompra();
 	});
@@ -645,17 +656,17 @@ $(document).ready(function() {
 						if(res=="Correcto"){
 							swal({
 								type: 'success',
-								title: 'La orden de compra ha sido eliminada',
+								title: 'La orden de compra ha sido modificada',
 							}); 
 				 			ordenesCompra();
 				 			setTimeout(function() {
 								$("#ContenidoOrden").children('tr').eq(fila).show();
-							},1000);
+							},1500);
 						}else{
 							swal({
 								type: 'error',
 								title: 'Error:',
-								text: 'La orden de compra no ha podido ser eliminada',
+								text: 'La orden de compra no ha podido ser modificada',
 							});
 							console.log(res);
 						}
@@ -669,6 +680,115 @@ $(document).ready(function() {
 		  		}
 			});
 		}
+	});
+
+	$(document).on('click', '.bCancelarCompra', function() {
+		var fila = $(this).parent().parent().parent().parent().parent().parent().index();
+		swalWithBootstrapButtons({
+			title: '¿Estas seguro que quieres cancelar la Compra?',
+			type: 'warning',
+			showCancelButton: true,
+			confirmButtonText: 'Aceptar',
+			cancelButtonText: 'Cancelar',
+			reverseButtons: true
+		}).then((result) => {
+			if (result.value) {
+				var tabla = $(this).parent().parent().children('div:eq(0)').children('table').children('tbody');
+				var actua = new Array();
+
+				tabla.children('tr').each(function(index) {
+					actua[index]=[$(this).children('td:eq(1)').children('span').text(),$(this).children('td:eq(3)').text()];
+				});
+
+				var data="metodo=15&orden="+$(this).attr('attrFK')+"&compra="+$(this).attr('attrID')+"&actua="+JSON.stringify(actua);
+
+				$.ajax({
+					url: 'php/OrdenCompra.php',
+					type: 'POST',
+					data: data
+				})
+				.done(function(res) {
+					if(res=="Correcto"){
+						swal({
+							type: 'success',
+							title: 'La compra ha sido cancelada',
+						}); 
+				 		Compras();
+				 		if(tipo1==0){
+					 		setTimeout(function() {
+								$("#ContenidoCompras").children('tr').eq(fila).show();
+							},1500);
+					 	}
+						verProductos();
+					}else{
+						swal({
+							type: 'error',
+							title: 'Error:',
+							text: 'La compra no ha podido ser cancelada',
+						});
+						console.log(res);
+					}
+					$("#carga").hide();		
+				})
+				.fail(function() {
+					console.log("Error");
+				});
+			} else if (result.dismiss === swal.DismissReason.cancel) {
+		   		swal('Has cancelado la operación');
+		  	}
+		});
+	});
+
+	$(document).on('click', '.bEliminarCompra', function() {
+		swalWithBootstrapButtons({
+			title: '¿Estas seguro que quieres eliminar la Compra?',
+			text: 'Una vez eliminada ya no podrá ser recuperada jamás ',
+			type: 'warning',
+			showCancelButton: true,
+			confirmButtonText: 'Aceptar',
+			cancelButtonText: 'Cancelar',
+			reverseButtons: true
+		}).then((result) => {
+			if (result.value) {
+				var tabla = $(this).parent().parent().children('div:eq(0)').children('table').children('tbody');
+				var actua = new Array();
+
+				tabla.children('tr').each(function(index) {
+					actua[index]=[$(this).children('td:eq(1)').children('span').text(),$(this).children('td:eq(3)').text()];
+				});
+
+				var data="metodo=16&cance="+$(this).attr('attrCAN')+"&orden="+$(this).attr('attrFK')+"&compra="+$(this).attr('attrID')+"&actua="+JSON.stringify(actua);
+
+				$.ajax({
+					url: 'php/OrdenCompra.php',
+					type: 'POST',
+					data: data
+				})
+				.done(function(res) {
+					if(res=="Correcto"){
+						swal({
+							type: 'success',
+							title: 'La compra ha sido eliminada',
+						}); 
+				 		Compras();
+						verProductos();
+					}else{
+						swal({
+							type: 'error',
+							title: 'Error:',
+							text: 'La compra no ha podido ser eliminada',
+						});
+						console.log(res);
+					}
+					$("#carga").hide();		
+				})
+				.fail(function() {
+					console.log("Error");
+				});
+			} else if (result.dismiss === swal.DismissReason.cancel) {
+		   		swal('Has cancelado la operación');
+		  	}
+		});
 	});
 
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -687,6 +807,21 @@ $(document).ready(function() {
 			console.log("Error");
 		});
 		
+	}
+
+	function Compras() {
+		var data = "metodo=14&buscar="+$.trim($("#BuscarCompra").val())+"&desde="+$("#fechaDesdeC").val()+"&hasta="+$("#fechaHastaC").val()+"&tipo="+tipo1;
+		$.ajax({
+			url: 'php/OrdenCompra.php',
+			type: 'POST',
+			data: data
+		})
+		.done(function(res) {
+			$("#ContenidoCompras").html(res);	
+		})
+		.fail(function() {
+			console.log("Error");
+		});
 	}
 
 	function verFolios(tipod) {
@@ -870,8 +1005,9 @@ $(document).ready(function() {
 	            { "data": "Nombre" },
 	            { "data": "UME" },
 	            { "data": "Existencia" },
-	            { "data": "Max" },
 	            { "data": "Min" },
+	            { "data": "Max" },
+	            { "data": "IVA" },
 	            { "data": "Activo" },
 	            { "data": "Botones" }
 	        ], 
