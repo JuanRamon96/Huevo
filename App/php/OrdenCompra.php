@@ -4,7 +4,7 @@
 	$id = $_SESSION['user']['ID_Usuario'];
 	$compras = array('0','0','0','0');
 
-	if($_SESSION['user']['Tipo']=="2" && $_POST["metodo"]=="1"){
+	if($_SESSION['user']['Tipo']=="2" && ($_POST["metodo"]=="10" || $_POST["metodo"]=="14")){
     	$sql1 = "SELECT * FROM permisos WHERE FK_Usuario = '$id'";
 
 		if($res1=$con->query($sql1)){
@@ -35,13 +35,13 @@
     		if($res->num_rows > 0){
     			while($row = $res->fetch_assoc()){
 
-    				if($compras[2] == '1' || $_SESSION['user']['Tipo']=="1"){
+    				if($_SESSION['user']['Tipo']=="1"){
     					$boton1="<button type='button' class='btn btn-warning ModificarOrdenFolio' attrID='$row[ID_Folio]' data-toggle='modal' data-target='#ModalModificarFolio'><i class='fas fa-pencil-alt'></i></button>";
 	    			}else{
 	    				$boton1="";
 	    			}
 
-	    			if($compras[3] == '1' || $_SESSION['user']['Tipo']=="1"){
+	    			if($_SESSION['user']['Tipo']=="1"){
 	    				$boton2="<button type='button' class='btn btn-danger BorrarOrdenFolio' attrID='$row[ID_Folio]'><i class='fas fa-trash-alt'></i></button>";
 	    			}else{
 	    				$boton2="";
@@ -350,7 +350,13 @@
                         $bConvertir="<h5>Convertida</h5>";
                     } 
 
-                    echo "<tr>
+                    if($row['Convertida'] == "0"){
+                        $clase="";
+                    }else{
+                        $clase="table-success";
+                    }
+
+                    echo "<tr class='$clase'>
                         <td><span hidden>$row[NFolio]</span><p>$row[Folio]</p></td>
                         <td><span hidden>$row[FK_Proveedor]</span><p>$row[Nombre]</p><span hidden>$row[DatosPro]</span></td>
                         <td>$row[Total]</td>

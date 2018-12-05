@@ -140,7 +140,7 @@
 	  			if($entregas[1]=='1' || $_SESSION['user']['Tipo']=='1'){
 	  				echo "<li id='verNuevaEntrega'>Nueva Entrega <i class='fas fa-plus'></i></li>";
 	  			}
-	  			echo "<li id='verEntregas'>Consultar Entrgas <i class='fas fa-search'></i></li>
+	  			echo "<li id='verEntregas'>Consultar Entregas <i class='fas fa-search'></i></li>
 	  				</ul>";
 	  				
 	  		}

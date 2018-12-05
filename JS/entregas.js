@@ -1,4 +1,6 @@
 $(document).ready(function() {
+	var tipo="0", fila=0;
+	verEntregas();
 
 	const swalWithBootstrapButtons = swal.mixin({
 	  confirmButtonClass: 'btn btn-success',
@@ -157,7 +159,7 @@ $(document).ready(function() {
 		 			$("#EntregaDatosResponsable").html("");
 		 			calTotal($("#Entregadetalles"),$("#EntregaCostoTotal"));
 		 			valorFolio('entregas',$("#EntregaNombreF").attr('attrFolio'));
-		 			//ordenesCompra();
+		 			verEntregas();
 		 			//window.open("OrdenCompra.php?id="+separa[0]+"&proveedor="+separa[1]);
 				}else{
 					swal({
@@ -174,8 +176,37 @@ $(document).ready(function() {
 			});
 		}
 	});
+	$("input[name=REntrega]").click(function() {
+		tipo=$(this).val();
+		verEntregas();
+	});
+
+	$(document).on('click', '.vermasEntrega', function() {
+		var fila= $(this).parent().parent().index();
+		$(this).parent().parent().parent().children('tr').eq(fila+1).toggle('fast');
+	});
+
+	$(document).on('click', '.bCancelarEntre', function() {
+		alert("lmk");
+	});
 
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+	function verEntregas() {
+		var data = "metodo=5&buscar="+$("#BuscarEntregas").val()+"&desde="+$("#fechaDesdeE").val()+"&hasta="+$("#fechaHastaE").val()+"&tipo="+tipo;
+		
+		$.ajax({
+			url: 'php/entregas.php',
+			type: 'POST',
+			data: data
+		})
+		.done(function(res) {
+			$("#ContenidoEntregas").html(res);
+		})
+		.fail(function() {
+			console.log("Error");
+		});
+	}
+
 	function responsables() {
 		$.ajax({
 			url: 'php/entregas.php',

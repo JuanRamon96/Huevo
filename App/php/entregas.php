@@ -4,7 +4,7 @@
 	$id = $_SESSION['user']['ID_Usuario'];
 	$entregas = array('0','0','0','0');
 
-	/*if($_SESSION['user']['Tipo']=="2" && $_POST["metodo"]=="1"){
+	if($_SESSION['user']['Tipo']=="2" && $_POST["metodo"]=="5"){
     	$sql1 = "SELECT * FROM permisos WHERE FK_Usuario = '$id'";
 
 		if($res1=$con->query($sql1)){
@@ -15,7 +15,7 @@
 		}else{
 			echo "Error: ".mysqli_error($con);
 		}
-    }*/
+    }
 
     if($_POST['metodo']=='1'){
         $sql = "SELECT ID_Empleado, empleados.Codigo AS Codigo, empleados.Nombre AS Nombre, Ap_Pat, Ap_Mat, areas.Nombre AS Area, puestos.Nombre AS Puesto FROM empleados INNER JOIN puestos ON FK_Puesto=ID_Puesto INNER JOIN areas ON FK_Area=ID_Area WHERE Estatus='0' AND empleados.Eliminado='0'";
@@ -181,5 +181,132 @@
             echo "Error: ".mysqli_error($con);
         }
         $con->close();
+    }
+
+    if($_POST['metodo']=='5'){
+        if($_POST['tipo'] == '0'){
+            $tipo="";
+        }else if($_POST['tipo'] == '1'){
+            $tipo="AND Cancelada = '0'";
+        }else{
+            $tipo="AND Cancelada = '1'";
+        }
+
+        if($_POST['desde'] == "" && $_POST['hasta'] == ""){
+            $fechas="";
+        }else if($_POST['desde'] == ""){
+            $fechas="AND Fecha <= '$_POST[hasta]'";
+        }else if($_POST['hasta'] == ""){
+            $fechas="AND Fecha >= '$_POST[desde]'";
+        }else{
+            $fechas="AND Fecha BETWEEN '$_POST[desde]' AND '$_POST[hasta]'";
+        }
+        $sql = "SELECT ID_Entrega, Folio, (SELECT Nombre FROM folios WHERE Folio LIKE CONCAT(Serie,'%') LIMIT 1) AS NFolio, FK_Empleado, CONCAT(empleados.Nombre,' ',empleados.Ap_Pat,' ',empleados.Ap_Mat) AS Nombre, CONCAT('<p>Código: ',empleados.Codigo,'</p><p>Nombre: ',empleados.Nombre,' ',empleados.Ap_Pat,' ',empleados.Ap_Mat,'</p><p>Domicilio: ',empleados.Domicilio,'</p><p>Colonia: ',empleados.Colonia,'</p><p>Ciudad: ',empleados.Ciudad,'</p><p>Estado: ',empleados.Estado,'</p><p>País: ',empleados.Pais,'</p><p>Código Postal: ',empleados.CP,'</p><p>Teléfono: ',empleados.Telefono,'</p><p>Email: ',empleados.Email,'</p><p>Área: ',areas.Nombre,'</p><p>Puesto: ',puestos.Nombre,'</p>') AS DatosEmp,Total, Fecha, DATE_FORMAT(Fecha, '%d-%m-%Y %h:%i %p') AS FechaE, Cancelada, Eliminada FROM entregas INNER JOIN empleados ON FK_Empleado=ID_Empleado INNER JOIN puestos ON FK_Puesto=ID_Puesto INNER JOIN areas ON FK_Area=ID_Area WHERE Folio LIKE '%$_POST[buscar]%' AND Eliminada='0' $tipo $fechas ORDER BY ID_Entrega DESC";
+
+        if($res=$con->query($sql)){
+            if($res->num_rows > 0){
+                while($row = $res->fetch_assoc()){
+                    
+                    $sql1 = "SELECT ID_Entrega_Detalle, FK_Entrega, FK_Producto,  Codigo, Nombre, UME, Cantidad, Costo, Subtotal, entregas_detalles.IVA AS IVA, Total FROM entregas_detalles INNER JOIN productos ON FK_Producto=ID_Producto WHERE FK_Entrega='$row[ID_Entrega]' ORDER BY Codigo";
+
+                    if($res1=$con->query($sql1)){
+                        if($res1->num_rows > 0){
+                            $orden="";
+                            while($row1 = $res1->fetch_assoc()){
+                                $orden .= "<tr>
+                                    <td><span hidden>$row1[ID_Entrega_Detalle]</span><p>$row1[Codigo]</p></td>
+                                    <td><span hidden>$row1[FK_Producto]</span><p>$row1[Nombre]</p></td>
+                                    <td>$row1[UME]</td>
+                                    <td>$row1[Cantidad]</td>
+                                    <td>$row1[Costo]</td>
+                                    <td>$row1[Subtotal]</td>
+                                    <td>$row1[IVA]</td>
+                                    <td>$row1[Total]</td>
+                                </tr>";       
+                            }
+                        }else{
+                            $orden = "<tr><td colspan='9'>No se encontraron detalles</td></tr>";
+                        }
+                    }else{
+                        echo "Error: ".mysqli_error($con);
+                    }
+
+                    if($_SESSION['user']['Tipo'] == "1" || $entregas[3] == "1"){
+                        $bEliminar="<button type='button' class='btn btn-danger btn-sm bBorrarEntre' attrID='$row[ID_Entrega]'><i class='fas fa-trash-alt'></i></button>";
+                    }else{
+                        $bEliminar="";
+                    } 
+
+                    if(($_SESSION['user']['Tipo'] == "1" || $compras[2] == "1") && $row['Cancelada'] == "0"){
+                        $bModificar="<button type='button' class='btn btn-warning btn-sm bModificarEntre' attrID='$row[ID_Entrega]' data-toggle='modal' data-target=''><i class='fas fa-pencil-alt'></i></button>";
+                        $bCancelar="<button type='button' class='btn btn-warning btn-sm bCancelarEntre' attrID='$row[ID_Entrega]'>Cancelar Entrega <i class='fas fa-ban'></i></button>";
+                    }else{
+                        $bModificar="";
+                        $bCancelar="";
+                    }  
+
+                    echo "<tr>
+                        <td><span hidden>$row[NFolio]</span><p>$row[Folio]</p></td>
+                        <td><span hidden>$row[FK_Empleado]</span><p>$row[Nombre]</p><span hidden>$row[DatosEmp]</span></td>
+                        <td>$row[Total]</td>
+                        <td><span hidden>$row[Fecha]</span><p>$row[FechaE]</p></td>
+                        <td><span hidden>$row[ID_Entrega]</span><a href='Entrega.php?id=$row[ID_Entrega]&empleado=$row[FK_Empleado]' target='_blank' class='btn btn-light'><i class='fas fa-print'></i></a></td>
+                        <td><button type='button' class='btn btn-outline-info vermasEntrega'><i class='fas fa-eye'></i></button></td>
+                    </tr>
+                    <tr class='oculto' style='background: #F7F7F7;'>
+                        <td colspan='6'>
+                            <div class='row'>
+                                <div class='col-12'>
+                                    <div class='row'>
+                                        <div class='col-12 table-responsive masOrdenDetalle'>
+                                            <table class='table table-hover table-sm table-bordered'>
+                                                <thead>
+                                                    <tr>
+                                                        <th>Código</th>
+                                                        <th>Producto</th>
+                                                        <th>UME</th>
+                                                        <th>Cantidad</th>
+                                                        <th>Costo</th>
+                                                        <th>Subtotal</th>
+                                                        <th>IVA %</th>
+                                                        <th>Total</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    $orden
+                                                </tbody>
+                                                <tfoot>
+                                                    <tr class='table-active'>
+                                                        <th colspan='7' class='text-right'>Total:</th>
+                                                        <th>$row[Total]</th>
+                                                    </tr>
+                                                </tfoot>
+                                            </table>
+                                        </div>
+                                        <br>
+                                        <div class='col-6 text-left'>
+                                            $bEliminar
+                                            $bModificar
+                                        </div>
+                                        <div class='col-6 text-right'>
+                                           $bCancelar
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>";
+                }
+            }else{
+                echo "No se encontraron resultados";
+            }
+        }else{
+            echo "Error: ".mysqli_error($con);
+        }
+        $con->close();
+    }
+
+    if($_POST['metodo']=='6'){
+        
     }
 ?>
