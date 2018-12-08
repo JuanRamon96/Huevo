@@ -232,7 +232,7 @@
                     }
 
                     if($_SESSION['user']['Tipo'] == "1" || $entregas[3] == "1"){
-                        $bEliminar="<button type='button' class='btn btn-danger btn-sm bBorrarEntre' attrID='$row[ID_Entrega]'><i class='fas fa-trash-alt'></i></button>";
+                        $bEliminar="<button type='button' class='btn btn-danger btn-sm bBorrarEntre' attrCan='$row[Cancelada]' attrID='$row[ID_Entrega]'><i class='fas fa-trash-alt'></i></button>";
                     }else{
                         $bEliminar="";
                     } 
@@ -245,7 +245,13 @@
                         $bCancelar="";
                     }  
 
-                    echo "<tr>
+                    if($row['Cancelada'] == 1){
+                        $clase="table-danger";
+                    }else{
+                        $clase="";
+                    }
+
+                    echo "<tr class='$clase'>
                         <td><span hidden>$row[NFolio]</span><p>$row[Folio]</p></td>
                         <td><span hidden>$row[FK_Empleado]</span><p>$row[Nombre]</p><span hidden>$row[DatosEmp]</span></td>
                         <td>$row[Total]</td>
@@ -307,6 +313,54 @@
     }
 
     if($_POST['metodo']=='6'){
+        $sql="UPDATE entregas SET Cancelada=1 WHERE ID_Entrega='$_POST[id]'";
+
+        if ($con->query($sql)) {
+            $compro=0;
+            $regre=json_decode($_POST["regre"]);
+
+            foreach($regre as $re){
+                $sql1 = "UPDATE productos SET Existencia=Existencia+$re[1] WHERE ID_Producto='$re[0]'";
+
+                if(!$con->query($sql1)){
+                    $compro=1;
+                }
+            }
+
+            if ($compro == 0) {
+                echo "Correcto";
+            }
+        } else {
+            echo "Error: ".mysqli_error($con);
+        }
+        
+    }
+
+    if($_POST['metodo']=='7'){
+        $sql="UPDATE entregas SET Eliminada=1 WHERE ID_Entrega='$_POST[id]'";
+
+        if ($con->query($sql)) {
+            if($_POST['cancela'] == '0'){
+                $compro=0;
+                $regre=json_decode($_POST["regre"]);
+
+                foreach($regre as $re){
+                    $sql1 = "UPDATE productos SET Existencia=Existencia+$re[1] WHERE ID_Producto='$re[0]'";
+
+                    if(!$con->query($sql1)){
+                        $compro=1;
+                    }
+                }
+
+                if ($compro == 0) {
+                    echo "Correcto";
+                }
+            }else{
+                echo "Correcto";
+            }
+        } else {
+            echo "Error: ".mysqli_error($con);
+        }
         
     }
 ?>

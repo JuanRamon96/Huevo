@@ -103,7 +103,7 @@ $(document).ready(function() {
 		tabla.children('tr').each(function() {
 			suma += parseFloat($(this).children('td:eq(7)').text());
 		});
-		campo.val(suma);
+		campo.val(suma.toFixed(2));
 	}
 
 	$("#GuardarEntrega").click(function() {
@@ -160,6 +160,7 @@ $(document).ready(function() {
 		 			calTotal($("#Entregadetalles"),$("#EntregaCostoTotal"));
 		 			valorFolio('entregas',$("#EntregaNombreF").attr('attrFolio'));
 		 			verEntregas();
+		 			verProductos();
 		 			//window.open("OrdenCompra.php?id="+separa[0]+"&proveedor="+separa[1]);
 				}else{
 					swal({
@@ -187,7 +188,113 @@ $(document).ready(function() {
 	});
 
 	$(document).on('click', '.bCancelarEntre', function() {
-		alert("lmk");
+		swalWithBootstrapButtons({
+		  	title: '¿Estas seguro que quieres cancelar la entrega?',
+		  	text: "¡Una vez cancelada no podrá ser recuperada!",
+		  	type: 'warning',
+		  	showCancelButton: true,
+		 	confirmButtonText: 'Aceptar',
+		  	cancelButtonText: 'Cancelar',
+		  	reverseButtons: true
+		}).then((result) => {
+		  	if (result.value) {
+				fila = $(this).parent().parent().parent().parent().parent().parent().index();
+				var regre = Array();
+				$(this).parent().parent().children('div:eq(0)').children('table').children('tbody').children('tr').each(function(index) {
+					regre[index]=[$(this).children('td:eq(1)').children('span').text(),$(this).children('td:eq(3)').text()];
+				});
+
+				var data = "metodo=6&id="+$(this).attr('attrID')+"&regre="+JSON.stringify(regre);
+
+				$.ajax({
+					url: 'php/entregas.php',
+					type: 'POST',
+					data: data,
+					beforeSend: function() {
+						$("#carga").show();
+					}
+				})
+				.done(function(res) {
+					if(res == "Correcto"){
+						swal({
+							type: 'success',
+							title: 'La entrega ha sido cancelada',
+						}); 
+						verEntregas();
+						verProductos();
+						setTimeout(function() {
+							$("#ContenidoEntregas").children('tr').eq(fila).show();
+						},1500);
+					}else{
+						swal({
+							type: 'error',
+							title: 'Error:',
+							text: 'La entrega no ha podido ser cancelada',
+						});
+						console.log(res);
+					}
+					$("#carga").hide();	
+				})
+				.fail(function() {
+					console.log("Error");
+				});
+			} else if (result.dismiss === swal.DismissReason.cancel) {
+		    	swal('Has cancelado la operación');
+		  	}
+		});	
+	});
+
+	$(document).on('click', '.bBorrarEntre', function() {
+		swalWithBootstrapButtons({
+		  	title: '¿Estas seguro que quieres eliminar la entrega?',
+		  	text: "¡Una vez eliminada no podrá ser recuperada!",
+		  	type: 'warning',
+		  	showCancelButton: true,
+		 	confirmButtonText: 'Aceptar',
+		  	cancelButtonText: 'Cancelar',
+		  	reverseButtons: true
+		}).then((result) => {
+		  	if (result.value) {
+				var regre = Array();
+				$(this).parent().parent().children('div:eq(0)').children('table').children('tbody').children('tr').each(function(index) {
+					regre[index]=[$(this).children('td:eq(1)').children('span').text(),$(this).children('td:eq(3)').text()];
+				});
+
+				var data = "metodo=7&id="+$(this).attr('attrID')+"&cancela="+$(this).attr('attrCan')+"&regre="+JSON.stringify(regre);
+
+				$.ajax({
+					url: 'php/entregas.php',
+					type: 'POST',
+					data: data,
+					beforeSend: function() {
+						$("#carga").show();
+					}
+				})
+				.done(function(res) {
+					if(res == "Correcto"){
+						swal({
+							type: 'success',
+							title: 'La entrega ha sido eliminada',
+						}); 
+						verEntregas();
+						verProductos();
+					}else{
+						swal({
+							type: 'error',
+							title: 'Error:',
+							text: 'La entrega no ha podido ser eliminada',
+						});
+						console.log(res);
+					}
+					$("#carga").hide();	
+				})
+				.fail(function() {
+					console.log("Error");
+				});
+			} else if (result.dismiss === swal.DismissReason.cancel) {
+		    	swal('Has cancelado la operación');
+		  	}
+		});	
 	});
 
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -312,5 +419,96 @@ $(document).ready(function() {
 		.fail(function() {
 			console.log("Error");
 		});
+	}
+
+	$.fn.dataTable.ext.errMode = 'none';
+	function productos1(catego,tabla) {
+		tabla.dataTable({
+			"destroy": true,
+			"ajax":{
+				"url": 'php/productos.php',
+				"method": 'POST',
+				"data": {
+			        "metodo": '2',
+			        "categoria": catego
+			    }
+			},
+			"columns": [
+				{ "data": "Codigo" },
+	            { "data": "Nombre" },
+	            { "data": "UME" },
+	            { "data": "Existencia" },
+	            { "data": "Min" },
+	            { "data": "Max" },
+	            { "data": "IVA" },
+	            { "data": "Activo" },
+	            { "data": "Botones" }
+	        ], 
+	        "language": {
+			    "sProcessing":     "Procesando...",
+			    "sLengthMenu":     "Mostrar _MENU_ registros",
+			    "sZeroRecords":    "No se encontraron resultados",
+			    "sEmptyTable":     "Ningún dato disponible en esta tabla",
+			    "sInfo":           "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+			    "sInfoEmpty":      "Mostrando registros del 0 al 0 de un total de 0 registros",
+			    "sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
+			    "sInfoPostFix":    "",
+			    "sSearch":         "Buscar:",
+			    "sUrl":            "",
+			    "sInfoThousands":  ",",
+			    "sLoadingRecords": "Cargando...",
+			    "oPaginate": {
+			        "sFirst":    "Primero",
+			        "sLast":     "Último",
+			        "sNext":     "Siguiente",
+			        "sPrevious": "Anterior"
+			    },
+			    "oAria": {
+			        "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
+			        "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+			    },
+			     buttons: {
+		            copy: 'Copiar',
+				    copySuccess: {
+				        1: "Se ha copiado una fila",
+				        _: "Se han copiado %d filas"
+				    },
+				    copyTitle: 'Elementos copiados'
+		        }
+			},
+			dom:"<'row'<'col-sm-12 col-md-12'B>>"+ 
+				"<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>" +
+				"<'row'<'col-sm-12'tr>>" +
+				"<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",//'Bfrtip',
+	        buttons: [
+	            {
+	            	extend: 'copyHtml5',
+	            	text: "<i class='fas fa-copy'></i>",
+	            	titleAttr: 'Copiar'
+	            },
+	            {
+	            	extend: 'excelHtml5',
+	            	text: "<i class='fas fa-file-excel'></i>",
+	            	titleAttr: 'Excel',
+	            	filename: catego,
+	            	title: catego
+	            },
+	            {
+	            	extend: 'pdfHtml5',
+	            	text: "<i class='fas fa-file-pdf'></i>",
+	            	titleAttr: 'PDF',
+	            	filename: catego,
+	            	title: catego,
+	            	customize: function(doc) {
+					    doc.defaultStyle.alignment = 'center';
+					}
+	            }
+	        ]
+		});
+	}
+
+	function verProductos() {
+		productos1('Materia Prima',$("#tablaProductos2"));
+		productos1('Insumo',$("#tablaProductos3"));
 	}
 });
