@@ -172,7 +172,7 @@
                 if($compro == 1){
                     echo "Error: ".mysqli_error($con);
                 }else{
-                    echo "Correcto";
+                    echo "$id*$_POST[responsable]*Correcto";
                 }
             }else{
                 echo "Error: ".mysqli_error($con);
@@ -238,7 +238,7 @@
                     } 
 
                     if(($_SESSION['user']['Tipo'] == "1" || $compras[2] == "1") && $row['Cancelada'] == "0"){
-                        $bModificar="<button type='button' class='btn btn-warning btn-sm bModificarEntre' attrID='$row[ID_Entrega]' data-toggle='modal' data-target=''><i class='fas fa-pencil-alt'></i></button>";
+                        $bModificar="<button type='button' class='btn btn-warning btn-sm bModificarEntre' attrID='$row[ID_Entrega]' data-toggle='modal' data-target='#ModalMEntrega'><i class='fas fa-pencil-alt'></i></button>";
                         $bCancelar="<button type='button' class='btn btn-warning btn-sm bCancelarEntre' attrID='$row[ID_Entrega]'>Cancelar Entrega <i class='fas fa-ban'></i></button>";
                     }else{
                         $bModificar="";

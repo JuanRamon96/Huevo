@@ -11,9 +11,9 @@
 		    //$this->Image('../Imagenes/tooth.png',15,15,20);
 		    // Arial bold 15
 		    $this->SetFont('Arial','I',30);
-		    $this->Cell(120,25,utf8_decode("Orden de Compra"),0,0,'C');
+		    $this->Cell(120,25,utf8_decode("Compra"),0,0,'C');
 
-		    $sql = "SELECT Folio,Fecha FROM compras WHERE ID_Compra='$_GET[id]'";
+		    $sql = "SELECT Folio, DATE_FORMAT(Fecha, '%d-%m-%Y %h:%i %p') AS Fecha FROM compras WHERE ID_Compra='$_GET[id]'";
 			
 			if($res=$con->query($sql)){
 				if ($res->num_rows > 0) {

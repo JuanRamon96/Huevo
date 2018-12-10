@@ -147,7 +147,8 @@ $(document).ready(function() {
 				}
 			})
 			.done(function(res) {
-				if(res=="Correcto"){
+				var separa = res.split("*");
+				if(separa[2]=="Correcto"){
 					swal({
 						type: 'success',
 						title: 'La entrega ha sido guardada',
@@ -161,7 +162,7 @@ $(document).ready(function() {
 		 			valorFolio('entregas',$("#EntregaNombreF").attr('attrFolio'));
 		 			verEntregas();
 		 			verProductos();
-		 			//window.open("OrdenCompra.php?id="+separa[0]+"&proveedor="+separa[1]);
+		 			window.open("Entrega.php?id="+separa[0]+"&empleado="+separa[1]);
 				}else{
 					swal({
 						type: 'error',

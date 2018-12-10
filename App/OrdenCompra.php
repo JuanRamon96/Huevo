@@ -13,7 +13,7 @@
 		    $this->SetFont('Arial','I',30);
 		    $this->Cell(120,25,utf8_decode("Orden de Compra"),0,0,'C');
 
-		    $sql = "SELECT Folio,Fecha FROM orden_compra WHERE ID_Orden='$_GET[id]'";
+		    $sql = "SELECT Folio, DATE_FORMAT(Fecha, '%d-%m-%Y %h:%i %p') AS Fecha FROM orden_compra WHERE ID_Orden='$_GET[id]'";
 			
 			if($res=$con->query($sql)){
 				if ($res->num_rows > 0) {

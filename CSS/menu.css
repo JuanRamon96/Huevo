@@ -123,7 +123,7 @@ table{
     background: #FAFAFA;
 }
 
-#OrdenDatosProveedor, #OrdenMDatosProveedor, #EntregaDatosResponsable{
+#OrdenDatosProveedor, #OrdenMDatosProveedor, #EntregaDatosResponsable, #EntregaMDatosResponsable{
     border: 1px solid #CCC;
     border-radius: 5px;
     height: 200px;
@@ -131,7 +131,7 @@ table{
     overflow-x: auto;
 }
 
-#OrdenMDatosProveedor, #EntregaDatosResponsable{
+#OrdenMDatosProveedor, #EntregaMDatosResponsable{
     font-size: 12px;
     margin: 0 auto;
 }
@@ -140,7 +140,7 @@ table{
     height: 500px;
 }
 
-#TablaMOrden{
+#TablaMOrden, #TablaMEntrega{
     height: 300px;
 }
 
