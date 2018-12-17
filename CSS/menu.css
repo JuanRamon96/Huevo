@@ -123,7 +123,7 @@ table{
     background: #FAFAFA;
 }
 
-#OrdenDatosProveedor, #OrdenMDatosProveedor, #EntregaDatosResponsable, #EntregaMDatosResponsable{
+#OrdenDatosProveedor, #OrdenMDatosProveedor, #EntregaDatosResponsable, #EntregaMDatosResponsable, #VentaDatosCliente, #VentaMDatosCliente{
     border: 1px solid #CCC;
     border-radius: 5px;
     height: 200px;
@@ -131,16 +131,16 @@ table{
     overflow-x: auto;
 }
 
-#OrdenMDatosProveedor, #EntregaMDatosResponsable{
+#OrdenMDatosProveedor, #EntregaMDatosResponsable, #VentaMDatosCliente{
     font-size: 12px;
     margin: 0 auto;
 }
 
-#TablaOrden, #TablaEntrega{
+#TablaOrden, #TablaEntrega, #TablaVenta{
     height: 500px;
 }
 
-#TablaMOrden, #TablaMEntrega{
+#TablaMOrden, #TablaMEntrega, #TablaMVenta{
     height: 300px;
 }
 

@@ -96,9 +96,9 @@
 	  			echo "<ul><span><i class='fas fa-dollar-sign'></i> Ventas</span>";
 
 	  			if($ventas[1]=='1' || $_SESSION['user']['Tipo']=='1'){
-	  				echo "<li>Nueva Venta <i class='fas fa-plus'></i></li>";
+	  				echo "<li id='verNuevaVenta'>Nueva Venta <i class='fas fa-plus'></i></li>";
 	  			}
-	  			echo "<li>Consultar Ventas <i class='fas fa-search'></i></li>
+	  			echo "<li id='verVentas'>Consultar Ventas <i class='fas fa-search'></i></li>
 	  				</ul>";
 	  				
 	  		}
@@ -260,6 +260,14 @@
 
 			if($_SESSION['user']['Tipo']=='1' || $entregas[0]=='1'){
 				require("vistas/verEntregas.php");
+			}
+
+			if($_SESSION['user']['Tipo']=='1' || $ventas[1]=='1'){
+				require("vistas/NuevaVenta.php");
+			}
+
+			if($_SESSION['user']['Tipo']=='1' || $ventas[0]=='1'){
+				require("vistas/verVentas.php");
 			}
 		?>
 	</div>

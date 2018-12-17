@@ -140,6 +140,18 @@ $(document).ready(function() {
 		$("#mySidenav").css('width', '0');
 	});
 
+	$("#verNuevaVenta").click(function() {
+		$(".oculto").hide();
+		$("#VistaNuevaVenta").show();
+		$("#mySidenav").css('width', '0');
+	});
+
+	$("#verVentas").click(function() {
+		$(".oculto").hide();
+		$("#VistaVerVentas").show();
+		$("#mySidenav").css('width', '0');
+	});
+
 	$(document).on('keyup change', '.generales', function() {
 		$("#GuardarGeneral").attr('disabled', false);
 	});
