@@ -1,5 +1,6 @@
 $(document).ready(function() {
-	var tipo="0", fila=0;
+	var tipo="0", fila=0, respo=0, produ=0;
+	var eliminarDE = new Array();
 	verEntregas();
 
 	const swalWithBootstrapButtons = swal.mixin({
@@ -9,13 +10,13 @@ $(document).ready(function() {
 	});
 
 	$("#EntregaBuscarResponsable").click(function() {
+		respo=1;
 		responsables();
 	});
 
 	$(document).on('click','.seleccionarResponsable',function() {
 		var padre=$(this).parent().parent();
-		$("#EntregaResponsable").val(padre.children('td:eq(0)').text());
-		$("#EntregaResponsable").attr("attrID",$(this).attr('attrID'));
+		var id = $(this).attr('attrID');
 
 		var data="metodo=2&id="+$(this).attr('attrID');
 		$.ajax({
@@ -24,7 +25,15 @@ $(document).ready(function() {
 			data: data
 		})
 		.done(function(res) {
-			$("#EntregaDatosResponsable").html(res);
+			if(respo == 1){
+				$("#EntregaDatosResponsable").html(res);
+				$("#EntregaResponsable").val(padre.children('td:eq(1)').text()+" "+padre.children('td:eq(2)').text()+" "+padre.children('td:eq(3)').text());
+				$("#EntregaResponsable").attr("attrID", id);	
+			}else{
+				$("#EntregaMResponsable").attr("attrID", id);
+				$("#EntregaMDatosResponsable").html(res);
+				$("#EntregaMResponsable").val(padre.children('td:eq(1)').text()+" "+padre.children('td:eq(2)').text()+" "+padre.children('td:eq(3)').text());
+			}
 			$("#ModalSeleResponsable").modal("hide");
 		})
 		.fail(function() {
@@ -33,25 +42,42 @@ $(document).ready(function() {
 	});
 
 	$("#EntregaBuscarProducto").click(function() {
+		produ=1;
 		productos();
 	});
 
 	$(document).on('click', '.seleccionarENProducto', function() {
 		var padre= $(this).parent().parent();
-		$("#EntregaProducto").val(padre.children('td:eq(1)').text());
-		$("#EntregaProducto").attr('attrID', $(this).attr('attrID'));
-		$("#EntregaCodigoP").val(padre.children('td:eq(0)').text());
-		$("#EntregaUMEP").val(padre.children('td:eq(2)').text());
-		$("#EntregaEX").val(padre.children('td:eq(4)').text());
-		$("#EntregaCosto").val(padre.children('td:eq(6)').text());
-		$("#EntregaIVA").val(padre.children('td:eq(5)').text());
-		$("#EntregaCantidad").attr('max', padre.children('td:eq(4)').text());
-		calcular();
+		if(produ==1){
+			$("#EntregaProducto").val(padre.children('td:eq(1)').text());
+			$("#EntregaProducto").attr('attrID', $(this).attr('attrID'));
+			$("#EntregaCodigoP").val(padre.children('td:eq(0)').text());
+			$("#EntregaUMEP").val(padre.children('td:eq(2)').text());
+			$("#EntregaEX").val(padre.children('td:eq(4)').text());
+			$("#EntregaCosto").val(padre.children('td:eq(6)').text());
+			$("#EntregaIVA").val(padre.children('td:eq(5)').text());
+			$("#EntregaCantidad").attr('max', padre.children('td:eq(4)').text());
+			calcular();
+		}else{
+			$("#EntregaMProducto").val(padre.children('td:eq(1)').text());
+			$("#EntregaMProducto").attr('attrID', $(this).attr('attrID'));
+			$("#EntregaMCodigoP").val(padre.children('td:eq(0)').text());
+			$("#EntregaMUMEP").val(padre.children('td:eq(2)').text());
+			$("#EntregaMEX").val(padre.children('td:eq(4)').text());
+			$("#EntregaMCosto").val(padre.children('td:eq(6)').text());
+			$("#EntregaMIVA").val(padre.children('td:eq(5)').text());
+			$("#EntregaMCantidad").attr('max', padre.children('td:eq(4)').text());
+			calcular1();
+		}
 		$("#ModalSeleEntregaProducto").modal("hide");
 	});
 
 	$("#EntregaCantidad").on('change keyup', function() {
 		calcular();
+	});
+
+	$("#EntregaMCantidad").on('change keyup', function() {
+		calcular1();
 	});
 
 	function calcular() {
@@ -60,6 +86,15 @@ $(document).ready(function() {
 			var total = num+(num * 0.16);
 			$("#EntregaSubtotal").val(num.toFixed(2));
 			$("#EntregaTotal").val(total.toFixed(2));
+		}
+	}
+
+	function calcular1() {
+		if(parseFloat($("#EntregaMCantidad").val()) >= 0){
+			var num = parseFloat($("#EntregaMCantidad").val())*parseFloat($("#EntregaMCosto").val());
+			var total = num+(num * 0.16);
+			$("#EntregaMSubtotal").val(num.toFixed(2));
+			$("#EntregaMTotal").val(total.toFixed(2));
 		}
 	}
 
@@ -82,6 +117,25 @@ $(document).ready(function() {
 		}
 	});
 
+	$("#FormMGuardarEntrega").submit(function(e) {
+		e.preventDefault();
+		if(parseFloat($("#EntregaMProducto").val()) != ""){
+			$("#EntregaMdetalles").append("<tr><td><span hidden>"+$("#EntregaMProducto").attr('attrID')+"</span>"+$("#EntregaMCodigoP").val()+"</td><td>"+$("#EntregaMProducto").val()+"</td><td>"+$("#EntregaMUMEP").val()+"</td><td><input type='number' min='0' class='CantidadMM' max='"+$("#EntregaMEX").val()+"' value='"+$("#EntregaMCantidad").val()+"'></td><td>"+$("#EntregaMCosto").val()+"</td><td>"+$("#EntregaMSubtotal").val()+"</td><td>"+$("#EntregaMIVA").val()+"</td><td>"+$("#EntregaMTotal").val()+"</td><td><button type='button' class='btn btn-danger btn-sm borrarMDeEn'><i class='fas fa-times'></i></button></td></tr>");
+			calTotal($("#EntregaMdetalles"),$("#EntregaMCostoTotal"));
+			$(".IntMENDetalle").val("0");
+			$(".IntMENPro").val("");
+		}else{
+			swal({
+				type: 'warning',
+				title: 'Debes seleccionar un producto',
+			}).then((result) => {
+				if (result.value) {
+					$("#EntregaMBuscarProducto").click();
+				}
+			}); 
+		}
+	});
+
 	$(document).on('change keyup', '.CantidadM', function() {
 		if(parseFloat($(this).val()) >= 0){
 			var padre = $(this).parent().parent();
@@ -90,6 +144,17 @@ $(document).ready(function() {
 			padre.children('td:eq(5)').text(num.toFixed(2));
 			padre.children('td:eq(7)').text(total.toFixed(2));
 			calTotal($("#Entregadetalles"),$("#EntregaCostoTotal"));
+		}
+	});
+
+	$(document).on('change keyup', '.CantidadMM', function() {
+		if(parseFloat($(this).val()) >= 0){
+			var padre = $(this).parent().parent();
+			var num = parseFloat($(this).val())*parseFloat(padre.children('td:eq(4)').text());
+			var total = num+(num * 0.16);
+			padre.children('td:eq(5)').text(num.toFixed(2));
+			padre.children('td:eq(7)').text(total.toFixed(2));
+			calTotal($("#EntregaMdetalles"),$("#EntregaMCostoTotal"));
 		}
 	});
 
@@ -178,6 +243,7 @@ $(document).ready(function() {
 			});
 		}
 	});
+
 	$("input[name=REntrega]").click(function() {
 		tipo=$(this).val();
 		verEntregas();
@@ -296,6 +362,148 @@ $(document).ready(function() {
 		    	swal('Has cancelado la operación');
 		  	}
 		});	
+	});
+
+	$(document).on('click', '.bModificarEntre', function() {
+		fila = $(this).parent().parent().parent().parent().parent().parent().index();
+		var Npadre=$(this).parent().parent().parent().parent().parent().parent().index();
+		var padreS=$("#ContenidoEntregas").children('tr').eq(Npadre-1);
+		$("#EntregaMFolio").val(padreS.children('td:eq(0)').children('p').text());
+		$("#EntregaMNombreF").val(padreS.children('td:eq(0)').children('span').text());
+		$("#EntregaMResponsable").val(padreS.children('td:eq(1)').children('p').text());
+		$("#EntregaMDatosResponsable").html(padreS.children('td:eq(1)').children('span:eq(1)').html());
+		$("#EntregaMdetalles").html("");
+		if($(this).parent().parent().children('div:eq(0)').children('table').children('tbody').children('tr').children('td').text() != "No se encontraron detalles"){
+			$(this).parent().parent().children('div:eq(0)').children('table').children('tbody').children('tr').each(function(index) {
+				$("#EntregaMdetalles").append("<tr><td><span hidden>"+$(this).children('td:eq(0)').children('span').text()+"</span>"+$(this).children('td:eq(0)').children('p').text()+"</td><td><span hidden>"+$(this).children('td:eq(1)').children('span').text()+"</span>"+$(this).children('td:eq(1)').children('p').text()+"</td><td>"+$(this).children('td:eq(2)').text()+"</td><td><input type='number' class='CantidadMM' step='any' min='1' value='"+$(this).children('td:eq(3)').text()+"'></td><td>"+$(this).children('td:eq(4)').text()+"</td><td>"+$(this).children('td:eq(5)').text()+"</td><td>"+$(this).children('td:eq(6)').text()+"</td><td>"+$(this).children('td:eq(7)').text()+"</td><td><button type='button' class='btn btn-danger btn-sm borrarMDeEn'><i class='fas fa-times'></i></button></td></tr>");
+			});
+		}
+		$("#EntregaMCostoTotal").val(padreS.children('td:eq(2)').text());
+		$("#EntregaMFecha").val(padreS.children('td:eq(3)').children('span').text().replace(" ","T"));
+
+		$(".IntMENDetalle").val('0');
+		$(".IntMENPro").val("");
+		eliminarDE.length = 0;
+		$("#EntregaMNombreF").attr('attrFolio', "");
+		$("#EntregaMResponsable").attr('attrID', "");
+		$("#GuardarMEntrega").attr('attrID', $(this).attr('attrID'));
+	});
+
+	$("#EntregaMBuscarResponsable").click(function() {
+		$('#ModalSeleResponsable').css('z-index', '1060');
+		responsables();
+		respo=2;
+	});
+
+	$('#ModalSeleResponsable').on('hidden.bs.modal',function() {
+		if(respo == 2){
+			$('body').addClass('modal-open');
+		}
+	});
+
+	$("#EntregaMBuscarProducto").click(function(event) {
+		$('#ModalSeleEntregaProducto').css('z-index', '1060');
+		productos();
+		produ=2;
+	});
+
+	$('#ModalSeleEntregaProducto').on('hidden.bs.modal',function() {
+		if(produ == 2){
+			$('body').addClass('modal-open');
+		}
+	});
+
+	$(document).on('click', '.borrarMDeEn', function() {
+		var padre=$(this).parent().parent();
+		if (padre.children('td:eq(0)').children('span').text() != "") {
+			eliminarDE.push(padre.children('td:eq(0)').children('span').text());
+		}
+		padre.remove();
+		calTotal($("#EntregaMdetalles"),$("#EntregaMCostoTotal"));
+	});
+
+	$("#GuardarMEntrega").click(function() {
+		if($("#EntregaMFolio").val() == ""){
+			swal({
+				type: 'warning',
+				title: 'Debes seleccionar un folio',
+			}).then((result) => {
+				if (result.value) {
+					$("#EntregaMBuscarFolio").click();
+				}
+			});	
+		}else if($("#EntregaMFecha").val() == ""){
+			swal({
+				type: 'warning',
+				title: 'Debes seleccionar una fecha',
+			}).then((result) => {
+				if (result.value) {
+					$("#EntregaMFecha").focus();
+				}
+			});
+		}else if($("#EntregaMResponsable").val() == ""){
+			swal({
+				type: 'warning',
+				title: 'Debes seleccionar un responsable',
+			}).then((result) => {
+				if (result.value) {
+					$("#EntregaMBuscarResponsable").click();
+				}
+			});
+		}else if($("#EntregaMdetalles").children('tr').index() < 0){
+			swal({
+				type: 'warning',
+				title: 'Debes ingresar productos a la entrega',
+			});
+		}else{
+			var insertar = new Array();
+			var actualizar = new Array();
+			var x=0, y=0;
+			$("#EntregaMdetalles").children('tr').each(function(index) {
+				if($(this).children('td:eq(1)').children('span').text() == ""){
+					insertar[x] = [$(this).children('td:eq(0)').children('span').text(),$(this).children('td:eq(3)').children('input').val(),$(this).children('td:eq(4)').text(),$(this).children('td:eq(5)').text(),$(this).children('td:eq(6)').text(),$(this).children('td:eq(7)').text()];
+					x++;				
+				}else{
+					actualizar[y] = [$(this).children('td:eq(0)').children('span').text(),$(this).children('td:eq(3)').children('input').val(),$(this).children('td:eq(4)').text(),$(this).children('td:eq(5)').text(),$(this).children('td:eq(6)').text(),$(this).children('td:eq(7)').text()];
+					y++;
+				}
+			});
+
+			var data="metodo=8&id="+$("#GuardarMEntrega").attr('attrID')+"&folio="+$("#EntregaMNombreF").attr('attrFolio')+"&responsable="+$("#EntregaMResponsable").attr("attrID")+"&total="+$("#EntregaMCostoTotal").val()+"&fecha="+$("#EntregaMFecha").val()+"&insertar="+JSON.stringify(insertar)+"&actualizar="+JSON.stringify(actualizar)+"&eliminar="+JSON.stringify(eliminarDE);
+			
+			$.ajax({
+				url: 'php/entregas.php',
+				type: 'POST',
+				data: data,
+				beforeSend: function() {
+				    $("#carga").show();
+				}
+			})
+			.done(function(res) {
+				if(res=="Correcto"){
+					swal({
+						type: 'success',
+						title: 'La entrega ha sido modificada',
+					}); 
+		 			verEntregas();
+		 			verProductos();
+		 			setTimeout(function() {
+						$("#ContenidoEntregas").children('tr').eq(fila).show();
+					},1500);
+				}else{
+					swal({
+						type: 'error',
+						title: 'Error:',
+						text: 'La entrega no ha podido ser guardada',
+					});
+					console.log(res);
+				}
+				$("#carga").hide();	
+			})
+			.fail(function() {
+				console.log("Error");
+			});
+		}
 	});
 
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>

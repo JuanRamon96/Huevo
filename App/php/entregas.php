@@ -363,4 +363,81 @@
         }
         
     }
+
+    if($_POST['metodo']=='8'){
+        $compro=0;
+        $folio="";
+        if($_POST['folio'] != ""){
+            $numero = strlen($_POST['folio']);
+            $sql = "SELECT SUBSTR(MAX(Folio) FROM $numero+1) AS Numero FROM orden_compra WHERE SUBSTR(Folio,1,$numero)='$_POST[folio]'";
+
+            if($res=$con->query($sql)){
+                $row = $res->fetch_assoc();
+                if($row['Numero'] == ""){
+                    $folio= $_POST['folio'].'1';
+                }else{
+                   $folio= $_POST['folio'].($row['Numero']+1); 
+                }
+            }else{
+                echo "Error: ".mysqli_error($con);
+            }
+        }
+
+        $Mfolio=""; $Mresponsable="";
+        if($folio != ""){
+            $Mfolio=",Folio='$folio'";
+        }
+
+        if($_POST['responsable'] != ""){
+            $Mresponsable=",FK_Empleado='$_POST[responsable]'";
+        }
+
+        $sql = "UPDATE entregas SET Total='$_POST[total]', Fecha='$_POST[fecha]' $Mresponsable $Mfolio WHERE ID_Entrega='$_POST[id]'";
+
+
+        if($con->query($sql)){
+            $insertar=json_decode($_POST["insertar"]);
+            $actualizar=json_decode($_POST["actualizar"]);
+            $eliminar=json_decode($_POST["eliminar"]);
+
+            if(isset($insertar)){
+                foreach($insertar as $inse){
+                    $sql1 = "INSERT INTO entregas_detalles VALUES(null,'$_POST[id]','$inse[0]','$inse[1]','$inse[2]','$inse[3]','$inse[4]','$inse[5]')";
+
+                    if(!$con->query($sql1)){
+                        $compro=1;
+                    }
+                }
+            }
+
+            if(isset($actualizar)){
+                foreach($actualizar as $actu){
+                    $sql2 = "UPDATE entregas_detalles SET Cantidad='$actu[1]',Costo='$actu[2]',Subtotal='$actu[3]',IVA='$actu[4]',Total='$actu[5]' WHERE ID_Entrega_Detalle='$actu[0]'";
+
+                    if(!$con->query($sql2)){
+                        $compro=1;
+                    }
+                }
+            }
+
+            if(isset($eliminar)){
+                foreach($eliminar as $eli){
+                    $sql2 = "DELETE FROM entregas_detalles WHERE ID_Entrega_Detalle='$eli'";
+
+                    if(!$con->query($sql2)){
+                        $compro=1;
+                    }
+                }
+            }
+
+            if($compro == 1){
+                echo "Error: ".mysqli_error($con);
+            }else{
+                echo "Correcto";
+            }
+        }else{
+            echo "Error: ".mysqli_error($con);
+        }
+        $con->close();
+    }
 ?>

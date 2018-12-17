@@ -19,6 +19,13 @@ $(document).ready(function() {
 		verFolios(tipof);
 	});
 
+	$("#EntregaMBuscarFolio").click(function() {	
+		$('#ModalOrdenFolio').css('z-index', '1060');	
+		lfolio=4;
+		tipof=3;
+		verFolios(tipof);
+	});
+
 	$("#EntregaBuscarFolio").click(function() {	
 		lfolio=3;
 		tipof=3;
@@ -41,7 +48,7 @@ $(document).ready(function() {
 	});
 
 	$('#ModalOrdenFolio').on('hidden.bs.modal',function() {
-		if(lfolio == 2){
+		if(lfolio == 2 || lfolio == 4){
 			$('body').addClass('modal-open');
 		}
 	});
@@ -203,9 +210,13 @@ $(document).ready(function() {
 				$("#OrdenMNombreF").val(padre.children('td:eq(1)').text());
 				$("#OrdenMNombreF").attr('attrFolio', folio);
 				valorFolio('orden_compra');
-			}else{
+			}else if(lfolio == 3){
 				$("#EntregaNombreF").val(padre.children('td:eq(1)').text());
 				$("#EntregaNombreF").attr('attrFolio', folio);
+				valorFolio('entregas');
+			}else{
+				$("#EntregaMNombreF").val(padre.children('td:eq(1)').text());
+				$("#EntregaMNombreF").attr('attrFolio', folio);
 				valorFolio('entregas');
 			}
 		}else{
@@ -564,11 +575,11 @@ $(document).ready(function() {
 
 	$(document).on('click', '.BorrarMDetalle', function() {
 		padre = $(this).parent().parent();
-		padre.remove();
-		total($("#OrdenMdetalles"),$("#OrdenMCostoTotal"));
 		if(padre.children('td:eq(0)').children('span').text() != ""){
 			eliminarOC.push(padre.children('td:eq(0)').children('span').text());
 		}
+		padre.remove();
+		total($("#OrdenMdetalles"),$("#OrdenMCostoTotal"));
 	});
 
 	$(".IntMOrDetalle").on('keyup change', function() {
@@ -959,16 +970,20 @@ $(document).ready(function() {
 					$("#OrdenFolio").val(folio+'1');
 				}else if(lfolio == 2){
 					$("#OrdenMFolio").val(folio+'1');
-				}else{
+				}else if(lfolio == 3){
 					$("#EntregaFolio").val(folio+'1');
+				}else{
+					$("#EntregaMFolio").val(folio+'1');
 				}
 			}else if(!isNaN(res)){
 				if(lfolio == 1){
 					$("#OrdenFolio").val(folio+(parseInt(res)+1));
 				}else if(lfolio == 2){
 					$("#OrdenMFolio").val(folio+(parseInt(res)+1));
-				}else{
+				}else if(lfolio == 3){
 					$("#EntregaFolio").val(folio+(parseInt(res)+1));
+				}else{
+					$("#EntregaMFolio").val(folio+(parseInt(res)+1));
 				}
 			}else{
 				swal({

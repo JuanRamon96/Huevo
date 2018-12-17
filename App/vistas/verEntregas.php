@@ -86,7 +86,7 @@
       		</div>
       		<div class="modal-body">
       			<div class="row">
-					<div class="form-group col-5 offset-3">
+					<div class="form-group col-5 offset-2">
 						<div class="input-group input-group-sm">
 							<div class="input-group-prepend">
 						    	<span class="input-group-text">Folio</span>
@@ -97,13 +97,21 @@
 							</div>
 						</div>
 					</div>
-					<div class="form-group col-4">
+					<div class="form-group col-5">
 						<input type="text" class="form-control form-control-sm" id="EntregaMNombreF" disabled required>
+					</div>
+					<div class="form-group col-5 offset-7">
+						<div class="input-group input-group-sm">
+							<div class="input-group-prepend">
+						    	<span class="input-group-text">Fecha</span>
+						  	</div>
+							<input type="datetime-local" class="form-control" id="EntregaMFecha" required>
+						</div>
 					</div>
 				</div>
 				<br>
 				<div class="row">
-					<div class="form-group col-6">
+					<div class="form-group col-5">
 						<label for="EntregaMResponsable">Responsable:</label>
 						<div class="input-group input-group-sm">
 							<input type="text" class="form-control" id="EntregaMResponsable" required disabled>

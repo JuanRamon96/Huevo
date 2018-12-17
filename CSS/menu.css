@@ -144,7 +144,7 @@ table{
     height: 300px;
 }
 
-.IntDetalles, .CantidadM{
+.IntDetalles, .CantidadM, .CantidadMM{
     text-align: center;
     border: none;
     background: none;

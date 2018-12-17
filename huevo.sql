@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 20-11-2018 a las 04:51:12
+-- Tiempo de generación: 17-12-2018 a las 06:10:33
 -- Versión del servidor: 10.1.25-MariaDB
 -- Versión de PHP: 5.6.31
 
@@ -111,8 +111,15 @@ INSERT INTO `compras` (`ID_Compra`, `FK_Orden`, `Folio`, `FK_Proveedor`, `Total`
 (3, 1, 'CPG2', 2, 423.4, '2018-10-28 21:01:36', 0, 0),
 (4, 2, 'CPG3', 1, 700, '2018-10-28 21:18:53', 0, 0),
 (5, 3, 'CPG4', 2, 400, '2018-10-28 21:21:21', 0, 0),
-(6, 1, 'CPP1', 2, 423.4, '2018-10-30 12:48:48', 0, 0),
-(7, 4, 'CPG5', 2, 162.4, '2018-10-30 12:51:19', 0, 0);
+(6, 1, 'CPP1', 2, 423.4, '2018-10-30 12:48:48', 1, 0),
+(7, 4, 'CPG5', 2, 162.4, '2018-10-30 12:51:19', 1, 0),
+(8, 9, 'CPG6', 2, 59.16, '2018-11-25 14:55:47', 1, 0),
+(9, 8, 'CPG7', 1, 98.6, '2018-11-25 15:15:08', 1, 1),
+(10, 7, 'CPP2', 1, 24.36, '2018-11-25 15:16:53', 1, 1),
+(11, 6, 'CPP3', 1, 24.36, '2018-11-25 15:28:48', 1, 1),
+(12, 9, 'CPP4', 2, 59.16, '2018-11-25 20:42:27', 0, 0),
+(13, 8, 'CPP5', 1, 98.6, '2018-11-25 20:44:57', 0, 0),
+(14, 4, 'CPG8', 2, 162.4, '2018-11-25 20:49:28', 0, 0);
 
 -- --------------------------------------------------------
 
@@ -144,7 +151,14 @@ INSERT INTO `compras_detalle` (`ID_Compras_Detalle`, `FK_Compra`, `FK_Producto`,
 (6, 5, 3, 100, 4, 400, 0, 0, 400),
 (7, 6, 1, 50, 6.5, 325, 0, 16, 377),
 (8, 6, 4, 5, 8, 40, 0, 16, 46.4),
-(9, 7, 1, 20, 7, 140, 0, 16, 162.4);
+(9, 7, 1, 20, 7, 140, 0, 16, 162.4),
+(10, 8, 4, 6, 8.5, 51, 0, 16, 59.16),
+(11, 9, 4, 10, 8.5, 85, 0, 16, 98.6),
+(12, 10, 5, 3, 7, 21, 0, 16, 24.36),
+(13, 11, 5, 3, 7, 21, 0, 16, 24.36),
+(14, 12, 4, 6, 8.5, 51, 0, 16, 59.16),
+(15, 13, 4, 10, 8.5, 85, 0, 16, 98.6),
+(16, 14, 1, 20, 7, 140, 0, 16, 162.4);
 
 --
 -- Disparadores `compras_detalle`
@@ -226,8 +240,11 @@ CREATE TABLE `entregas` (
 
 INSERT INTO `entregas` (`ID_Entrega`, `Folio`, `FK_Empleado`, `Total`, `Fecha`, `Cancelada`, `Eliminada`) VALUES
 (2, 'EGHJ1', 1, 61.53, '2018-11-19 18:59:30', 0, 0),
-(3, 'EGHJ2', 1, 27.84, '2018-11-19 19:02:42', 0, 0),
-(4, 'EGHJ3', 2, 22.69, '2018-11-19 19:04:16', 0, 0);
+(3, 'EGHJ2', 1, 27.84, '2018-11-19 19:02:42', 0, 1),
+(4, 'EGHJ3', 2, 22.69, '2018-11-19 19:04:16', 1, 1),
+(5, 'EGHJ4', 1, 47.12, '2018-12-08 10:20:56', 1, 0),
+(6, 'EOPL1', 2, 16.24, '2018-12-09 21:04:09', 0, 0),
+(7, 'EGHJ6', 1, 154.28, '2018-12-11 11:35:23', 1, 0);
 
 -- --------------------------------------------------------
 
@@ -254,11 +271,27 @@ INSERT INTO `entregas_detalles` (`ID_Entrega_Detalle`, `FK_Entrega`, `FK_Product
 (1, 2, 1, 2, 6.52, 13.04, 16, 15.13),
 (2, 2, 4, 5, 8, 40, 16, 46.4),
 (3, 3, 4, 3, 8, 24, 16, 27.84),
-(4, 4, 1, 3, 6.52, 19.56, 16, 22.69);
+(4, 4, 1, 3, 6.52, 19.56, 16, 22.69),
+(5, 5, 1, 3, 6.54, 19.62, 16, 22.76),
+(6, 5, 5, 3, 7, 21, 16, 24.36),
+(7, 6, 5, 2, 7, 14, 16, 16.24),
+(8, 7, 5, 19, 7, 133, 16, 154.28);
 
 --
 -- Disparadores `entregas_detalles`
 --
+DELIMITER $$
+CREATE TRIGGER `actua_regresa` AFTER UPDATE ON `entregas_detalles` FOR EACH ROW BEGIN
+	UPDATE productos SET Existencia=Existencia+(OLD.Cantidad-NEW.Cantidad) WHERE ID_Producto=NEW.FK_Producto;
+END
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `eli_regresa` AFTER DELETE ON `entregas_detalles` FOR EACH ROW BEGIN
+	UPDATE productos SET Existencia=Existencia+OLD.Cantidad WHERE ID_Producto=OLD.FK_Producto;
+END
+$$
+DELIMITER ;
 DELIMITER $$
 CREATE TRIGGER `quitar_entregas` AFTER INSERT ON `entregas_detalles` FOR EACH ROW BEGIN
 	UPDATE productos SET Existencia = Existencia - New.Cantidad WHERE ID_Producto = New.FK_Producto;
@@ -290,7 +323,8 @@ INSERT INTO `folios` (`ID_Folio`, `Nombre`, `Serie`, `Tipo`) VALUES
 (8, 'AlmacÃ©n General', 'CPG', 2),
 (18, 'Prueba4', 'OCYU', 1),
 (19, 'Entrega Prueba', 'EGHJ', 3),
-(20, 'gfcjbknmjl', 'UIOY', 1);
+(20, 'gfcjbknmjl', 'UIOY', 1),
+(21, 'prueba E', 'EOPL', 3);
 
 -- --------------------------------------------------------
 
@@ -341,15 +375,15 @@ CREATE TABLE `orden_compra` (
 --
 
 INSERT INTO `orden_compra` (`ID_Orden`, `Folio`, `FK_Proveedor`, `Total`, `Fecha`, `Convertida`, `Eliminada`) VALUES
-(1, 'OCAG1', 2, 423.4, '2018-10-21 14:58:07', 1, 0),
+(1, 'OCAG1', 2, 423.4, '2018-10-21 14:58:07', 0, 0),
 (2, 'OCP1', 1, 700, '2018-10-21 15:04:01', 1, 0),
 (3, 'OCPP1', 2, 400, '2018-10-28 21:04:04', 1, 0),
 (4, 'OCAG2', 2, 162.4, '2018-10-30 12:51:03', 1, 0),
 (5, 'OCAG3', 2, 63.8, '2018-11-04 18:27:13', 0, 0),
 (6, 'OCAG4', 1, 24.36, '2018-11-19 19:16:02', 0, 0),
 (7, 'OCAG5', 1, 24.36, '2018-11-19 19:27:28', 0, 0),
-(8, 'OCAG6', 1, 98.6, '2018-11-19 19:28:13', 0, 0),
-(9, 'OCPP2', 2, 59.16, '2018-11-19 19:33:58', 0, 0);
+(8, 'OCAG6', 1, 98.6, '2018-11-19 19:28:13', 1, 0),
+(9, 'OCPP2', 2, 59.16, '2018-11-19 19:33:58', 1, 0);
 
 -- --------------------------------------------------------
 
@@ -433,11 +467,16 @@ CREATE TABLE `precios` (
 --
 
 INSERT INTO `precios` (`ID_Precio`, `FK_Producto`, `Costo_Actual`, `Costo_Promedio`, `Precio1`, `Precio2`) VALUES
-(1, 1, 7, 6.5212765957446805, 0, 0),
+(1, 1, 7, 6.5440729483282665, 0, 0),
 (2, 2, 0, 0, 0, 0),
 (3, 3, 4, 3.5625, 0, 0),
-(4, 4, 8, 8, 0, 0),
-(5, 5, 0, 0, 0, 0);
+(4, 4, 8.5, 8.070554717613541, 0, 0),
+(5, 5, 7, 7, 0, 0),
+(6, 6, 0, 0, 0, 0),
+(7, 7, 0, 0, 0, 0),
+(8, 8, 0, 0, 0, 0),
+(9, 9, 0, 0, 0, 0),
+(10, 10, 0, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -464,11 +503,16 @@ CREATE TABLE `productos` (
 --
 
 INSERT INTO `productos` (`ID_Producto`, `Codigo`, `Nombre`, `UME`, `Categoria`, `Existencia`, `Max`, `Min`, `IVA`, `Activo`, `Eliminado`) VALUES
-(1, 'ABC123', 'JabÃ³n', 'Pieza', 'Insumo', 470, 300, 50, 16, 1, 0),
+(1, 'ABC123', 'JabÃ³n', 'Pieza', 'Insumo', 423, 300, 50, 16, 1, 0),
 (2, 'TUI123', 'Huevo liquido', 'Litro', 'Producto Terminado', 2255, 10000, 1000, 0, 1, 0),
-(3, 'ERT123', 'Huevo frÃ¡gil', 'Kg', 'Materia Prima', 800, 200, 20000, 0, 1, 0),
-(4, 'KUI123', 'Prueba', 'Pieza', 'Insumo', 205, 100, 10, 16, 1, 0),
-(5, 'GHY123', 'Guantes', 'Litro', 'Insumo', 20, 50, 10, 16, 1, 0);
+(3, 'ERT123', 'Huevo frÃ¡gil', 'Kg', 'Materia Prima', 800, 20000, 200, 0, 1, 0),
+(4, 'KUI123', 'Prueba', 'Pieza', 'Insumo', 221, 100, 10, 16, 1, 0),
+(5, 'GHY123', 'Guantes', 'Pieza', 'Insumo', 21, 50, 10, 16, 1, 0),
+(6, 'FDHVJDK', 'dsgdfvbgfdbhg', 'Pieza', 'Insumo', 50, 100, 20, 16, 1, 1),
+(7, 'xcxc', 'xzcxzcxzc', 'Kg', 'Materia Prima', 50, 50, 10, 16, 1, 1),
+(8, 'SEKNDFKS', 'dsfnk', 'Pieza', 'Insumo', 15, 200, 10, 16, 1, 1),
+(9, 'bjkb', 'GCVHGJ', 'Litro', 'Insumo', 156, 20, 10, 16, 1, 1),
+(10, 'FGHJK', 'sdfvbh', 'Pieza', 'Insumo', 10, 20, 5, 16, 1, 0);
 
 --
 -- Disparadores `productos`
@@ -717,12 +761,12 @@ ALTER TABLE `clientes`
 -- AUTO_INCREMENT de la tabla `compras`
 --
 ALTER TABLE `compras`
-  MODIFY `ID_Compra` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `ID_Compra` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 --
 -- AUTO_INCREMENT de la tabla `compras_detalle`
 --
 ALTER TABLE `compras_detalle`
-  MODIFY `ID_Compras_Detalle` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `ID_Compras_Detalle` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 --
 -- AUTO_INCREMENT de la tabla `empleados`
 --
@@ -732,17 +776,17 @@ ALTER TABLE `empleados`
 -- AUTO_INCREMENT de la tabla `entregas`
 --
 ALTER TABLE `entregas`
-  MODIFY `ID_Entrega` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `ID_Entrega` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 --
 -- AUTO_INCREMENT de la tabla `entregas_detalles`
 --
 ALTER TABLE `entregas_detalles`
-  MODIFY `ID_Entrega_Detalle` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `ID_Entrega_Detalle` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 --
 -- AUTO_INCREMENT de la tabla `folios`
 --
 ALTER TABLE `folios`
-  MODIFY `ID_Folio` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `ID_Folio` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 --
 -- AUTO_INCREMENT de la tabla `generales`
 --
@@ -767,12 +811,12 @@ ALTER TABLE `permisos`
 -- AUTO_INCREMENT de la tabla `precios`
 --
 ALTER TABLE `precios`
-  MODIFY `ID_Precio` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `ID_Precio` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 --
 -- AUTO_INCREMENT de la tabla `productos`
 --
 ALTER TABLE `productos`
-  MODIFY `ID_Producto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `ID_Producto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 --
 -- AUTO_INCREMENT de la tabla `proveedores`
 --
