@@ -144,7 +144,7 @@ table{
     height: 300px;
 }
 
-.IntDetalles, .CantidadM, .CantidadMM{
+.IntDetalles, .CantidadM, .CantidadMM, .CantidadVM, .CantidadVMM{
     text-align: center;
     border: none;
     background: none;
@@ -158,7 +158,7 @@ table{
     box-sizing: border-box;
 }
 
-.MDetalles, .CantidadM{
+.MDetalles, .CantidadM, .CantidadVM, .CantidadVMM{
     width: 100%;
 }
 

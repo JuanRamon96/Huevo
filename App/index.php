@@ -294,5 +294,7 @@
 <script src="../JS/OrdenCompra.js"></script>
 <script src="../JS/precios.js"></script>	
 <script src="../JS/entregas.js"></script>
+<script src="../JS/precios.js"></script>	
+<script src="../JS/ventas.js"></script>
 </body>
 </html>

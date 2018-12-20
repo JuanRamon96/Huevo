@@ -2,7 +2,7 @@
 	require("../../conexion.php");
 	session_start();
 	$id = $_SESSION['user']['ID_Usuario'];
-	$entregas = array('0','0','0','0');
+	$ventas = array('0','0','0','0');
 
 	if($_SESSION['user']['Tipo']=="2" && $_POST["metodo"]=="5"){
     	$sql1 = "SELECT * FROM permisos WHERE FK_Usuario = '$id'";
@@ -10,7 +10,7 @@
 		if($res1=$con->query($sql1)){
 			if ($res1->num_rows > 0) {
 				$row1 = $res1->fetch_assoc();
-				$entregas = explode("*", $row1["Entregas"]);		
+				$ventas = explode("*", $row1["Ventas"]);		
 			}
 		}else{
 			echo "Error: ".mysqli_error($con);
@@ -18,7 +18,7 @@
     }
 
     if($_POST['metodo']=='1'){
-        $sql = "SELECT ID_Empleado, empleados.Codigo AS Codigo, empleados.Nombre AS Nombre, Ap_Pat, Ap_Mat, areas.Nombre AS Area, puestos.Nombre AS Puesto FROM empleados INNER JOIN puestos ON FK_Puesto=ID_Puesto INNER JOIN areas ON FK_Area=ID_Area WHERE Estatus='0' AND empleados.Eliminado='0'";
+        $sql = "SELECT ID_Cliente, Codigo, Nombre, Domicilio, Colonia, Ciudad, Estado, Pais, CP, RazonSocial, RFC, Telefono, Email, Contacto, TelContacto FROM clientes WHERE Activo='1' AND Eliminado='0'";
 
         $filas="";
         if($res=$con->query($sql)){
@@ -27,11 +27,19 @@
                     $filas .= "<tr>
                         <td>$row[Codigo]</td>
                         <td>$row[Nombre]</td>
-                        <td>$row[Ap_Pat]</td>
-                        <td>$row[Ap_Mat]</td>
-                        <td>$row[Area]</td>
-                        <td>$row[Puesto]</td>
-                        <td><button type='button' class='btn btn-outline-info seleccionarResponsable' attrID='$row[ID_Empleado]'>Seleccionar</button></td>
+                        <td>$row[Domicilio]</td>
+                        <td>$row[Colonia]</td>
+                        <td>$row[Ciudad]</td>
+                        <td>$row[Estado]</td>
+                        <td>$row[Pais]</td>
+                        <td>$row[CP]</td>
+                        <td>$row[RazonSocial]</td>
+                        <td>$row[RFC]</td>
+                        <td>$row[Telefono]</td>
+                        <td>$row[Email]</td>
+                        <td>$row[Contacto]</td>
+                        <td>$row[TelContacto]</td>
+                        <td><button type='button' class='btn btn-outline-info seleccionarCliente' attrID='$row[ID_Cliente]'>Seleccionar</button></td>
                     </tr>";
                 }
             }else{
@@ -40,15 +48,23 @@
 
             echo "<div class='row'>
                 <div class='col-12 table-responsive'>
-                    <table class='table table-hover table-stripped table-sm' id='tablaOrdenProveedores'>
+                    <table class='table table-hover table-stripped table-sm' id='tablaVerClientes'>
                         <thead>
                             <tr>
                                 <th>Código</th>
                                 <th>Nombre</th>
-                                <th>Apellido Paterno</th>
-                                <th>Apellido Materno</th>
-                                <th>Área</th>
-                                <th>Puesto</th>
+                                <th>Domicilio</th>
+                                <th>Colonia</th>
+                                <th>Ciudad</th>
+                                <th>Estado</th>
+                                <th>País</th>
+                                <th>CP</th>
+                                <th>Razón social</th>
+                                <th>RFC</th>
+                                <th>Teléfono</th>
+                                <th>Email</th>
+                                <th>Contacto</th>
+                                <th>Teléfono Contacto</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -65,36 +81,7 @@
     }
 
     if($_POST['metodo']=='2'){
-        $sql = "SELECT empleados.Codigo AS Codigo, empleados.Nombre AS Nombre, Ap_Pat, Ap_Mat, Domicilio, Colonia, Ciudad, Estado, Pais, CP, Telefono, Email, areas.Nombre AS Area, puestos.Nombre AS Puesto FROM empleados INNER JOIN puestos ON FK_Puesto=ID_Puesto INNER JOIN areas ON FK_Area=ID_Area WHERE ID_Empleado='$_POST[id]' AND Estatus='0' AND empleados.Eliminado='0'";
-
-        if($res=$con->query($sql)){
-            if($res->num_rows > 0){
-                $row = $res->fetch_assoc();
-                echo "<div style='font-size:13px; padding:10px 0px;'>
-                <p>Código: $row[Codigo]</p>
-                <p>Nombre: $row[Nombre] $row[Ap_Pat] $row[Ap_Mat]</p>
-                <p>Domicilio: $row[Domicilio]</p>
-                <p>Colonia: $row[Colonia]</p>
-                <p>Ciudad: $row[Ciudad]</p>
-                <p>Estado: $row[Estado]</p>
-                <p>País: $row[Pais]</p>
-                <p>Código Postal: $row[CP]</p>
-                <p>Teléfono: $row[Telefono]</p>
-                <p>Email: $row[Email]</p>
-                <p>Área: $row[Area]</p>
-                <p>Puesto: $row[Puesto]</p>";
-            }else{
-                $echo = "No se encontraron resultados";
-            }
-        }else{
-            echo "Error: ".mysqli_error($con);
-        }
-        $con->close();
-    }
-
-
-    if($_POST['metodo']=='3'){
-        $sql = "SELECT ID_Producto, Codigo, Nombre, UME, Categoria, Existencia, IVA,  ROUND(Costo_Promedio, 2) AS CostoP FROM productos INNER JOIN precios ON ID_Producto=FK_Producto WHERE Activo='1' AND Categoria!='Producto Terminado' AND Eliminado='0' AND Existencia > 0";
+        $sql = "SELECT ID_Producto, Codigo, Nombre, UME, Categoria, Existencia, IVA,  ROUND(Costo_Promedio, 2) AS CostoP FROM productos INNER JOIN precios ON ID_Producto=FK_Producto WHERE Activo='1' AND Categoria!='Insumo' AND Eliminado='0' AND Existencia > 0";
 
         $filas="";
         if($res=$con->query($sql)){
@@ -108,7 +95,7 @@
                         <td>$row[Existencia]</td>
                         <td>$row[IVA]</td>
                         <td>$row[CostoP]</td>
-                        <td><button type='button' class='btn btn-outline-info seleccionarENProducto' attrID='$row[ID_Producto]'>Seleccionar</button></td>
+                        <td><button type='button' class='btn btn-outline-info seleccionarVProducto' attrID='$row[ID_Producto]'>Seleccionar</button></td>
                     </tr>";
                 }
             }else{
@@ -117,7 +104,7 @@
 
             echo "<div class='row'>
                 <div class='col-12 table-responsive'>
-                    <table class='table table-hover table-stripped table-sm' id='tablaEProductos'>
+                    <table class='table table-hover table-stripped table-sm' id='tablaVProductos'>
                         <thead>
                             <tr>
                                 <th>Código</th>

@@ -29,9 +29,9 @@
 							<div class="form-group col-6">
 								<label for="VentaResponsable">Cliente:</label>
 								<div class="input-group">
-								  	<input type="text" class="form-control" id="VentaResponsable" required disabled>
+								  	<input type="text" class="form-control" id="VentaCliente" required disabled>
 								  	<div class="input-group-append">
-								    	<button class="btn btn-outline-secondary" type="button" data-toggle="modal" data-target="#ModalSeleCliente" id="VentaBuscarResponsable"><i class="fas fa-search"></i></button>
+								    	<button class="btn btn-outline-secondary" type="button" data-toggle="modal" data-target="#ModalSeleCliente" id="VentaBuscarCliente"><i class="fas fa-search"></i></button>
 								  	</div>
 								</div>
 							</div>
@@ -70,10 +70,14 @@
 									<input type="number" id="VentaCantidad" class="form-control form-control-sm IntVenDetalle" min="0" step="any" value="0" required>
 								</div>
 								<div class="form-group col-2">
-									<label for="VentaPrecio">Costo:</label>
-									<input type="number" id="VentaCosto" class="form-control form-control-sm IntVenDetalle" min="0" step="any" value="0" required disabled>
+									<label for="VentaPrecio">Precio:</label>
+									<input type="number" id="VentaPrecio" class="form-control form-control-sm IntVenDetalle" min="0" step="any" value="0" required>
 								</div>
-								<div class="form-group col-3">
+								<div class="form-group col-2">
+									<label for="VentaDescuento">Descuento %:</label>
+									<input type="number" id="VentaDescuento" class="form-control form-control-sm IntVenDetalle" min="0" step="any" value="0" required>
+								</div>
+								<div class="form-group col-2">
 									<label for="VentaSubtotal">Subtotal:</label>
 									<input type="number" id="VentaSubtotal" class="form-control form-control-sm IntVenDetalle" min="0" step="any" value="0" disabled required>
 								</div>
@@ -81,7 +85,7 @@
 									<label for="VentaIVA">IVA %:</label>
 									<input type="number" id="VentaIVA" class="form-control form-control-sm IntVenDetalle" min="0" step="any" value="0" required disabled>
 								</div>
-								<div class="form-group col-3">
+								<div class="form-group col-2">
 									<label for="VentaTotal">Total:</label>
 									<input type="number" id="VentaTotal" class="form-control form-control-sm IntVenDetalle" min="0" step="any" value="0" disabled required>
 								</div>
@@ -98,7 +102,8 @@
 										<th>Producto</th>
 										<th>UME</th>
 										<th>Cantidad</th>
-										<th>Costo</th>
+										<th>Precio</th>
+										<th>Descuento %</th>
 										<th>Subtotal</th>
 										<th>IVA %</th>
 										<th>Total</th>
