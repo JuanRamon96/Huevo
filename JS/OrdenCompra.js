@@ -506,6 +506,10 @@ $(document).ready(function() {
 		ordenesCompra();
 	});
 
+	$(".busCompra").on('keyup change', function() {
+		Compras();
+	});
+
 	$(document).on('click', '.vermasOrden', function() {
 		var fila= $(this).parent().parent().index();
 		$(this).parent().parent().parent().children('tr').eq(fila+1).toggle('fast');

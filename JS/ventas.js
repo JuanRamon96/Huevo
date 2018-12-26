@@ -1,7 +1,7 @@
 $(document).ready(function() {
 	var tipo="0", fila=0, clien=0, produ=0;
 	var eliminarDE = new Array();
-	//verEntregas();
+	verVentas();
 
 	const swalWithBootstrapButtons = swal.mixin({
 	  confirmButtonClass: 'btn btn-success',
@@ -162,26 +162,26 @@ $(document).ready(function() {
 		campo.val(suma.toFixed(2));
 	}
 
-	/*$("#GuardarEntrega").click(function() {
-		if($("#EntregaFolio").val() == ""){
+	$("#GuardarVenta").click(function() {
+		if($("#VentaFolio").val() == ""){
 			swal({
 				type: 'warning',
 				title: 'Debes seleccionar un folio',
 			}).then((result) => {
 				if (result.value) {
-					$("#EntregaBuscarFolio").click();
+					$("#VentaBuscarFolio").click();
 				}
 			});	
-		}else if($("#EntregaResponsable").val() == ""){
+		}else if($("#VentaCliente").val() == ""){
 			swal({
 				type: 'warning',
 				title: 'Debes seleccionar un responsable',
 			}).then((result) => {
 				if (result.value) {
-					$("#EntregaBuscarResponsable").click();
+					$("#VentaBuscarCliente").click();
 				}
 			});
-		}else if($("#Entregadetalles").children('tr').index() < 0){
+		}else if($("#Ventadetalles").children('tr').index() < 0){
 			swal({
 				type: 'warning',
 				title: 'Debes ingresar productos a la entrega',
@@ -189,21 +189,21 @@ $(document).ready(function() {
 		}else{
 			var detalles = new Array();
 			var error=0, contador=0;
-			$("#Entregadetalles").children('tr').each(function(index) {
+			$("#Ventadetalles").children('tr').each(function(index) {
 				if(parseFloat($(this).children('td:eq(3)').children('input').val()) > parseFloat($(this).children('td:eq(3)').children('input').attr('max')) || parseFloat($(this).children('td:eq(3)').children('input').val()) < parseFloat($(this).children('td:eq(3)').children('input').attr('min'))){
 					error=1;
 					contador=index;
 					return false;
 				}
-				detalles[index] = [$(this).children('td:eq(0)').children('span').text(),$(this).children('td:eq(3)').children('input').val(),$(this).children('td:eq(4)').text(),$(this).children('td:eq(5)').text(),$(this).children('td:eq(6)').text(),$(this).children('td:eq(7)').text()];
+				detalles[index] = [$(this).children('td:eq(0)').children('span').text(),$(this).children('td:eq(3)').children('input').val(),$(this).children('td:eq(4)').children('input').val(),$(this).children('td:eq(5)').children('input').val(),$(this).children('td:eq(6)').text(),$(this).children('td:eq(7)').text(),$(this).children('td:eq(8)').text()];			
 			});
 
 			if(error==0){
 
-				var data="metodo=4&folio="+$("#EntregaNombreF").attr('attrFolio')+"&responsable="+$("#EntregaResponsable").attr("attrID")+"&total="+$("#EntregaCostoTotal").val()+"&detalles="+JSON.stringify(detalles);
+				var data="metodo=3&folio="+$("#VentaNombreF").attr('attrFolio')+"&cliente="+$("#VentaCliente").attr("attrID")+"&total="+$("#VentaCostoTotal").val()+"&detalles="+JSON.stringify(detalles);
 				
 				$.ajax({
-					url: 'php/entregas.php',
+					url: 'php/ventas.php',
 					type: 'POST',
 					data: data,
 					beforeSend: function() {
@@ -215,23 +215,23 @@ $(document).ready(function() {
 					if(separa[2]=="Correcto"){
 						swal({
 							type: 'success',
-							title: 'La entrega ha sido guardada',
+							title: 'La venta ha sido guardada',
 						}); 
-						$("#Entregadetalles tr").remove();
-						$(".IntENDetalle").val("0");
-						$(".IntENPro").val("");
-			 			$("#EntregaResponsable").val("");
-			 			$("#EntregaDatosResponsable").html("");
-			 			calTotal($("#Entregadetalles"),$("#EntregaCostoTotal"));
-			 			valorFolio('entregas',$("#EntregaNombreF").attr('attrFolio'));
-			 			verEntregas();
+						$("#Ventadetalles tr").remove();
+						$(".IntVenDetalle").val("0");
+						$(".IntVenPro").val("");
+			 			$("#VentaCliente").val("");
+			 			$("#VentaDatosCliente").html("");
+			 			calTotal($("#Ventadetalles"),$("#VentaCostoTotal"));
+			 			valorFolio('ventas',$("#VentaNombreF").attr('attrFolio'));
+			 			verVentas();
 			 			verProductos();
-			 			window.open("Entrega.php?id="+separa[0]+"&empleado="+separa[1]);
+			 			//window.open("Venta.php?id="+separa[0]+"&empleado="+separa[1]);
 					}else{
 						swal({
 							type: 'error',
 							title: 'Error:',
-							text: 'La entrega no ha podido ser guardada',
+							text: 'La venta no ha podido ser guardada',
 						});
 						console.log(res);
 					}
@@ -247,7 +247,7 @@ $(document).ready(function() {
 				}).then((result) => {
 					if (result.value) {
 						setTimeout(function() {
-							$("#Entregadetalles").children('tr').eq(contador).children('td:eq(3)').children('input').focus();
+							$("#Ventadetalles").children('tr').eq(contador).children('td:eq(3)').children('input').focus();
 						},500);
 					}
 				});
@@ -255,19 +255,23 @@ $(document).ready(function() {
 		}
 	});
 
-	$("input[name=REntrega]").click(function() {
+	$("input[name=RVenta]").click(function() {
 		tipo=$(this).val();
-		verEntregas();
+		verVentas();
 	});
-
-	$(document).on('click', '.vermasEntrega', function() {
+	
+	$(document).on('click', '.vermasVenta', function() {
 		var fila= $(this).parent().parent().index();
 		$(this).parent().parent().parent().children('tr').eq(fila+1).toggle('fast');
 	});
 
-	$(document).on('click', '.bCancelarEntre', function() {
+	$(document).on('change keyup','.busVentas', function() {
+		verVentas();
+	});
+
+	$(document).on('click', '.bCancelarVenta', function() {
 		swalWithBootstrapButtons({
-		  	title: '¿Estas seguro que quieres cancelar la entrega?',
+		  	title: '¿Estas seguro que quieres cancelar la venta?',
 		  	text: "¡Una vez cancelada no podrá ser recuperada!",
 		  	type: 'warning',
 		  	showCancelButton: true,
@@ -282,10 +286,10 @@ $(document).ready(function() {
 					regre[index]=[$(this).children('td:eq(1)').children('span').text(),$(this).children('td:eq(3)').text()];
 				});
 
-				var data = "metodo=6&id="+$(this).attr('attrID')+"&regre="+JSON.stringify(regre);
+				var data = "metodo=5&id="+$(this).attr('attrID')+"&regre="+JSON.stringify(regre);
 
 				$.ajax({
-					url: 'php/entregas.php',
+					url: 'php/ventas.php',
 					type: 'POST',
 					data: data,
 					beforeSend: function() {
@@ -296,18 +300,18 @@ $(document).ready(function() {
 					if(res == "Correcto"){
 						swal({
 							type: 'success',
-							title: 'La entrega ha sido cancelada',
+							title: 'La venta ha sido cancelada',
 						}); 
-						verEntregas();
+						verVentas();
 						verProductos();
 						setTimeout(function() {
-							$("#ContenidoEntregas").children('tr').eq(fila).show();
+							$("#ContenidoVentas").children('tr').eq(fila).show();
 						},1500);
 					}else{
 						swal({
 							type: 'error',
 							title: 'Error:',
-							text: 'La entrega no ha podido ser cancelada',
+							text: 'La venta no ha podido ser cancelada',
 						});
 						console.log(res);
 					}
@@ -322,7 +326,7 @@ $(document).ready(function() {
 		});	
 	});
 
-	$(document).on('click', '.bBorrarEntre', function() {
+	/*$(document).on('click', '.bBorrarEntre', function() {
 		swalWithBootstrapButtons({
 		  	title: '¿Estas seguro que quieres eliminar la entrega?',
 		  	text: "¡Una vez eliminada no podrá ser recuperada!",
@@ -535,24 +539,51 @@ $(document).ready(function() {
 				});
 			}
 		}
-	});
+	});*/
 
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-	function verEntregas() {
-		var data = "metodo=5&buscar="+$("#BuscarEntregas").val()+"&desde="+$("#fechaDesdeE").val()+"&hasta="+$("#fechaHastaE").val()+"&tipo="+tipo;
+	function verVentas() {
+		var data = "metodo=4&buscar="+$("#BuscarVentas").val()+"&desde="+$("#fechaDesdeV").val()+"&hasta="+$("#fechaHastaV").val()+"&tipo="+tipo;
 		
 		$.ajax({
-			url: 'php/entregas.php',
+			url: 'php/ventas.php',
 			type: 'POST',
 			data: data
 		})
 		.done(function(res) {
-			$("#ContenidoEntregas").html(res);
+			$("#ContenidoVentas").html(res);
 		})
 		.fail(function() {
 			console.log("Error");
 		});
-	}*/
+	}
+
+	function valorFolio(tabla,folio) {
+		var data = "metodo=5&folio="+folio+"&tabla="+tabla; 
+
+		$.ajax({
+			url: 'php/OrdenCompra.php',
+			type: 'POST',
+			data: data
+		})
+		.done(function(res) {
+			if(res == ""){
+				$("#VentaFolio").val(folio+'1');
+			}else if(!isNaN(res)){	
+				$("#VentaFolio").val(folio+(parseInt(res)+1));
+			}else{
+				swal({
+					type: 'error',
+					title: 'Error:',
+					text: 'No se ha podido obtener el folio',
+				});
+				console.log(res);
+			}
+		})
+		.fail(function() {
+			console.log("Error");
+		});
+	}
 
 	function clientes() {
 		$.ajax({
@@ -722,6 +753,6 @@ $(document).ready(function() {
 
 	function verProductos() {
 		productos1('Materia Prima',$("#tablaProductos2"));
-		productos1('Insumo',$("#tablaProductos3"));
+		productos1('Producto Terminado',$("#tablaProductos1"));
 	}
 });

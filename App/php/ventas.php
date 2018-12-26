@@ -129,10 +129,10 @@
         $con->close();
     }
 
-    if($_POST['metodo']=='4'){
+    if($_POST['metodo']=='3'){
         $compro=0;
         $numero = strlen($_POST['folio']);
-        $sql = "SELECT SUBSTR(MAX(Folio) FROM $numero+1) AS Numero FROM entregas WHERE SUBSTR(Folio,1,$numero)='$_POST[folio]'";
+        $sql = "SELECT SUBSTR(MAX(Folio) FROM $numero+1) AS Numero FROM ventas WHERE SUBSTR(Folio,1,$numero)='$_POST[folio]'";
 
         if($res=$con->query($sql)){
             $row = $res->fetch_assoc();
@@ -142,14 +142,14 @@
                $folio= $_POST['folio'].($row['Numero']+1); 
             }
 
-            $sql1 = "INSERT INTO entregas VALUES(null,'$folio','$_POST[responsable]','$_POST[total]',NOW(),'0','0')";
+            $sql1 = "INSERT INTO ventas VALUES(null,'$folio','$_POST[cliente]','$_POST[total]',NOW(),'0','0')";
 
             if($con->query($sql1)){
                 $id=mysqli_insert_id($con);
                 $detalles=json_decode($_POST["detalles"]);
 
                 foreach($detalles as $deta){
-                    $sql2 = "INSERT INTO entregas_detalles VALUES(null,'$id','$deta[0]','$deta[1]','$deta[2]','$deta[3]','$deta[4]','$deta[5]')";
+                    $sql2 = "INSERT INTO ventas_detalle VALUES(null,'$id','$deta[0]','$deta[1]','$deta[2]','$deta[3]','$deta[4]','$deta[5]','$deta[6]')";
 
                     if(!$con->query($sql2)){
                         $compro=1;
@@ -159,7 +159,7 @@
                 if($compro == 1){
                     echo "Error: ".mysqli_error($con);
                 }else{
-                    echo "$id*$_POST[responsable]*Correcto";
+                    echo "$id*$_POST[cliente]*Correcto";
                 }
             }else{
                 echo "Error: ".mysqli_error($con);
@@ -170,7 +170,7 @@
         $con->close();
     }
 
-    if($_POST['metodo']=='5'){
+    if($_POST['metodo']=='4'){
         if($_POST['tipo'] == '0'){
             $tipo="";
         }else if($_POST['tipo'] == '1'){
@@ -188,24 +188,25 @@
         }else{
             $fechas="AND Fecha BETWEEN '$_POST[desde]' AND '$_POST[hasta]'";
         }
-        $sql = "SELECT ID_Entrega, Folio, (SELECT Nombre FROM folios WHERE Folio LIKE CONCAT(Serie,'%') LIMIT 1) AS NFolio, FK_Empleado, CONCAT(empleados.Nombre,' ',empleados.Ap_Pat,' ',empleados.Ap_Mat) AS Nombre, CONCAT('<p>Código: ',empleados.Codigo,'</p><p>Nombre: ',empleados.Nombre,' ',empleados.Ap_Pat,' ',empleados.Ap_Mat,'</p><p>Domicilio: ',empleados.Domicilio,'</p><p>Colonia: ',empleados.Colonia,'</p><p>Ciudad: ',empleados.Ciudad,'</p><p>Estado: ',empleados.Estado,'</p><p>País: ',empleados.Pais,'</p><p>Código Postal: ',empleados.CP,'</p><p>Teléfono: ',empleados.Telefono,'</p><p>Email: ',empleados.Email,'</p><p>Área: ',areas.Nombre,'</p><p>Puesto: ',puestos.Nombre,'</p>') AS DatosEmp,Total, Fecha, DATE_FORMAT(Fecha, '%d-%m-%Y %h:%i %p') AS FechaE, Cancelada, Eliminada FROM entregas INNER JOIN empleados ON FK_Empleado=ID_Empleado INNER JOIN puestos ON FK_Puesto=ID_Puesto INNER JOIN areas ON FK_Area=ID_Area WHERE Folio LIKE '%$_POST[buscar]%' AND Eliminada='0' $tipo $fechas ORDER BY ID_Entrega DESC";
+        $sql = "SELECT ID_Venta, Folio, (SELECT Nombre FROM folios WHERE Folio LIKE CONCAT(Serie,'%') LIMIT 1) AS NFolio, FK_Cliente, clientes.Nombre AS Nombre, CONCAT('<p>Código: ',clientes.Codigo,'</p><p>Nombre: ',clientes.Nombre,'</p><p>Domicilio: ',clientes.Domicilio,'</p><p>Colonia: ',clientes.Colonia,'</p><p>Ciudad: ',clientes.Ciudad,'</p><p>Estado: ',clientes.Estado,'</p><p>País: ',clientes.Pais,'</p><p>CP: ',clientes.CP,'</p><p>Razón social: ',clientes.RazonSocial,'</p><p>RFC: ',clientes.RFC,'</p><p>Teléfono: ',clientes.Telefono,'</p><p>Email: ',clientes.Email,'</p><p>Contacto: ',clientes.Contacto,'</p><p>Teléfono Contacto: ',clientes.TelContacto,'</p>') AS DatosCli,Total, Fecha, DATE_FORMAT(Fecha, '%d-%m-%Y %h:%i %p') AS FechaE, Cancelada, Eliminada FROM ventas INNER JOIN clientes ON FK_Cliente=ID_Cliente WHERE Folio LIKE '%$_POST[buscar]%' AND Eliminada='0' $tipo $fechas ORDER BY ID_Venta DESC";
 
         if($res=$con->query($sql)){
             if($res->num_rows > 0){
                 while($row = $res->fetch_assoc()){
                     
-                    $sql1 = "SELECT ID_Entrega_Detalle, FK_Entrega, FK_Producto,  Codigo, Nombre, UME, Cantidad, Costo, Subtotal, entregas_detalles.IVA AS IVA, Total, Existencia FROM entregas_detalles INNER JOIN productos ON FK_Producto=ID_Producto WHERE FK_Entrega='$row[ID_Entrega]' ORDER BY Codigo";
+                    $sql1 = "SELECT ID_Venta_Detalle, FK_Venta, FK_Producto,  Codigo, Nombre, UME, Cantidad, Precio, Descuento, Subtotal, ventas_detalle.IVA AS IVA, Total, Existencia FROM ventas_detalle INNER JOIN productos ON FK_Producto=ID_Producto WHERE FK_Venta='$row[ID_Venta]' ORDER BY Codigo";
 
                     if($res1=$con->query($sql1)){
                         if($res1->num_rows > 0){
                             $orden="";
                             while($row1 = $res1->fetch_assoc()){
                                 $orden .= "<tr>
-                                    <td><span hidden>$row1[ID_Entrega_Detalle]</span><p>$row1[Codigo]</p></td>
+                                    <td><span hidden>$row1[ID_Venta_Detalle]</span><p>$row1[Codigo]</p></td>
                                     <td><span hidden>$row1[FK_Producto]</span><p>$row1[Nombre]</p></td>
                                     <td>$row1[UME]</td>
                                     <td attrMax='$row1[Existencia]'>$row1[Cantidad]</td>
-                                    <td>$row1[Costo]</td>
+                                    <td>$row1[Precio]</td>
+                                    <td>$row1[Descuento]</td>
                                     <td>$row1[Subtotal]</td>
                                     <td>$row1[IVA]</td>
                                     <td>$row1[Total]</td>
@@ -219,14 +220,14 @@
                     }
 
                     if($_SESSION['user']['Tipo'] == "1" || $entregas[3] == "1"){
-                        $bEliminar="<button type='button' class='btn btn-danger btn-sm bBorrarEntre' attrCan='$row[Cancelada]' attrID='$row[ID_Entrega]'><i class='fas fa-trash-alt'></i></button>";
+                        $bEliminar="<button type='button' class='btn btn-danger btn-sm bBorrarEntre' attrCan='$row[Cancelada]' attrID='$row[ID_Venta]'><i class='fas fa-trash-alt'></i></button>";
                     }else{
                         $bEliminar="";
                     } 
 
                     if(($_SESSION['user']['Tipo'] == "1" || $compras[2] == "1") && $row['Cancelada'] == "0"){
-                        $bModificar="<button type='button' class='btn btn-warning btn-sm bModificarEntre' attrID='$row[ID_Entrega]' data-toggle='modal' data-target='#ModalMEntrega'><i class='fas fa-pencil-alt'></i></button>";
-                        $bCancelar="<button type='button' class='btn btn-warning btn-sm bCancelarEntre' attrID='$row[ID_Entrega]'>Cancelar Entrega <i class='fas fa-ban'></i></button>";
+                        $bModificar="<button type='button' class='btn btn-warning btn-sm bModificarVenta' attrID='$row[ID_Venta]' data-toggle='modal' data-target='#ModalMVenta'><i class='fas fa-pencil-alt'></i></button>";
+                        $bCancelar="<button type='button' class='btn btn-warning btn-sm bCancelarVenta' attrID='$row[ID_Venta]'>Cancelar Venta <i class='fas fa-ban'></i></button>";
                     }else{
                         $bModificar="";
                         $bCancelar="";
@@ -240,11 +241,11 @@
 
                     echo "<tr class='$clase'>
                         <td><span hidden>$row[NFolio]</span><p>$row[Folio]</p></td>
-                        <td><span hidden>$row[FK_Empleado]</span><p>$row[Nombre]</p><span hidden>$row[DatosEmp]</span></td>
+                        <td><span hidden>$row[FK_Cliente]</span><p>$row[Nombre]</p><span hidden>$row[DatosCli]</span></td>
                         <td>$row[Total]</td>
                         <td><span hidden>$row[Fecha]</span><p>$row[FechaE]</p></td>
-                        <td><span hidden>$row[ID_Entrega]</span><a href='Entrega.php?id=$row[ID_Entrega]&empleado=$row[FK_Empleado]' target='_blank' class='btn btn-light'><i class='fas fa-print'></i></a></td>
-                        <td><button type='button' class='btn btn-outline-info vermasEntrega'><i class='fas fa-eye'></i></button></td>
+                        <td><span hidden>$row[ID_Venta]</span><a href='Venta.php?id=$row[ID_Venta]&empleado=$row[FK_Cliente]' target='_blank' class='btn btn-light'><i class='fas fa-print'></i></a></td>
+                        <td><button type='button' class='btn btn-outline-info vermasVenta'><i class='fas fa-eye'></i></button></td>
                     </tr>
                     <tr class='oculto' style='background: #F7F7F7;'>
                         <td colspan='6'>
@@ -259,7 +260,8 @@
                                                         <th>Producto</th>
                                                         <th>UME</th>
                                                         <th>Cantidad</th>
-                                                        <th>Costo</th>
+                                                        <th>Precio</th>
+                                                        <th>Descuento %</th>
                                                         <th>Subtotal</th>
                                                         <th>IVA %</th>
                                                         <th>Total</th>
@@ -270,7 +272,7 @@
                                                 </tbody>
                                                 <tfoot>
                                                     <tr class='table-active'>
-                                                        <th colspan='7' class='text-right'>Total:</th>
+                                                        <th colspan='8' class='text-right'>Total:</th>
                                                         <th>$row[Total]</th>
                                                     </tr>
                                                 </tfoot>
@@ -299,8 +301,8 @@
         $con->close();
     }
 
-    if($_POST['metodo']=='6'){
-        $sql="UPDATE entregas SET Cancelada=1 WHERE ID_Entrega='$_POST[id]'";
+    if($_POST['metodo']=='5'){
+        $sql="UPDATE ventas SET Cancelada=1 WHERE ID_Venta='$_POST[id]'";
 
         if ($con->query($sql)) {
             $compro=0;
@@ -323,7 +325,7 @@
         
     }
 
-    if($_POST['metodo']=='7'){
+    if($_POST['metodo']=='6'){
         $sql="UPDATE entregas SET Eliminada=1 WHERE ID_Entrega='$_POST[id]'";
 
         if ($con->query($sql)) {

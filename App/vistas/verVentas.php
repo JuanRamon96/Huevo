@@ -57,7 +57,7 @@
 						<table class="table table-hover" id="tablaVerVenta">
 							<thead>
 								<th>Folio</th>
-								<th>Empleado</th>
+								<th>Cliente</th>
 								<th>Total</th>
 								<th>Fecha</th>
 								<th></th>

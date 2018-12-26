@@ -80,6 +80,10 @@ $(document).ready(function() {
 		calcular1();
 	});
 
+	$(document).on('change keyup','.busEntregas', function() {
+		verEntregas();
+	});
+
 	function calcular() {
 		if(parseFloat($("#EntregaCantidad").val()) >= 0){
 			var num = parseFloat($("#EntregaCantidad").val())*parseFloat($("#EntregaCosto").val());

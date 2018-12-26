@@ -571,11 +571,11 @@
         if($_POST['desde'] == "" && $_POST['hasta'] == ""){
             $fechas="";
         }else if($_POST['desde'] == ""){
-            $fechas="AND Fecha <= '$_POST[hasta]'";
+            $fechas="AND compras.Fecha <= '$_POST[hasta]'";
         }else if($_POST['hasta'] == ""){
-            $fechas="AND Fecha >= '$_POST[desde]'";
+            $fechas="AND compras.Fecha >= '$_POST[desde]'";
         }else{
-            $fechas="AND Fecha BETWEEN '$_POST[desde]' AND '$_POST[hasta]'";
+            $fechas="AND compras.Fecha BETWEEN '$_POST[desde]' AND '$_POST[hasta]'";
         }
         $sql = "SELECT ID_Compra, compras.Folio AS Folio, orden_compra.Folio AS Folio1, FK_Orden, (SELECT Nombre FROM folios WHERE compras.Folio LIKE CONCAT(Serie,'%') LIMIT 1) AS NFolio, compras.FK_Proveedor, proveedores.Nombre AS Nombre,compras.Total, compras.Fecha, DATE_FORMAT(compras.Fecha, '%d-%m-%Y %h:%i %p') AS FechaE, Cancelada, compras.Eliminada FROM compras INNER JOIN proveedores ON FK_Proveedor=ID_Proveedor INNER JOIN orden_compra ON FK_Orden=ID_Orden WHERE compras.Folio LIKE '%$_POST[buscar]%' AND compras.Eliminada='0' $tipo $fechas ORDER BY ID_Compra DESC";
 
