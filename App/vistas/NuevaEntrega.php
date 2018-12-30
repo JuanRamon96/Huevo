@@ -150,7 +150,6 @@
       		<div class="modal-footer">
         		<button type="button" class="btn btn-outline-danger" data-dismiss="modal">Cerrar</button>
       		</div>
-      		</form>
     	</div>
   	</div>
 </div>
@@ -171,7 +170,6 @@
       		<div class="modal-footer">
         		<button type="button" class="btn btn-outline-danger" data-dismiss="modal">Cerrar</button>
       		</div>
-      		</form>
     	</div>
   	</div>
 </div>

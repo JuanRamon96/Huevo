@@ -7,6 +7,68 @@ $(document).ready(function() {
 	  buttonsStyling: false,
 	});
 
+	$(document).on('click', '.ModificarPrecio', function() {
+		var padre = $(this).parent().parent();
+		$("#CostoActual").val(padre.children('td:eq(2)').text());
+		$("#CostoPromedio").val(padre.children('td:eq(3)').text());
+		$("#Precio1").val(padre.children('td:eq(4)').text());
+		$("#Precio2").val(padre.children('td:eq(5)').text());
+		$("#bMprecios").attr('attrID', $(this).attr('attrID'));
+		$("#bMprecios").attr('disabled', true);
+	});
+
+	$("#FormMPrecios").children().on('change keyup', function(event) {
+		$("#bMprecios").attr('disabled', false);
+	});
+
+	$("#FormMPrecios").submit(function(e) {
+		e.preventDefault();
+
+		swalWithBootstrapButtons({
+		  	title: '¿Estas seguro que quieres modificar los precios y/o costos?',
+		  	type: 'warning',
+		  	showCancelButton: true,
+		 	confirmButtonText: 'Aceptar',
+		  	cancelButtonText: 'Cancelar',
+		  	reverseButtons: true
+		}).then((result) => {
+		  	if (result.value) {
+				var data = "metodo=2&id="+$("#bMprecios").attr('attrID')+"&costoA="+$("#CostoActual").val()+"&costoP="+$("#CostoPromedio").val()+"&precio1="+$("#Precio1").val()+"&precio2="+$("#Precio2").val();
+				$.ajax({
+					url: 'php/precios.php',
+					type: 'POST',
+					data: data,
+					beforeSend: function() {
+			           	$("#carga").show();
+			        }
+				})
+				.done(function(res) {
+					if(res=="Correcto"){
+						swal({
+						  	type: 'success',
+						  	title: 'Los precios se han modificado',
+						}); 
+						$(".IntClientes").val("");
+						precios();	
+					}else{
+						swal({
+						  	type: 'error',
+						  	title: 'Error:',
+						  	text: 'Los precios se han modificado',
+						});
+						console.log(res);
+					}
+					$("#carga").hide();
+				})
+				.fail(function() {
+					console.log("Error");
+				});
+		} else if (result.dismiss === swal.DismissReason.cancel) {
+		    	swal('Has cancelado la operación');
+		  	}
+		});	
+	});
+
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 	$.fn.dataTable.ext.errMode = 'none';
 	function precios() {

@@ -18,14 +18,14 @@
     }
 
     if($_POST['metodo'] == '1'){
-		$sql = "SELECT ID_Precio, Costo_Actual, ROUND(Costo_Promedio, 2) AS CostoP, Precio1, Precio2, Codigo, Nombre FROM precios INNER JOIN productos ON FK_Producto=ID_Producto";
+		$sql = "SELECT ID_Precio, Costo_Actual, ROUND(Costo_Promedio, 2) AS CostoP, Precio1, Precio2, Codigo, Nombre FROM precios INNER JOIN productos ON FK_Producto=ID_Producto AND Eliminado='0'";
 
 		if($res=$con->query($sql)){
 			if ($res->num_rows > 0) {
 				while($row = $res->fetch_assoc()){
 
 					if($precios[5]=="1" || $_SESSION['user']['Tipo']=="1"){
-						$bModificar="<button class='btn btn-warning ModificarPrecio' attrID='$row[ID_Precio]' data-toggle='modal' data-target='#'><i class='fas fa-pencil-alt'></i></button>";
+						$bModificar="<button class='btn btn-warning ModificarPrecio' attrID='$row[ID_Precio]' data-toggle='modal' data-target='#ModalMPrecios'><i class='fas fa-pencil-alt'></i></button>";
 					}else{
 						$bModificar='';
 					}	
@@ -40,5 +40,15 @@
 			echo "Error: ".mysqli_error($con);
 		}	
 		$con->close();
+	}
+
+	if($_POST['metodo'] == '2'){
+		$sql="UPDATE precios SET Costo_Actual='$_POST[costoA]', Costo_Promedio='$_POST[costoP]', Precio1='$_POST[precio1]', Precio2='$_POST[precio2]' WHERE ID_Precio='$_POST[id]'";
+
+		if($con->query($sql)){
+			echo "Correcto";
+		}else{
+			echo "Error: ".mysqli_error($con);
+		}
 	}
 ?>
