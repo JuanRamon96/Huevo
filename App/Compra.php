@@ -7,9 +7,8 @@
 		function Header()
 		{
 			require('../conexion.php');
-		    // Logo
-		    //$this->Image('../Imagenes/tooth.png',15,15,20);
-		    // Arial bold 15
+
+		    $this->Image('../Imagenes/gigantes.jpg',7,7,35);
 		    $this->SetFont('Arial','I',30);
 		    $this->Cell(120,25,utf8_decode("Compra"),0,0,'C');
 
