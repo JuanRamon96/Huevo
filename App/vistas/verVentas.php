@@ -112,9 +112,9 @@
 				<br>
 				<div class="row">
 					<div class="form-group col-5">
-						<label for="VentaMResponsable">Responsable:</label>
+						<label for="VentaMCliente">Cliente:</label>
 						<div class="input-group input-group-sm">
-							<input type="text" class="form-control" id="VentaMResponsable" required disabled>
+							<input type="text" class="form-control" id="VentaMCliente" required disabled>
 							<div class="input-group-append">
 								<button class="btn btn-outline-secondary" type="button" data-toggle="modal" data-target="#ModalSeleCliente" id="VentaMBuscarCliente"><i class="fas fa-search"></i></button>
 							</div>
@@ -155,10 +155,14 @@
 							<input type="number" id="VentaMCantidad" class="form-control form-control-sm IntMVenDetalle" min="0" step="any" value="0" required>
 						</div>
 						<div class="form-group col-2">
-							<label for="VentaMCosto">Costo:</label>
-							<input type="number" id="VentaMCosto" class="form-control form-control-sm IntMVenDetalle" min="0" step="any" value="0" required disabled>
+							<label for="VentaMPrecio">Precio:</label>
+							<input type="number" id="VentaMPrecio" class="form-control form-control-sm IntMVenDetalle" min="0" step="any" value="0" required>
 						</div>
-						<div class="form-group col-3">
+						<div class="form-group col-2">
+							<label for="VentaMDescuento">Descuento %:</label>
+							<input type="number" id="VentaMDescuento" class="form-control form-control-sm IntMVenDetalle" min="0" step="any" value="0" required>
+						</div>
+						<div class="form-group col-2">
 							<label for="VentaMSubtotal">Subtotal:</label>
 							<input type="number" id="VentaMSubtotal" class="form-control form-control-sm IntMVenDetalle" min="0" step="any" value="0" disabled required>
 						</div>
@@ -166,7 +170,7 @@
 							<label for="VentaMIVA">IVA %:</label>
 							<input type="number" id="VentaMIVA" class="form-control form-control-sm IntMVenDetalle" min="0" step="any" value="0" required disabled>
 						</div>
-						<div class="form-group col-3">
+						<div class="form-group col-2">
 							<label for="VentaMTotal">Total:</label>
 							<input type="number" id="VentaMTotal" class="form-control form-control-sm IntMVenDetalle" min="0" step="any" value="0" disabled required>
 						</div>
@@ -183,7 +187,8 @@
 								<th>Producto</th>
 								<th>UME</th>
 								<th>Cantidad</th>
-								<th>Costo</th>
+								<th>Precio</th>
+								<th>Descuento %</th>
 								<th>Subtotal</th>
 								<th>IVA %</th>
 								<th>Total</th>

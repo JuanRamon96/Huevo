@@ -220,7 +220,7 @@
                     }
 
                     if($_SESSION['user']['Tipo'] == "1" || $entregas[3] == "1"){
-                        $bEliminar="<button type='button' class='btn btn-danger btn-sm bBorrarEntre' attrCan='$row[Cancelada]' attrID='$row[ID_Venta]'><i class='fas fa-trash-alt'></i></button>";
+                        $bEliminar="<button type='button' class='btn btn-danger btn-sm bBorrarVenta' attrCan='$row[Cancelada]' attrID='$row[ID_Venta]'><i class='fas fa-trash-alt'></i></button>";
                     }else{
                         $bEliminar="";
                     } 
@@ -244,7 +244,7 @@
                         <td><span hidden>$row[FK_Cliente]</span><p>$row[Nombre]</p><span hidden>$row[DatosCli]</span></td>
                         <td>$row[Total]</td>
                         <td><span hidden>$row[Fecha]</span><p>$row[FechaE]</p></td>
-                        <td><span hidden>$row[ID_Venta]</span><a href='Venta.php?id=$row[ID_Venta]&empleado=$row[FK_Cliente]' target='_blank' class='btn btn-light'><i class='fas fa-print'></i></a></td>
+                        <td><span hidden>$row[ID_Venta]</span><a href='Venta.php?id=$row[ID_Venta]&cliente=$row[FK_Cliente]' target='_blank' class='btn btn-light'><i class='fas fa-print'></i></a></td>
                         <td><button type='button' class='btn btn-outline-info vermasVenta'><i class='fas fa-eye'></i></button></td>
                     </tr>
                     <tr class='oculto' style='background: #F7F7F7;'>
@@ -326,7 +326,7 @@
     }
 
     if($_POST['metodo']=='6'){
-        $sql="UPDATE entregas SET Eliminada=1 WHERE ID_Entrega='$_POST[id]'";
+        $sql="UPDATE ventas SET Eliminada=1 WHERE ID_Venta='$_POST[id]'";
 
         if ($con->query($sql)) {
             if($_POST['cancela'] == '0'){
@@ -353,12 +353,12 @@
         
     }
 
-    if($_POST['metodo']=='8'){
+    if($_POST['metodo']=='7'){
         $compro=0;
         $folio="";
         if($_POST['folio'] != ""){
             $numero = strlen($_POST['folio']);
-            $sql = "SELECT SUBSTR(MAX(Folio) FROM $numero+1) AS Numero FROM orden_compra WHERE SUBSTR(Folio,1,$numero)='$_POST[folio]'";
+            $sql = "SELECT SUBSTR(MAX(Folio) FROM $numero+1) AS Numero FROM ventas WHERE SUBSTR(Folio,1,$numero)='$_POST[folio]'";
 
             if($res=$con->query($sql)){
                 $row = $res->fetch_assoc();
@@ -372,16 +372,16 @@
             }
         }
 
-        $Mfolio=""; $Mresponsable="";
+        $Mfolio=""; $Mcliente="";
         if($folio != ""){
             $Mfolio=",Folio='$folio'";
         }
 
-        if($_POST['responsable'] != ""){
-            $Mresponsable=",FK_Empleado='$_POST[responsable]'";
+        if($_POST['cliente'] != ""){
+            $Mcliente=",FK_Cliente='$_POST[cliente]'";
         }
 
-        $sql = "UPDATE entregas SET Total='$_POST[total]', Fecha='$_POST[fecha]' $Mresponsable $Mfolio WHERE ID_Entrega='$_POST[id]'";
+        $sql = "UPDATE ventas SET Total='$_POST[total]', Fecha='$_POST[fecha]' $Mcliente $Mfolio WHERE ID_Venta='$_POST[id]'";
 
 
         if($con->query($sql)){
@@ -391,7 +391,7 @@
 
             if(isset($insertar)){
                 foreach($insertar as $inse){
-                    $sql1 = "INSERT INTO entregas_detalles VALUES(null,'$_POST[id]','$inse[0]','$inse[1]','$inse[2]','$inse[3]','$inse[4]','$inse[5]')";
+                    $sql1 = "INSERT INTO ventas_detalle VALUES(null,'$_POST[id]','$inse[0]','$inse[1]','$inse[2]','$inse[3]','$inse[4]','$inse[5]','$inse[6]')";
 
                     if(!$con->query($sql1)){
                         $compro=1;
@@ -401,7 +401,7 @@
 
             if(isset($actualizar)){
                 foreach($actualizar as $actu){
-                    $sql2 = "UPDATE entregas_detalles SET Cantidad='$actu[1]',Costo='$actu[2]',Subtotal='$actu[3]',IVA='$actu[4]',Total='$actu[5]' WHERE ID_Entrega_Detalle='$actu[0]'";
+                    $sql2 = "UPDATE ventas_detalle SET Cantidad='$actu[1]',Precio='$actu[2]',Descuento='$actu[3]',Subtotal='$actu[4]',IVA='$actu[5]',Total='$actu[6]' WHERE ID_Venta_Detalle='$actu[0]'";
 
                     if(!$con->query($sql2)){
                         $compro=1;
@@ -411,7 +411,7 @@
 
             if(isset($eliminar)){
                 foreach($eliminar as $eli){
-                    $sql2 = "DELETE FROM entregas_detalles WHERE ID_Entrega_Detalle='$eli'";
+                    $sql2 = "DELETE FROM ventas_detalle WHERE ID_Venta_Detalle='$eli'";
 
                     if(!$con->query($sql2)){
                         $compro=1;

@@ -38,6 +38,13 @@ $(document).ready(function() {
 		verFolios(tipof);
 	});
 
+	$("#VentaMBuscarFolio").click(function() {	
+		$('#ModalOrdenFolio').css('z-index', '1060');
+		lfolio=6;
+		tipof=4;
+		verFolios(tipof);
+	});
+
 	$("#OrdenMBuscarFolio").click(function() {
 		$('#ModalOrdenFolio').css('z-index', '1060');	
 		lfolio=2;
@@ -54,7 +61,7 @@ $(document).ready(function() {
 	});
 
 	$('#ModalOrdenFolio').on('hidden.bs.modal',function() {
-		if(lfolio == 2 || lfolio == 4){
+		if(lfolio == 2 || lfolio == 4 || lfolio == 6){
 			$('body').addClass('modal-open');
 		}
 	});
@@ -227,6 +234,10 @@ $(document).ready(function() {
 			}else if(lfolio == 5){
 				$("#VentaNombreF").val(padre.children('td:eq(1)').text());
 				$("#VentaNombreF").attr('attrFolio', folio);
+				valorFolio('ventas');
+			}else{
+				$("#VentaMNombreF").val(padre.children('td:eq(1)').text());
+				$("#VentaMNombreF").attr('attrFolio', folio);
 				valorFolio('ventas');
 			}
 		}else{
@@ -990,6 +1001,8 @@ $(document).ready(function() {
 					$("#EntregaMFolio").val(folio+'1');
 				}else if(lfolio == 5){
 					$("#VentaFolio").val(folio+'1');
+				}else{
+					$("#VentaMFolio").val(folio+'1');
 				}
 			}else if(!isNaN(res)){
 				if(lfolio == 1){
@@ -1002,6 +1015,8 @@ $(document).ready(function() {
 					$("#EntregaMFolio").val(folio+(parseInt(res)+1));
 				}else if(lfolio == 5){
 					$("#VentaFolio").val(folio+(parseInt(res)+1));
+				}else{
+					$("#VentaMFolio").val(folio+(parseInt(res)+1));
 				}
 			}else{
 				swal({
