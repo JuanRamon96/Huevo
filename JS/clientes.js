@@ -69,7 +69,8 @@ $(document).ready(function() {
 						  	type: 'success',
 						  	title: 'El cliente ha sido borrado',
 						});  
-						clientes();	
+						clientes();
+						clientesB();	
 					}else{
 						swal({
 						  	type: 'error',
@@ -271,6 +272,20 @@ $(document).ready(function() {
 					}
 	            }
 	        ]
+		});
+	}
+
+	function clientesB() {
+		$.ajax({
+			url: 'php/papelera.php',
+			type: 'POST',
+			data: 'metodo=4'
+		})
+		.done(function(res) {
+			$("#clientes").html(res);
+		})
+		.fail(function() {
+			console.log("Error");
 		});
 	}
 });

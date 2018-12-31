@@ -70,6 +70,7 @@ $(document).ready(function() {
 						  	title: 'El proveedor ha sido borrado',
 						});  
 						proveedores();	
+						proveedoresB();
 					}else{
 						swal({
 						  	type: 'error',
@@ -271,6 +272,20 @@ $(document).ready(function() {
 					}
 	            }
 	        ]
+		});
+	}
+
+	function proveedoresB() {
+		$.ajax({
+			url: 'php/papelera.php',
+			type: 'POST',
+			data: 'metodo=5'
+		})
+		.done(function(res) {
+			$("#proveedores").html(res);
+		})
+		.fail(function() {
+			console.log("Error");
 		});
 	}
 });

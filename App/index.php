@@ -168,7 +168,7 @@
 	  			
 	  			echo "<ul id='VerUsuarios'><span><i class='fas fa-users'></i> Usuarios</span></ul>
 	  				<ul id='DatosGenerales'><span><i class='fas fa-tasks'></i> Generales</span></ul>
-	  				<ul id='VerUsuarios'><span><i class='fas fa-trash-alt'></i> Papelera</span></ul>";
+	  				<ul id='VerPapelera'><span><i class='fas fa-trash-alt'></i> Papelera</span></ul>";
 	  		}
 	  	?>
 	</div>
@@ -201,6 +201,7 @@
 				require("vistas/usuarios.php"); 
 				require("vistas/configuracion.php");
 				require("vistas/generales.php"); 
+				require("vistas/papelera.php");
 			} 
 
 			if($_SESSION['user']['Tipo'] == "1" || $productos[1]=='1'){ 
@@ -296,5 +297,6 @@
 <script src="../JS/entregas.js"></script>
 <script src="../JS/precios.js"></script>	
 <script src="../JS/ventas.js"></script>
+<script src="../JS/papelera.js"></script>
 </body>
 </html>

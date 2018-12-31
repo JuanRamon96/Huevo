@@ -64,7 +64,7 @@
 	}
 
 	if($_POST['metodo'] == '3'){
-		$sql = "DELETE FROM proveedores WHERE ID_Proveedor='$_POST[id]'";
+		$sql = "UPDATE proveedores SET Eliminado='1' WHERE ID_Proveedor='$_POST[id]'";
 
 		if($con->query($sql)){
 			echo "1";

@@ -71,6 +71,7 @@ $(document).ready(function() {
 						  	title: 'El producto ha sido borrado',
 						});  
 						verProductos();	
+						productosB();
 					}else{
 						swal({
 						  	type: 'error',
@@ -261,5 +262,19 @@ $(document).ready(function() {
 		productos('Producto Terminado',$("#tablaProductos1"));
 		productos('Materia Prima',$("#tablaProductos2"));
 		productos('Insumo',$("#tablaProductos3"));
+	}
+
+	function productosB() {
+		$.ajax({
+			url: 'php/papelera.php',
+			type: 'POST',
+			data: 'metodo=1'
+		})
+		.done(function(res) {
+			$("#productos").html(res);
+		})
+		.fail(function() {
+			console.log("Error");
+		});
 	}
 });
