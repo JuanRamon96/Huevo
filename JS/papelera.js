@@ -2,6 +2,13 @@ $(document).ready(function() {
 	registros(1,$("#productos"));
 	registros(4,$("#clientes"));
 	registros(5,$("#proveedores"));
+	registros(6,$("#empleados"));
+	registros(7,$("#puestos"));
+	registros(8,$("#areas"));
+	registros(9,$("#ventas"));
+	registros(10,$("#orden_compra"));
+	registros(11,$("#compras"));
+	registros(12,$("#entregas"));
 
 	const swalWithBootstrapButtons = swal.mixin({
 	  confirmButtonClass: 'btn btn-success',
@@ -46,6 +53,15 @@ $(document).ready(function() {
 						}else if(separa[1] == "proveedores"){
 							proveedores();
 							registros(5,$("#proveedores"));
+						}else if(separa[1] == "empleados"){
+							empleados();
+							registros(6,$("#empleados"));
+						}else if(separa[1] == "puestos"){
+							puestos();
+							registros(7,$("#puestos"));
+						}else if(separa[1] == "areas"){
+							areas();
+							registros(8,$("#areas"));
 						}
 					}else{
 						swal({
@@ -100,6 +116,20 @@ $(document).ready(function() {
 							registros(4,$("#clientes"));
 						}else if(separa[1] == "proveedores"){
 							registros(5,$("#proveedores"));
+						}else if(separa[1] == "empleados"){
+							registros(6,$("#empleados"));
+						}else if(separa[1] == "puestos"){
+							registros(7,$("#puestos"));
+						}else if(separa[1] == "areas"){
+							registros(8,$("#areas"));
+						}else if(separa[1] == "ventas"){
+							registros(9,$("#ventas"));
+						}else if(separa[1] == "orden_compra"){
+							registros(10,$("#orden_compra"));
+						}else if(separa[1] == "compras"){
+							registros(11,$("#compras"));
+						}else if(separa[1] == "entregas"){
+							registros(12,$("#entregas"));
 						}
 					}else{
 						swal({
@@ -413,6 +443,269 @@ $(document).ready(function() {
 	            	customize: function(doc) {
 					    doc.defaultStyle.fontSize = 11;
 					    doc.styles.tableHeader.fontSize = 12;
+					    doc.defaultStyle.alignment = 'center';
+					}
+	            }
+	        ]
+		});
+	}
+
+	function empleados() {
+		$("#tablaEmpleados").dataTable({
+			"destroy": true,
+			"ajax":{
+				"url": 'php/empleados.php',
+				"method": 'POST',
+				"data": {
+			        "metodo": '3'
+			    }
+			},
+			"columns": [
+	            { "data": "Codigo" },
+	            { "data": "Nombre" },
+	            { "data": "ApPat" },
+	            { "data": "ApMat" },
+	            { "data": "Domicilio" },
+	            { "data": "Colonia" },
+	            { "data": "Ciudad" },
+	            { "data": "Estado" },
+	            { "data": "Pais" },
+	            { "data": "CP" },
+	            { "data": "Telefono" },
+	            { "data": "Email" },
+	            { "data": "Area" },
+	            { "data": "Puesto" },
+	            { "data": "SDI" },
+	            { "data": "TI" },
+	            { "data": "Alergias" },
+	            { "data": "Emergencia" },
+	            { "data": "TelEmergencia" },
+	            { "data": "FechaIn" },
+	            { "data": "FechaBa" },
+	            { "data": "FechaRe" },
+	            { "data": "Estatus" },
+	            { "data": "Boton1" },
+	            { "data": "Boton2" }
+	        ], 
+	        "language": {
+			    "sProcessing":     "Procesando...",
+			    "sLengthMenu":     "Mostrar _MENU_ registros",
+			    "sZeroRecords":    "No se encontraron resultados",
+			    "sEmptyTable":     "Ningún dato disponible en esta tabla",
+			    "sInfo":           "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+			    "sInfoEmpty":      "Mostrando registros del 0 al 0 de un total de 0 registros",
+			    "sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
+			    "sInfoPostFix":    "",
+			    "sSearch":         "Buscar:",
+			    "sUrl":            "",
+			    "sInfoThousands":  ",",
+			    "sLoadingRecords": "Cargando...",
+			    "oPaginate": {
+			        "sFirst":    "Primero",
+			        "sLast":     "Último",
+			        "sNext":     "Siguiente",
+			        "sPrevious": "Anterior"
+			    },
+			    "oAria": {
+			        "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
+			        "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+			    },
+			     buttons: {
+		            copy: 'Copiar',
+				    copySuccess: {
+				        1: "Se ha copiado una fila",
+				        _: "Se han copiado %d filas"
+				    },
+				    copyTitle: 'Elementos copiados'
+		        }
+			},
+			dom:"<'row'<'col-sm-12 col-md-12'B>>"+ 
+				"<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>" +
+				"<'row'<'col-sm-12'tr>>" +
+				"<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",//'Bfrtip',
+	        buttons: [
+	            {
+	            	extend: 'copyHtml5',
+	            	text: "<i class='fas fa-copy'></i>",
+	            	titleAttr: 'Copiar'
+	            },
+	            {
+	            	extend: 'excelHtml5',
+	            	text: "<i class='fas fa-file-excel'></i>",
+	            	titleAttr: 'Excel',
+	            	filename: 'Empleados',
+	            	title: 'Empleados'
+	            },
+	            {
+	            	extend: 'pdfHtml5',
+	            	text: "<i class='fas fa-file-pdf'></i>",
+	            	titleAttr: 'PDF',
+	            	filename: 'Empleados',
+	            	title: 'Empleados',
+	            	orientation: 'landscape',
+	            	pageSize: 'TABLOID',
+	            	customize: function(doc) {
+					    doc.defaultStyle.fontSize = 9;
+					    doc.styles.tableHeader.fontSize = 10;
+					    doc.defaultStyle.alignment = 'center';
+					}
+	            }
+	        ]
+		});
+	}
+
+	function puestos() {
+		$("#tablaPuestos").dataTable({
+			"destroy": true,
+			"ajax":{
+				"url": 'php/AreasyPuestos.php',
+				"method": 'POST',
+				"data": {
+			        "metodo": '9'
+			    }
+			},
+			"columns": [
+				{ "data": "Codigo" },
+	            { "data": "Nombre" },
+	            { "data": "Area" },
+	            { "data": "Activo" },
+	            { "data": "Botones" }
+	        ], 
+	        "language": {
+			    "sProcessing":     "Procesando...",
+			    "sLengthMenu":     "Mostrar _MENU_ registros",
+			    "sZeroRecords":    "No se encontraron resultados",
+			    "sEmptyTable":     "Ningún dato disponible en esta tabla",
+			    "sInfo":           "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+			    "sInfoEmpty":      "Mostrando registros del 0 al 0 de un total de 0 registros",
+			    "sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
+			    "sInfoPostFix":    "",
+			    "sSearch":         "Buscar:",
+			    "sUrl":            "",
+			    "sInfoThousands":  ",",
+			    "sLoadingRecords": "Cargando...",
+			    "oPaginate": {
+			        "sFirst":    "Primero",
+			        "sLast":     "Último",
+			        "sNext":     "Siguiente",
+			        "sPrevious": "Anterior"
+			    },
+			    "oAria": {
+			        "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
+			        "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+			    },
+			     buttons: {
+		            copy: 'Copiar',
+				    copySuccess: {
+				        1: "Se ha copiado una fila",
+				        _: "Se han copiado %d filas"
+				    },
+				    copyTitle: 'Elementos copiados'
+		        }
+			},
+			dom:"<'row'<'col-sm-12 col-md-12'B>>"+ 
+				"<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>" +
+				"<'row'<'col-sm-12'tr>>" +
+				"<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",//'Bfrtip',
+	        buttons: [
+	            {
+	            	extend: 'copyHtml5',
+	            	text: "<i class='fas fa-copy'></i>",
+	            	titleAttr: 'Copiar'
+	            },
+	            {
+	            	extend: 'excelHtml5',
+	            	text: "<i class='fas fa-file-excel'></i>",
+	            	titleAttr: 'Excel',
+	            	filename: 'Puestos',
+	            	title: 'Puestos'
+	            },
+	            {
+	            	extend: 'pdfHtml5',
+	            	text: "<i class='fas fa-file-pdf'></i>",
+	            	titleAttr: 'PDF',
+	            	filename: 'Puestos',
+	            	title: 'Puestos',
+	            	customize: function(doc) {
+					    doc.defaultStyle.alignment = 'center';
+					}
+	            }
+	        ]
+		});
+	}
+
+	function areas() {
+		$("#tablaAreas").dataTable({
+			"destroy": true,
+			"ajax":{
+				"url": 'php/AreasyPuestos.php',
+				"method": 'POST',
+				"data": {
+			        "metodo": '3'
+			    }
+			},
+			"columns": [
+				{ "data": "Codigo" },
+	            { "data": "Nombre" },
+	            { "data": "Activo" },
+	            { "data": "Botones" }
+	        ], 
+	        "language": {
+			    "sProcessing":     "Procesando...",
+			    "sLengthMenu":     "Mostrar _MENU_ registros",
+			    "sZeroRecords":    "No se encontraron resultados",
+			    "sEmptyTable":     "Ningún dato disponible en esta tabla",
+			    "sInfo":           "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+			    "sInfoEmpty":      "Mostrando registros del 0 al 0 de un total de 0 registros",
+			    "sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
+			    "sInfoPostFix":    "",
+			    "sSearch":         "Buscar:",
+			    "sUrl":            "",
+			    "sInfoThousands":  ",",
+			    "sLoadingRecords": "Cargando...",
+			    "oPaginate": {
+			        "sFirst":    "Primero",
+			        "sLast":     "Último",
+			        "sNext":     "Siguiente",
+			        "sPrevious": "Anterior"
+			    },
+			    "oAria": {
+			        "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
+			        "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+			    },
+			     buttons: {
+		            copy: 'Copiar',
+				    copySuccess: {
+				        1: "Se ha copiado una fila",
+				        _: "Se han copiado %d filas"
+				    },
+				    copyTitle: 'Elementos copiados'
+		        }
+			},
+			dom:"<'row'<'col-sm-12 col-md-12'B>>"+ 
+				"<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>" +
+				"<'row'<'col-sm-12'tr>>" +
+				"<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",//'Bfrtip',
+	        buttons: [
+	            {
+	            	extend: 'copyHtml5',
+	            	text: "<i class='fas fa-copy'></i>",
+	            	titleAttr: 'Copiar'
+	            },
+	            {
+	            	extend: 'excelHtml5',
+	            	text: "<i class='fas fa-file-excel'></i>",
+	            	titleAttr: 'Excel',
+	            	filename: 'Áreas',
+	            	title: 'Áreas'
+	            },
+	            {
+	            	extend: 'pdfHtml5',
+	            	text: "<i class='fas fa-file-pdf'></i>",
+	            	titleAttr: 'PDF',
+	            	filename: 'Áreas',
+	            	title: 'Áreas',
+	            	customize: function(doc) {
 					    doc.defaultStyle.alignment = 'center';
 					}
 	            }

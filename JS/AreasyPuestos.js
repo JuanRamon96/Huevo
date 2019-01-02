@@ -78,7 +78,8 @@ $(document).ready(function() {
 						  	type: 'success',
 						  	title: 'El área ha sido borrada',
 						});  
-						areas();	
+						areas();
+						areasB();	
 						setTimeout(function() {
 							verAreas();
 						},500);
@@ -241,6 +242,7 @@ $(document).ready(function() {
 						  	title: 'El puesto ha sido borrado',
 						});  
 						puestos();
+						puestosB()
 					}else{
 						swal({
 						  	type: 'error',
@@ -537,6 +539,34 @@ $(document).ready(function() {
 					}
 	            }
 	        ]
+		});
+	}
+
+	function puestosB() {
+		$.ajax({
+			url: 'php/papelera.php',
+			type: 'POST',
+			data: 'metodo=7'
+		})
+		.done(function(res) {
+			$("#puestos").html(res);
+		})
+		.fail(function() {
+			console.log("Error");
+		});
+	}
+
+	function areasB() {
+		$.ajax({
+			url: 'php/papelera.php',
+			type: 'POST',
+			data: 'metodo=8'
+		})
+		.done(function(res) {
+			$("#areas").html(res);
+		})
+		.fail(function() {
+			console.log("Error");
 		});
 	}
 });

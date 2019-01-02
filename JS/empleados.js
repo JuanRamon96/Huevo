@@ -76,7 +76,8 @@ $(document).ready(function() {
 						  	type: 'success',
 						  	title: 'El empleado ha sido borrado',
 						});  
-						empleados();	
+						empleados();
+						empleadosB();	
 					}else{
 						swal({
 						  	type: 'error',
@@ -227,7 +228,7 @@ $(document).ready(function() {
 		});
 	}
 
-	//$.fn.dataTable.ext.errMode = 'none';
+	$.fn.dataTable.ext.errMode = 'none';
 	function empleados() {
 		$("#tablaEmpleados").dataTable({
 			"destroy": true,
@@ -342,5 +343,19 @@ $(document).ready(function() {
 	    if (day.length < 2) day = '0' + day;
 
 	    return [year, month, day].join('-');
+	}
+
+	function empleadosB() {
+		$.ajax({
+			url: 'php/papelera.php',
+			type: 'POST',
+			data: 'metodo=6'
+		})
+		.done(function(res) {
+			$("#empleados").html(res);
+		})
+		.fail(function() {
+			console.log("Error");
+		});
 	}
 });

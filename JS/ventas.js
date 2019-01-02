@@ -360,6 +360,7 @@ $(document).ready(function() {
 						}); 
 						verVentas();
 						verProductos();
+						ventasB();
 					}else{
 						swal({
 							type: 'error',
@@ -754,5 +755,19 @@ $(document).ready(function() {
 	function verProductos() {
 		productos1('Materia Prima',$("#tablaProductos2"));
 		productos1('Producto Terminado',$("#tablaProductos1"));
+	}
+
+	function ventasB() {
+		$.ajax({
+			url: 'php/papelera.php',
+			type: 'POST',
+			data: 'metodo=9'
+		})
+		.done(function(res) {
+			$("#ventas").html(res);
+		})
+		.fail(function() {
+			console.log("Error");
+		});
 	}
 });

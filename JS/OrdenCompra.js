@@ -554,6 +554,7 @@ $(document).ready(function() {
 						  	title: 'La orden de compra ha sido eliminada',
 						});  
 						ordenesCompra();
+						ordenB();
 					}else{
 						swal({
 						  	type: 'error',
@@ -808,6 +809,7 @@ $(document).ready(function() {
 						}); 
 				 		Compras();
 						verProductos();
+						compraB();
 					}else{
 						swal({
 							type: 'error',
@@ -1143,5 +1145,33 @@ $(document).ready(function() {
 	    if (minuto.length < 2) minuto = '0' + minuto;
 
 	    return [hora, minuto].join(':');
+	}
+
+	function ordenB() {
+		$.ajax({
+			url: 'php/papelera.php',
+			type: 'POST',
+			data: 'metodo=10'
+		})
+		.done(function(res) {
+			$("#orden_compra").html(res);
+		})
+		.fail(function() {
+			console.log("Error");
+		});
+	}
+
+	function compraB() {
+		$.ajax({
+			url: 'php/papelera.php',
+			type: 'POST',
+			data: 'metodo=11'
+		})
+		.done(function(res) {
+			$("#compras").html(res);
+		})
+		.fail(function() {
+			console.log("Error");
+		});
 	}
 });
