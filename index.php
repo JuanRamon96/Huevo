@@ -21,7 +21,7 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-md-6 offset-md-3 login">
-				<img src="Imagenes/users.svg" width="40%" id="logo">
+				<img src="Imagenes/principal.png" width="50%" id="logo">
 				<form id="login">
 					<div class="form-group">
 						<div class="input-group">

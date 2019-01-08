@@ -149,16 +149,17 @@
 
 	  			/*if($produccion[1]=='1' || $_SESSION['user']['Tipo']=='1'){
 	  				echo "<li>Nueva Entrega <i class='fas fa-plus'></i></li>";
+	  				<li style='font-size:15px;' id='verEntradasM'>Entrada de Materia Prima <i class='fas fa-arrow-alt-circle-down'></i></li>
 	  			}*/
-	  			echo "<li>Quebrado <i class='fas fa-compress'></i></li>
-	  					<li>Pasteurizado <i class='fas fa-thermometer-full'></i></li>
+	  			echo "<li style='font-size:15px;' id='verEntradasM'>Quebrado y Pasteurizado <i <i class='fas fa-thermometer-full'></i></li>
 	  					<li>Envasado <i class='fas fa-dolly'></i></li>
 	  				</ul>";
 	  				
 	  		}
-	  		if ($reportes =='1' || $_SESSION['user']['Tipo']=='1') {
+	  		
+	  		/*if ($reportes =='1' || $_SESSION['user']['Tipo']=='1') {
 	  			echo "<ul><span><i class='fas fa-chart-line'></i> Reportes</span></ul>";	
-	  		}
+	  		}*/
 
 	  		if ($etiquetas =='1' || $_SESSION['user']['Tipo']=='1') {
 	  			echo "<ul><span><i class='fas fa-barcode'></i> Etiquetas</span></ul>";	
@@ -270,6 +271,10 @@
 			if($_SESSION['user']['Tipo']=='1' || $ventas[0]=='1'){
 				require("vistas/verVentas.php");
 			}
+
+			if ($_SESSION['user']['Tipo']=='1' || $produccion[0] =='1') {
+				require("vistas/materiaPrima.php");
+			}
 		?>
 	</div>
 
@@ -298,5 +303,6 @@
 <script src="../JS/precios.js"></script>	
 <script src="../JS/ventas.js"></script>
 <script src="../JS/papelera.js"></script>
+<script src="../JS/produccion.js"></script>
 </body>
 </html>
