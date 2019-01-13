@@ -152,7 +152,7 @@
 	  				<li style='font-size:15px;' id='verEntradasM'>Entrada de Materia Prima <i class='fas fa-arrow-alt-circle-down'></i></li>
 	  			}*/
 	  			echo "<li style='font-size:15px;' id='verEntradasM'>Quebrado y Pasteurizado <i <i class='fas fa-thermometer-full'></i></li>
-	  					<li>Envasado <i class='fas fa-dolly'></i></li>
+	  					<li id='verSalidasP'>Envasado <i class='fas fa-dolly'></i></li>
 	  				</ul>";
 	  				
 	  		}
@@ -161,9 +161,9 @@
 	  			echo "<ul><span><i class='fas fa-chart-line'></i> Reportes</span></ul>";	
 	  		}*/
 
-	  		if ($etiquetas =='1' || $_SESSION['user']['Tipo']=='1') {
+	  		/*if ($etiquetas =='1' || $_SESSION['user']['Tipo']=='1') {
 	  			echo "<ul><span><i class='fas fa-barcode'></i> Etiquetas</span></ul>";	
-	  		}
+	  		}*/
 
 	  		if($_SESSION['user']['Tipo']=='1'){ 
 	  			
@@ -274,6 +274,7 @@
 
 			if ($_SESSION['user']['Tipo']=='1' || $produccion[0] =='1') {
 				require("vistas/materiaPrima.php");
+				require("vistas/productoTerminado.php");
 			}
 		?>
 	</div>

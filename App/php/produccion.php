@@ -59,4 +59,44 @@
 			echo "Error: ".mysqli_error($con);
 		}
 	}
+
+	if($_POST['metodo'] == '5'){
+		$sql = "INSERT INTO produccion2 VALUES(null,'$_POST[producto]','$_POST[lote]','$_POST[cantidad]',NOW())";
+
+		if($con->query($sql)){
+			echo "Correcto";
+		}else{
+			echo "Error: ".mysqli_error($con);
+		}
+	}
+
+	if($_POST['metodo'] == '6'){
+		$sql = "SELECT ID_Pro2, Lote, Nombre, Codigo, UME, Cantidad, DATE_FORMAT(Fecha, '%d-%m-%Y %h:%i %p') AS Fecha FROM produccion2 INNER JOIN productos ON FK_Producto=ID_Producto";
+
+		if($res=$con->query($sql)){
+			if ($res->num_rows > 0) {
+				while($row = $res->fetch_assoc()){
+
+					$arreglo['data'][] = array('Lote'=> $row['Lote'],'Codigo'=> $row['Codigo'], 'Nombre'=> $row['Nombre'], 'Cantidad'=> $row['Cantidad'], 'Fecha'=> $row['Fecha'], 'UME'=> $row['UME'], 'Boton'=> "<button type='button' class='btn btn-danger borrarEPT' attrID='$row[ID_Pro2]'><i class='fas fa-trash-alt'></i></button><a class='btn btn-info' href='qr.php?lote=$row[Lote]' target='_blank'><i class='fas fa-print'></i></button>");	
+				}
+				echo json_encode($arreglo);
+			}else{
+				echo "No se encontraron resultados";
+			}
+		}else{
+			echo "Error: ".mysqli_error($con);
+		}	
+		$con->close();
+	}
+
+	if($_POST['metodo'] == '7'){
+		$sql = "DELETE FROM produccion2 WHERE ID_Pro2='$_POST[id]'";
+
+		if($con->query($sql)){
+			echo "Correcto";
+		}else{
+			echo "Error: ".mysqli_error($con);
+		}
+	}
+
 ?>
